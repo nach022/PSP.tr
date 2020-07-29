@@ -1,0 +1,29 @@
+<div fxLayout="column" fxLayoutAlign="space-around center" fxFlexFill class="espacioAbajo">
+  <h1 mat-dialog-title *ngIf="action == 'Delete'">Eliminar Tipo de Tarea.</h1>
+  <h1 mat-dialog-title *ngIf="action == 'Update'">Actualizar Tipo de Tarea.</h1>
+  <h1 mat-dialog-title *ngIf="action == 'Add'">Agregar Tipo de Tarea.</h1>
+  <mat-divider></mat-divider>
+</div>
+
+<form #dialogForm="ngForm">
+  <div fxLayout="column" fxLayoutAlign="stretch stretch" fxFlexFill mat-dialog-content class="espacioAbajo">
+
+    <mat-form-field *ngIf="action != 'Delete'; else elseTemplate">
+      <input matInput [(ngModel)]="local_data.Nombre" placeholder="Nombre" #nombreTipo="ngModel" maxlength="100" minlength="5" name="nombreTipo">
+      <mat-error *ngIf="nombreTipo.invalid">El nombre del Tipo de Tarea, debe tener al menos 5 caracteres.</mat-error>
+    </mat-form-field>
+    <ng-template #elseTemplate>
+      <div fxLayout="column" fxLayoutAlign="space-around center">
+        <p>Seguro que desea eliminar el Tipo de Tarea <b>{{local_data.Nombre}}</b>?</p>
+      </div>
+    </ng-template>
+  </div>
+  <div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-evenly stretch">
+    <button (click)="doAction(dialogForm)" mat-raised-button color="accent">
+      <mat-icon *ngIf="action != 'Delete'"> check</mat-icon>
+      <mat-icon *ngIf="action == 'Delete'"> delete</mat-icon>
+      &nbsp;Confirmar
+    </button>
+    <button (click)="closeDialog()" mat-raised-button><mat-icon>clear</mat-icon>&nbsp;Cancelar</button>
+  </div>
+</form>

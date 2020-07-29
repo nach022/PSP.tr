@@ -1,0 +1,61 @@
+
+<div  fxLayout="column" fxLayoutAlign="space-around center" fxFlexFill>
+
+  <div fxLayout="row" fxLayoutAlign="center center"> <h1>Tareas PSP.</h1></div>
+
+
+    <table mat-table #mytable [dataSource]="dataSource" matSort matSortActive="Holgura" matSortDirection="asc" class="my-table mat-elevation-z8">
+
+    <!--- Note that these columns can be defined in any order.
+        The actual rendered columns are set as a property on the row definition"
+      public displayedColumns: string[] = ['PPM', 'Descr', 'Equipo', 'Frecuencia', 'UltimaEjecucion', 'ProximaEjecucion', 'Holgura'];
+      -->
+
+    <!-- PPM Column -->
+    <ng-container matColumnDef="PPM">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> PPM </th>
+      <td mat-cell *matCellDef="let element"> {{element.PPM}} </td>
+    </ng-container>
+
+    <!-- Descr Column -->
+    <ng-container matColumnDef="Descr">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripci&oacute;n </th>
+      <td mat-cell *matCellDef="let element"> {{element.Descr}} </td>
+    </ng-container>
+
+    <!-- Equipo Column -->
+    <ng-container matColumnDef="Equipo">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Equipo </th>
+      <td mat-cell *matCellDef="let element" matTooltip="{{element.EquipoDescr}}" matTooltipPosition="right"> {{element.Equipo}} </td>
+    </ng-container>
+
+    <!-- Frecuencia Column -->
+    <ng-container matColumnDef="Frecuencia">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Frecuencia </th>
+      <td mat-cell *matCellDef="let element"> {{element.Frecuencia}} </td>
+    </ng-container>
+
+    <!-- Ultima Ejec -->
+    <ng-container matColumnDef="UltimaEjecucion">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="thead-dark"> &Uacute;ltima Ejecuci&oacute;n </th>
+      <td mat-cell *matCellDef="let element"> {{element.UltimaEjecucion}} </td>
+    </ng-container>
+
+    <!-- Proxima Ejec -->
+    <ng-container matColumnDef="ProximaEjecucion">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Pr&oacute;xima Ejecuci&oacute;n </th>
+      <td mat-cell *matCellDef="let element"> {{element.ProximaEjecucion}} </td>
+    </ng-container>
+
+    <!-- Holgura Column -->
+    <ng-container matColumnDef="Holgura">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Holgura  (d&iacute;as)</th>
+      <td mat-cell *matCellDef="let element"> {{element.Holgura}} </td>
+    </ng-container>
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns" class="thead-dark"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class.table-danger]="row.Holgura <= 0" [class.table-warning]="row.Holgura <= 7 && row.Holgura > 0"></tr>
+    </table>
+  </div>
+

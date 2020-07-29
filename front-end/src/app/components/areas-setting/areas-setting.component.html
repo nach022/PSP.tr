@@ -1,0 +1,38 @@
+<div  *ngIf="isDataLoaded" fxLayout="column" fxLayoutAlign="space-around center" fxFlexFill>
+
+  <div fxLayout="row" fxLayoutAlign="center center"> <h1>Grupos de Acci&oacute;n.</h1></div>
+
+
+
+
+  <table mat-table [dataSource]="dataSource" #mytable class="my-table mat-elevation-z8">
+
+    <!--- Note that these columns can be defined in any order.
+        The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- Id Column -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef> ID </th>
+      <td mat-cell *matCellDef="let element"> {{element.Id}} </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef width="55%"> Nombre </th>
+      <td mat-cell *matCellDef="let element"> {{element.Nombre}} </td>
+    </ng-container>
+
+    <!-- Action Column -->
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef style="text-align:center" width="30%"> <button mat-button (click)="openDialog('Add',{})" ><mat-icon>add</mat-icon></button> </th>
+      <td mat-cell *matCellDef="let element" class="action-link" style="text-align:center">
+        <button mat-button color="primary" (click)="openDialog('Update',element)"><mat-icon>edit</mat-icon></button> |
+        <button mat-button color="primary" (click)="openDialog('Delete',element)"><mat-icon>delete</mat-icon></button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns" class="thead-dark"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+</div>

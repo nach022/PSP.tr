@@ -1,0 +1,27 @@
+
+<br><br><br><br><br><br>
+
+<div id="dashboard" >
+
+  <iframe appIframeTracker (iframeClick)="navegarTareas()" src="http://10.101.0.57:3003/d-solo/o8DrKF4Gk/homepage?orgId=1&var-area=All&theme=light&panelId=4" width="100%" height="300" frameborder="0"></iframe>
+</div>
+
+
+
+ <script type="text/javascript">
+    var myConfObj = {
+      iframeMouseOver : false
+    }
+    window.addEventListener('blur',function(){
+      if(myConfObj.iframeMouseOver){
+        console.log('Wow! Iframe Click!');
+      }
+    });
+
+    document.getElementById('dashboard').addEventListener('mouseover',function(){
+      myConfObj.iframeMouseOver = true;
+    });
+    document.getElementById('dashboard').addEventListener('mouseout',function(){
+        myConfObj.iframeMouseOver = false;
+    });
+  </script>

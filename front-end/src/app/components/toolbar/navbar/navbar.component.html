@@ -1,0 +1,16 @@
+<mat-toolbar  class="mat-elevation-z10 barra-herramientas">
+  <img src="assets/img/PSP.svg" style="max-height: 80%; min-height: 80%;" >
+  <app-navbar-items></app-navbar-items>
+  <div class="spacer"></div>
+  <button mat-raised-button  [matMenuTriggerFor]="usuarioMenu"><mat-icon>account_circle</mat-icon>&nbsp;<span>{{ NombreUsuario }}</span></button>
+  <a mat-raised-button color="accent"><mat-icon>notifications</mat-icon></a>
+</mat-toolbar>
+
+
+
+<mat-menu #usuarioMenu="matMenu">
+  <button mat-menu-item (click)="cerrarSesion()">
+    <mat-icon>power_settings_new</mat-icon>
+    <span>Cerrar Sesión ({{ RolUsuario }})</span>
+  </button>
+</mat-menu>

@@ -1,0 +1,25 @@
+<span>
+  <ng-container *ngIf="navbarItem.tipo.trim() == 'H'; then itemHijo else itemNodo"></ng-container>
+</span>
+
+
+
+
+<ng-template #itemHijo>
+  <button mat-button (click)="navbarItemClick(navbarItem)"><mat-icon>{{ navbarItem.icon }}</mat-icon>&nbsp;{{ navbarItem.label }}</button>
+</ng-template>
+
+<ng-template #itemNodo>
+  <button mat-button [matMenuTriggerFor]="itemMenu"><mat-icon>{{ navbarItem.icon }}</mat-icon>&nbsp;{{ navbarItem.label }}</button>
+  <mat-menu #itemMenu="matMenu">
+    <button  mat-menu-item *ngFor="let hijo of navbarItem.hijos" (click)="navbarItemClick(hijo)">
+      <mat-icon>{{ hijo.icon }}</mat-icon>
+      <span>{{ hijo.label }}</span>
+    </button>
+  </mat-menu>
+</ng-template>
+
+
+
+
+

@@ -1,0 +1,15 @@
+.spacer{
+  flex: 1 1 auto;
+}
+
+.welcome{
+  font-size: small;
+}
+
+.rolname{
+  text-align: right;
+}
+
+.barra-herramientas{
+  margin-bottom: 80px;
+}

@@ -1,0 +1,69 @@
+<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
+  <mat-card class="box">
+    <mat-card-header >
+      <img src="/assets/img/PSP.svg" alt="PSP.tr">
+    </mat-card-header>
+
+    <form class="login-form" (submit)="loginUser(loginForm)" #loginForm="ngForm">
+
+      <mat-card-content>
+        <!-- Markup for getting Username starts -->
+        <mat-grid-list cols="9" rowHeight="75px">
+          <mat-grid-tile [rowspan]="1" class="login-icon">
+              <mat-icon>lock</mat-icon>
+          </mat-grid-tile>
+          <mat-grid-tile [colspan]="7">
+              <mat-form-field class="justifier">
+                  <input
+                    matInput
+                    ngModel
+                    name="userid"
+                    #userid="ngModel"
+                    placeholder="Usuario de red"
+                    text="text"
+                    required
+                    minlength="3"
+                  >
+                  <mat-error *ngIf="userid.invalid">El nombre de usuario es requerido y debe tener al menos 3 caracteres</mat-error>
+              </mat-form-field>
+          </mat-grid-tile>
+        </mat-grid-list>
+        <!-- Markup for getting Username ends -->
+
+        <!-- Markup for getting Password starts -->
+
+        <mat-grid-list cols="9" rowHeight="100px">
+          <mat-grid-tile [rowspan]="1"  class="login-icon">
+              <mat-icon>remove_red_eye</mat-icon>
+          </mat-grid-tile>
+          <mat-grid-tile [colspan]="7">
+              <mat-form-field class="justifier">
+                  <input
+                    matInput
+                    ngModel
+                    placeholder="Password"
+                    name="password"
+                    type="password"
+                    required
+                    minlength="3"
+                    #password="ngModel"
+                  >
+                  <mat-error *ngIf="password.invalid">La clave es requerida y debe tener al menos 3 caracteres</mat-error>
+              </mat-form-field>
+          </mat-grid-tile>
+        </mat-grid-list>
+        <!-- Markup for getting Password ends -->
+
+        <button mat-raised-button  color="accent" class="btn-block" type="submit">
+          <mat-icon>input</mat-icon> Ingresar
+        </button>
+
+
+      </mat-card-content>
+    </form>
+  </mat-card>
+  <div class="login-fondo-transparency">
+  </div>
+</div>
+
+

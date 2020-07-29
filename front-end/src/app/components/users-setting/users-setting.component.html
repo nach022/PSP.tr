@@ -1,0 +1,132 @@
+<div  *ngIf="isDataLoaded" fxLayout="column" fxLayoutAlign="space-around center" fxFlexFill>
+
+  <div fxLayout="row" fxLayoutAlign="center center"> <h1>Usuarios del Sistema.</h1></div>
+
+
+  <div style="width: 90%;margin:0 auto">
+    <div>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <h3>Solicitudes de Acceso.</h3>&nbsp;&nbsp;&nbsp;
+            <mat-icon color="warn" *ngIf="this.solicitudes.length !== 0">warning</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div  fxLayout="column" fxLayoutAlign="space-around center" fxFlexFill>
+          <table mat-table [dataSource]="this.solicitudes" id="tabla0" #mytable0 class="my-table mat-elevation-z8" width="95%">
+
+            <!--- Note that these columns can be defined in any order.
+                The actual rendered columns are set as a property on the row definition" -->
+
+
+            <!-- Legajo -->
+            <ng-container matColumnDef="Id">
+              <th mat-header-cell *matHeaderCellDef> Legajo </th>
+              <td mat-cell *matCellDef="let element"> {{element.Id}} </td>
+            </ng-container>
+
+            <!-- Nombre -->
+            <ng-container matColumnDef="Nombre">
+              <th mat-header-cell *matHeaderCellDef width="40%"> Nombre </th>
+              <td mat-cell *matCellDef="let element"> {{element.Nombre}} </td>
+            </ng-container>
+
+
+
+            <!-- Action Column -->
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef style="text-align:center">Asignar Rol | Eliminar Solicitud</th>
+              <td mat-cell *matCellDef="let element" class="action-link" style="text-align:center">
+                <button mat-button color="primary" (click)="openDialog('UpdateSol',element)"><mat-icon>person_add</mat-icon></button>
+                |
+                <button mat-button color="primary" (click)="openDialog('DeleteSol',element)"><mat-icon>delete</mat-icon></button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsSol" class="thead-dark"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsSol;"></tr>
+          </table>
+        </div>
+
+
+
+      </mat-expansion-panel>
+
+      <br><br><br>
+    </div>
+
+    <mat-expansion-panel expanded>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <h3>Usuarios y Roles.</h3>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div  fxLayout="column" fxLayoutAlign="space-around center" fxFlexFill>
+        <table mat-table [dataSource]="this.usuarios" id="tabla0" #mytable0 class="my-table mat-elevation-z8" width="95%">
+
+          <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+
+
+          <!-- Legajo -->
+          <ng-container matColumnDef="Id">
+            <th mat-header-cell *matHeaderCellDef> Legajo </th>
+            <td mat-cell *matCellDef="let element"> {{element.Id}} </td>
+          </ng-container>
+
+          <!-- Nombre -->
+          <ng-container matColumnDef="Nombre">
+            <th mat-header-cell *matHeaderCellDef width="35%"> Nombre </th>
+            <td mat-cell *matCellDef="let element"> {{element.Nombre}} </td>
+          </ng-container>
+
+          <!-- Nombre -->
+          <ng-container matColumnDef="Roles">
+            <th mat-header-cell *matHeaderCellDef width="35%" style="text-align:left"> Roles </th>
+            <td mat-cell *matCellDef="let element" style="text-align:left"> {{element.RolesList}} </td>
+          </ng-container>
+
+
+          <!-- Rol -->
+          <ng-container matColumnDef="Roles2">
+            <th mat-header-cell *matHeaderCellDef width="30%"> Roles</th>
+            <td mat-cell *matCellDef="let element">
+              <mat-form-field>
+                <mat-label>Seleccionar Roles</mat-label>
+                <mat-select [(ngModel)]="element.roles" multiple>
+                  <mat-option *ngFor="let rol of this.roles" [value]="rol.Id">
+                    {{rol.Nombre}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </td>
+          </ng-container>
+
+          <!-- Action Column -->
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef style="text-align:center">Editar Roles | Eliminar</th>
+            <td mat-cell *matCellDef="let element" class="action-link" style="text-align:center">
+              <button mat-button color="primary" (click)="openDialog('Update',element)"><mat-icon>edit</mat-icon></button>
+              |
+              <button mat-button color="primary" (click)="openDialog('Delete',element)"><mat-icon>delete</mat-icon></button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns" class="thead-dark"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+
+
+
+    </mat-expansion-panel>
+
+
+
+
+
+
+  </div>
+</div>

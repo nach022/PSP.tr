@@ -1,0 +1,7 @@
+<block-ui>
+  <div *ngIf="!router.url.includes('/login') && !router.url.includes('/register')">
+    <app-navbar></app-navbar>
+  </div>
+
+  <router-outlet></router-outlet>
+</block-ui>

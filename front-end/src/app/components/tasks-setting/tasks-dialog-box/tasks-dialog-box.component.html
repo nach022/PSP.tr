@@ -1,0 +1,81 @@
+<div fxLayout="column" fxLayoutAlign="space-around center" fxFlexFill class="espacioAbajo">
+  <h1 mat-dialog-title *ngIf="action == 'Delete'">Eliminar Tarea</h1>
+  <h1 mat-dialog-title *ngIf="action == 'Update'">Editar Tarea</h1>
+  <mat-divider></mat-divider>
+</div>
+
+<form #dialogForm="ngForm">
+  <div mat-dialog-content class="espacioAbajo">
+
+
+    <div  *ngIf="action != 'Delete'; else elseTemplate">
+      <div>
+        <mat-form-field class="descrInput">
+          <input matInput [(ngModel)]="local_data.Descr" placeholder="Descripci&oacute;n" #descr="ngModel" maxlength="80" minlength="5" name="descr">
+          <mat-error *ngIf="descr.invalid">La descripci&oacute;n de la Tarea, debe tener al menos 5 caracteres.</mat-error>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="tipoInput">
+          <mat-label>Seleccionar Tipo</mat-label>
+          <mat-select [(ngModel)]="local_data.TipoTareaId" name="tipoTareaId" #tipoTarea="ngModel">
+            <mat-optgroup *ngFor="let group of this.local_data.groups" [label]="group.Nombre">
+              <mat-option *ngFor="let tipoT of this.local_data.tipos[group.Id]" [value]="tipoT.Id">
+                {{tipoT.Nombre}}
+              </mat-option>
+            </mat-optgroup>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="freqInput">
+          <input matInput [(ngModel)]="local_data.Frecuencia" placeholder="Frecuencia" #frecuencia="ngModel" type="number" min="0" name="frecuencia">
+          <mat-error *ngIf="descr.invalid">La frecuencia de la Tarea, debe ser un entero positivo.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-select [(ngModel)]="local_data.Periodo" name="periodo" #periodo="ngModel">
+            <mat-option value="D">
+              d&iacute;as
+            </mat-option>
+            <mat-option value="W">
+              semanas
+            </mat-option>
+            <mat-option value="M">
+              meses
+            </mat-option>
+            <mat-option value="Y">
+              a&ntilde;os
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+    <ng-template #elseTemplate>
+      <div fxLayout="column" fxLayoutAlign="space-around center">
+        <p>Seguro que desea eliminar la de Tarea de c&oacute;digo <b>{{local_data.PPM}}</b>?</p>
+      </div>
+    </ng-template>
+
+  </div>
+  <div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-evenly stretch">
+    <button (click)="doAction(dialogForm)" mat-raised-button color="accent">
+      <mat-icon *ngIf="action != 'Delete'"> check</mat-icon>
+      <mat-icon *ngIf="action == 'Delete'"> delete</mat-icon>
+      &nbsp;Confirmar
+    </button>
+    <button (click)="closeDialog()" mat-raised-button><mat-icon>clear</mat-icon>&nbsp;Cancelar</button>
+  </div>
+</form>

@@ -1,0 +1,76 @@
+.mat-expansion-panel-header{
+  align-items: baseline;
+}
+
+.mat-expansion-panel-header-description{
+  justify-content: flex-end;
+  align-items: baseline;
+}
+
+.sinTareas{
+  font: 400 14px/20px Roboto, "Helvetica Neue", sans-serif;
+  font-style: normal;
+  font-variant-ligatures: normal;
+  font-variant-caps: normal;
+  font-variant-numeric: normal;
+  font-variant-east-asian: normal;
+  font-weight: 400;
+  font-stretch: normal;
+  font-size: 14px;
+  line-height: 20px;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  color: rgba(0,0,0,.54);
+}
+
+.table-danger,
+.table-danger > th,
+.table-danger > td {
+  background-color: #f5c6cb;
+}
+
+.table-danger th,
+.table-danger td,
+.table-danger thead th,
+.table-danger tbody + tbody {
+  border-color: #ed969e;
+}
+
+.table-hover .table-danger:hover {
+  background-color: #f1b0b7;
+}
+
+.table-hover .table-danger:hover > td,
+.table-hover .table-danger:hover > th {
+  background-color: #f1b0b7;
+}
+
+.table-warning,
+.table-warning > th,
+.table-warning > td {
+  background-color: #ffeeba;
+}
+
+.table-warning th,
+.table-warning td,
+.table-warning thead th,
+.table-warning tbody + tbody {
+  border-color: #ffdf7e;
+}
+
+.table-hover .table-warning:hover {
+  background-color: #ffe8a1;
+}
+
+.table-hover .table-warning:hover > td,
+.table-hover .table-warning:hover > th {
+  background-color: #ffe8a1;
+}
+
+.thead-dark tr,
+.thead-dark td,
+.thead-dark th,
+.thead-dark thead {
+  color: #fff;
+  background-color: #343a40;
+  border-color: #454d55;
+}

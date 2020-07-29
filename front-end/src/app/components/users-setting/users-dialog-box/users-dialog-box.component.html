@@ -1,0 +1,56 @@
+<div fxLayout="column" fxLayoutAlign="space-around center" fxFlexFill class="espacioAbajo">
+  <h1 mat-dialog-title *ngIf="action == 'Delete'">Eliminar Usuario</h1>
+  <h1 mat-dialog-title *ngIf="action == 'Update'">Editar Roles</h1>
+  <h1 mat-dialog-title *ngIf="action == 'DeleteSol'">Eliminar Solicitud</h1>
+  <h1 mat-dialog-title *ngIf="action == 'UpdateSol'">Asignar Roles</h1>
+  <mat-divider></mat-divider>
+</div>
+
+<form #dialogForm="ngForm">
+  <div mat-dialog-content class="espacioAbajo">
+
+
+    <div  *ngIf="action == 'Update' || action == 'UpdateSol'; else elseTemplate">
+      <div>
+        <mat-form-field class="descrInput">
+          <input matInput [(ngModel)]="usuario.Nombre" placeholder="Apellido, Nombre" maxlength="50" minlength="5" name="nombre" #nombre="ngModel">
+          <mat-error *ngIf="nombre.invalid">El nombre del usuario debe tener al menos 5 caracteres.</mat-error>
+        </mat-form-field>
+      </div>
+      <div>
+
+
+
+        <mat-form-field class="tipoInput">
+          <mat-label>Seleccionar Roles</mat-label>
+          <mat-select [(ngModel)]="usuario.Roles" multiple name="rolesUsr" #rolesUsr="ngModel" required>
+            <mat-option *ngFor="let rol of this.roles" [value]="rol.Id">
+              {{rol.Nombre}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="rolesUsr.invalid">Por favor, seleccione al menos un rol para el usuario</mat-error>
+        </mat-form-field>
+
+      </div>
+    </div>
+
+
+
+
+    <ng-template #elseTemplate>
+      <div fxLayout="column" fxLayoutAlign="space-around center">
+        <p *ngIf="action == 'Delete'">Seguro que desea eliminar al usuario <b>{{usuario.Nombre}}</b>?</p>
+        <p *ngIf="action == 'DeleteSol'">Seguro que desea eliminar la solicitud de acceso del usuario <b>{{usuario.Nombre}}</b>?</p>
+      </div>
+    </ng-template>
+
+  </div>
+  <div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-evenly stretch">
+    <button (click)="doAction(dialogForm)" mat-raised-button color="accent">
+      <mat-icon *ngIf="action == 'Update' || action == 'UpdateSol'"> check</mat-icon>
+      <mat-icon *ngIf="action == 'Delete' || action == 'DeleteSol'"> delete</mat-icon>
+      &nbsp;Confirmar
+    </button>
+    <button (click)="closeDialog()" mat-raised-button><mat-icon>clear</mat-icon>&nbsp;Cancelar</button>
+  </div>
+</form>

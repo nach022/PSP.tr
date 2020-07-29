@@ -1,0 +1,168 @@
+<div  *ngIf="isDataLoaded" fxLayout="column" fxLayoutAlign="space-around center" fxFlexFill>
+
+  <div fxLayout="row" fxLayoutAlign="center center"> <h1>Tareas.</h1></div>
+
+
+  <div style="width: 90%;margin:0 auto">
+
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <h3>Tareas EAM sin clasificar.</h3>
+        </mat-panel-title>
+        <mat-panel-description *ngIf="this.tareas[0].length">
+          <mat-icon color="warn">warning</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <div  fxLayout="column" fxLayoutAlign="space-around center" fxFlexFill>
+        <table mat-table [dataSource]="this.tareas[0]" id="tabla0" #mytable0 class="my-table mat-elevation-z8" width="90%">
+
+          <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+
+
+          <!-- PPM_CODE -->
+          <ng-container matColumnDef="PPM">
+            <th mat-header-cell *matHeaderCellDef> C&oacute;digo PPM </th>
+            <td mat-cell *matCellDef="let element"> {{element.PPM}} </td>
+          </ng-container>
+
+          <!-- Descr -->
+          <ng-container matColumnDef="Descr">
+            <th mat-header-cell *matHeaderCellDef width="40%"> Descripci&oacute;n </th>
+            <td mat-cell *matCellDef="let element"> {{element.Descr}} </td>
+          </ng-container>
+
+          <!-- Equipo -->
+          <ng-container matColumnDef="Equipo">
+            <th mat-header-cell *matHeaderCellDef> Equipo </th>
+            <td mat-cell *matCellDef="let element" matTooltip="{{element.EquipoDescr}}" matTooltipPosition="right"> {{element.Equipo}} </td>
+          </ng-container>
+
+          <!-- Frecuencia -->
+          <ng-container matColumnDef="Frecuencia">
+            <th mat-header-cell *matHeaderCellDef> Frecuencia </th>
+            <td mat-cell *matCellDef="let element"> {{element.Frecuencia}} {{element.PeriodoMap}}</td>
+          </ng-container>
+
+
+
+          <!-- Tipo -->
+          <ng-container matColumnDef="TipoTarea">
+            <th mat-header-cell *matHeaderCellDef> Asignar Tipo</th>
+            <td mat-cell *matCellDef="let element">
+              <mat-form-field>
+                <mat-label>Seleccionar Tipo</mat-label>
+                <mat-select [(ngModel)]="selectedValue[element.PPM][element.Equipo]">
+                  <mat-optgroup *ngFor="let group of this.servicios; index as i" [label]="group.Nombre">
+                    <mat-option *ngFor="let tipoT of this.tipos[group.Id]" [value]="tipoT.Id">
+                      {{tipoT.Nombre}}
+                    </mat-option>
+                  </mat-optgroup>
+                </mat-select>
+              </mat-form-field>
+            </td>
+          </ng-container>
+
+          <!-- Action Column -->
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef style="text-align:center"></th>
+            <td mat-cell *matCellDef="let element" class="action-link" style="text-align:center">
+              <button mat-button color="primary" (click)="assignTipo(element)" *ngIf="selectedValue[element.PPM][element.Equipo]"><mat-icon>send</mat-icon></button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns" class="thead-dark"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+
+
+
+    </mat-expansion-panel>
+
+
+
+    <mat-accordion>
+      <mat-expansion-panel  *ngFor="let serv of servicios; index as i ">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <h3>{{serv.Nombre}}</h3>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+          <mat-accordion>
+
+            <mat-expansion-panel  *ngFor="let tipo of tipos[serv.Id]; index as j ">
+              <mat-expansion-panel-header>
+                <div *ngIf="true">
+                  {{setTableArray(tipo.Id, i+j)}}
+                </div>
+                <mat-panel-title>
+                  <h3>{{tipo.Nombre}}</h3>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div  fxLayout="column" fxLayoutAlign="space-around center" fxFlexFill>
+                <table  [hidden] = "!tareas[tipo.Id].length" mat-table [dataSource]="tareas[tipo.Id]" id="tabla{{tipo.Id}}" #mytable{{tipo.Id}} class="my-table mat-elevation-z8" width="90%">
+
+                  <!-- Id -->
+                  <ng-container matColumnDef="ID">
+                    <th mat-header-cell *matHeaderCellDef> Id </th>
+                    <td mat-cell *matCellDef="let element"> {{element.Id}} </td>
+                  </ng-container>
+
+                  <!-- PPM_CODE Column -->
+                  <ng-container matColumnDef="PPM">
+                    <th mat-header-cell *matHeaderCellDef> C&oacute;digo PPM </th>
+                    <td mat-cell *matCellDef="let element"> {{element.PPM}} </td>
+                  </ng-container>
+
+                    <!-- Descr -->
+                  <ng-container matColumnDef="Descr">
+                    <th mat-header-cell *matHeaderCellDef width="55%"> Descripci&oacute;n </th>
+                    <td mat-cell *matCellDef="let element"> {{element.Descr}} </td>
+                  </ng-container>
+
+                  <!-- Equipo -->
+                  <ng-container matColumnDef="Equipo">
+                    <th mat-header-cell *matHeaderCellDef> Equipo </th>
+                    <td mat-cell *matCellDef="let element" matTooltip="{{element.EquipoDescr}}" matTooltipPosition="right"> {{element.Equipo}} </td>
+                  </ng-container>
+
+                  <!-- Frecuencia -->
+                  <ng-container matColumnDef="Frecuencia">
+                    <th mat-header-cell *matHeaderCellDef> Frecuencia </th>
+                    <td mat-cell *matCellDef="let element"> {{element.Frecuencia}} {{element.PeriodoMap}}</td>
+                  </ng-container>
+
+
+                  <!-- Action Column -->
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef style="text-align:center" > Editar | Eliminar </th>
+                    <td mat-cell *matCellDef="let element" class="action-link" style="text-align:center">
+                      <button mat-button color="primary" (click)="openDialog('Update',element)"><mat-icon>edit</mat-icon></button> |
+                      <button mat-button color="primary" (click)="openDialog('Delete',element)"><mat-icon>delete</mat-icon></button>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns2" class="thead-dark"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
+                </table>
+              </div>
+
+              <p class="sinTareas" *ngIf="tareas[tipo.Id].length == 0">No existen tareas de este tipo.</p>
+
+
+
+
+
+
+            </mat-expansion-panel>
+          </mat-accordion>
+        </mat-expansion-panel>
+      </mat-accordion>
+
+
+  </div>
+</div>
