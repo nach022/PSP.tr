@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { NgForm } from '@angular/forms';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
-import { NotificationService } from '../../services/notification.service';
+import { NotificationService } from 'src/app/services/notification.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { GlobalConstants } from '../../common/global.constants';
+import { GlobalConstants } from 'src/app/common/global.constants';
 
 
 
@@ -67,13 +67,11 @@ export class LoginComponent implements OnInit {
         else{
           // si el usuario tiene rol asignado, lo redirecciono al inicio
           if (response.rol){
-            console.log('me voy al home');
             this.router.navigate(['/home']);
           }
           // si no tiene rol asignado, lo redirecciono al registro de usuarios
           else{
             this.router.navigate(['/register']);
-
           }
         }
       });

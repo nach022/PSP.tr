@@ -195,16 +195,11 @@ router.post('/login', (req,res) => {
                             // si el usuario tiene un rol, lo agrego al payload, genero el jwt y devuelvo un 200
                             else{
                                 let roles = [];
-                                let nomRol = '';
+                                let nomRol = [];
                                 queryRes.rows.forEach(element => {
                                     roles.push(element.RolId);
                                     if(element.RolId > 1){
-                                        if(nomRol.length > 0){
-                                            nomRol += `, ${element.Rol.Nombre}`;
-                                        }
-                                        else{
-                                            nomRol += `${element.Rol.Nombre}`;
-                                        }
+                                        nomRol.push(element.Rol.Nombre);
                                     }                                    
                                 });
 

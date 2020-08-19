@@ -113,8 +113,14 @@ export class AuthService {
     sessionStorage.removeItem(GlobalConstants.SESSION_NAME_KEY);
     sessionStorage.removeItem(GlobalConstants.SESSION_ROL_KEY);
     sessionStorage.removeItem(GlobalConstants.SESSION_ROL_CREATED_AT);
+    sessionStorage.removeItem(GlobalConstants.SESSION_FILTRO_AREAS);
     localStorage.removeItem(GlobalConstants.LOCAL_TOKEN_KEY);
     this.router.navigate(['login']);
+  }
+
+  // Obtiene los Grupos de Acción para los cuales tiene permisos el Usuario.
+  getFiltroAreas(){
+    return this.http.get<any>(GlobalConstants.API_FILTRO_AREAS_URL);
   }
 
 }

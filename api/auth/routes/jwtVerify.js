@@ -35,7 +35,8 @@ module.exports = function (req, res, next) {
               include: [ 
                 { model: db.models['Rol'] },
               ]  
-            }).then(queryRes => {
+            })
+            .then(queryRes => {
               // si el usuario no tiene más ese rol, devuelvo 401.
               if (queryRes.count != payload.rol.length){
                 res.status(401).send("Los roles del usuario fueron modificado.");
@@ -61,7 +62,8 @@ module.exports = function (req, res, next) {
                       RolId: payload.rol,
                       Method: ['*', req.method]
                   }
-                }).then(rolRes => {
+                })
+                .then(rolRes => {
                   if (rolRes.count < 1){
                     //console.log(req);
                     res.status(405).send("El rol del usuario no tiene permisos para hacer este request.");
@@ -71,19 +73,41 @@ module.exports = function (req, res, next) {
                     req.userid = payload._id;
                     req.rolid = payload.rol;
                     req.appid = queryRes.rows[0].Rol.AppId; 
-                    next();
+                    req.areas = [];
+                    db.models['RolGruposAccion'].findAll({
+                      where: {
+                        RolId: payload.rol
+                      }
+                    })
+                    .then(areas =>{
+                      areas.forEach(area => {
+                        req.areas.push(area.ServicioEjecId);
+                      });
+                      next();
+                    })
+                    .catch(error => {
+                      return next(error);
+                    });
+                    
+
                   }
-                })              
+                })
+                .catch(error => {
+                  return next(error);
+                });              
               }
+            })
+            .catch(error => {
+              return next(error);
             });
 
           }
           // Si es el registro de un nuevo usuario
           else{
-            console.log(16);
             req.userid = payload._id;
             req.rolid = payload.rol;
             req.appid = payload.app; 
+            req.areas = [];
             next();
           }
 

@@ -65,11 +65,24 @@ export class TasksOverviewComponent implements OnInit {
     this.blockUI.start('Cargando Datos de Tareas...');
     this.siteService.getTareasOverview().subscribe(
       res => {
+        console.log(res);
         this.blockUI.stop();
         const table = [];
         res.forEach(element => {
           let freq = 0;
-          let prox = new Date(element.UltimaEjecucion);
+
+          const ue = new Date (element.UltimaEjecucion);
+          const timeZoneDifference = (ue.getTimezoneOffset() / 60);
+          ue.setTime(ue.getTime() + (timeZoneDifference * 60) * 60 * 1000);
+          let prox = new Date(ue);
+
+
+
+          if(element.PPM === '854AUS001'){
+            console.log('ultima ejec:', element.UltimaEjecucion);
+            console.log('next ejec:', prox);
+          }
+
           if (element.Periodo === 'M'){
             freq = element.Frecuencia * 30;
             prox.setMonth(prox.getMonth() + element.Frecuencia);
@@ -89,7 +102,7 @@ export class TasksOverviewComponent implements OnInit {
           else{
             prox = new Date();
           }
-          const ue = new Date (element.UltimaEjecucion);
+
 
           table.push({
             PPM: element.PPM,
@@ -99,9 +112,9 @@ export class TasksOverviewComponent implements OnInit {
             Frecuencia: `${element.Frecuencia}  ${element.Periodo !== null ? this.periodMap[element.Periodo.trim()][element.Frecuencia > 1 ? 2 : 1] : ''}`,
             UEjec: element.UltimaEjecucion,
             PEjec: prox,
-            UltimaEjecucion: `${ue.getDate()}/${ue.getMonth() + 1}/${ue.getFullYear()}`,
-            ProximaEjecucion: `${prox.getDate()}/${prox.getMonth() + 1}/${prox.getFullYear()}`,
-            Holgura: Math.ceil((prox.getTime() - (new Date()).getTime()) / (1000 * 60 * 60 * 24)),
+            UltimaEjecucion: `${ue.getDate().toString().padStart(2, '0')}/${(ue.getMonth() + 1).toString().padStart(2, '0')}/${ue.getFullYear()}`,
+            ProximaEjecucion: `${prox.getDate().toString().padStart(2, '0')}/${(prox.getMonth() + 1).toString().padStart(2, '0')}/${prox.getFullYear()}`,
+            Holgura: element.Holgura,
             ServicioEjecutor: element.ServicioEjecutor,
             TipoTarea: element.TipoTarea,
             Freq: freq

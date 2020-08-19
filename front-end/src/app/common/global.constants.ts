@@ -1,4 +1,6 @@
 import { ProgressAnimationType } from 'ngx-toastr';
+import { environment } from 'src/environments/environment';
+
 
 // Clase para exportar variables globales
 export class GlobalConstants {
@@ -14,11 +16,13 @@ export class GlobalConstants {
   public static APP_NOTIF_POSITION = 'toast-bottom-full-width';
 
   // urls de los servicios de la API
-  public static API_SERVER = '172.16.3.46';
+
   public static API_PORT = 3000;
-  public static API_BASE_URL = `http://${GlobalConstants.API_SERVER}:${GlobalConstants.API_PORT}/api`;
+  public static API_BASE_URL = `http://${GlobalConstants.API_SERVER()}:${GlobalConstants.API_PORT}/api`;
+  public static API_FILTRO_AREAS_URL = `${GlobalConstants.API_BASE_URL}/psp/myAreas`;
   public static API_LOGIN_URL = `${GlobalConstants.API_BASE_URL}/user/login`;
   public static API_MENU_URL = `${GlobalConstants.API_BASE_URL}/app/menu`;
+  public static API_NOTIF_URL = `${GlobalConstants.API_BASE_URL}/psp/notificaciones`;
   public static API_REGISTER_URL = `${GlobalConstants.API_BASE_URL}/user/register`;
   public static API_ROLES_URL = `${GlobalConstants.API_BASE_URL}/app/roles`;
   public static API_SERV_EJEC_URL = `${GlobalConstants.API_BASE_URL}/psp/areas`;
@@ -37,11 +41,19 @@ export class GlobalConstants {
   public static SESSION_ROL_KEY = 'psp-rol';
   public static SESSION_NAME_KEY = 'psp-name';
   public static SESSION_ROL_CREATED_AT = 'rol-createdAt';
+  public static SESSION_FILTRO_AREAS = 'psp-filtroAreas';
 
   // keys para almacenar información en el local storage
   public static LOCAL_TOKEN_KEY = 'psp-token';
 
-
+  public static API_SERVER(){
+    if (environment.production) {
+      return'172.16.3.46';
+    }
+    else{
+      return 'localhost';
+    }
+  }
 
 
 

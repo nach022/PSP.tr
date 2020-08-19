@@ -11,15 +11,15 @@ import { NotificationService } from 'src/app/services/notification.service';
 export class NavbarItemComponent implements OnInit {
   @Input() navbarItem: NavbarItem;
 
-  constructor(private _router: Router, private _notif: NotificationService) { }
+  constructor(private router: Router, private notif: NotificationService) { }
 
   ngOnInit(): void {
   }
 
-  navbarItemClick(item : NavbarItem){
-    this._notif.clear();
-    this._router.navigate([item.route]).catch(err =>{
-      this._notif.error(err);
+  navbarItemClick(item: NavbarItem){
+    this.notif.clear();
+    this.router.navigate([item.route]).catch(err => {
+      this.notif.error(err);
     });
   }
 

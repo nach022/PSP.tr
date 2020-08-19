@@ -21,3 +21,6 @@ global.DB_EAM_NAME = process.env.DB_EAM_NAME;
 global.DB_EAM_USER = process.env.DB_EAM_USER;
 global.DB_EAM_PASSWORD = process.env.DB_EAM_PASSWORD;
 global.DB_EAM_DIALECT = process.env.DB_EAM_DIALECT;
+global.SYSADMIN_ROL = process.env.SYSADMIN_ROL;
+global.PSP_ADMIN_ROL = process.env.PSP_ADMIN_ROL;
+global.PSP_NO_ROL = process.env.PSP_NO_ROL;

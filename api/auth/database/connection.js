@@ -14,6 +14,7 @@ const UserRolModel = require("../models/auth/UserRol");
 const ServEjecModel = require("../models/psp/ServicioEjecutor");
 const TareaModel = require("../models/psp/Tarea");
 const TipoTareaModel = require("../models/psp/TipoTarea");
+const RolGruposAccionModel = require("../models/psp/RolGruposAccion");
 
 
 const db = new sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
@@ -53,6 +54,7 @@ const RolMenu = RolMenuModel(db, sequelize);
 const RolRequest  = RolRequestModel(db, sequelize);
 const User = UserModel(db, sequelize);
 const UserRol = UserRolModel(db, sequelize);
+const RolGruposAccion = RolGruposAccionModel(db, sequelize);
 
 
 
