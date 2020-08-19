@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GlobalConstants } from '../common/global.constants';
-import { tareaDataInterface } from '../components/tasks-setting/tasks-setting.component';
-import { tipoInterface } from '../components/task-types-settings/task-types-settings.component';
+import { tareaDataInterface } from '../components/settings/tasks-setting/tasks-setting.component';
+import { tipoInterface } from '../components/settings/task-types-settings/task-types-settings.component';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +14,11 @@ export class SiteService {
   // Función para recuperar el menú de la aplicación, dependiendo del rol del usuario
   getNavbar(){
     return this.http.get<any>(GlobalConstants.API_MENU_URL);
+  }
+
+  // Función para obtener notificaciones del usuario
+  getNotifications(){
+    return this.http.get<any>(GlobalConstants.API_NOTIF_URL);
   }
 
   /************* Grupos de Acción *************/

@@ -20,7 +20,7 @@ import * as Gantt from 'fusioncharts/fusioncharts.gantt.js';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LoginComponent } from './components/login/login.component';
+import { LoginComponent } from './components/users/login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavbarComponent } from './components/toolbar/navbar/navbar.component';
 import { NavbarItemsComponent } from './components/toolbar/navbar-items/navbar-items.component';
@@ -28,20 +28,20 @@ import { NavbarItemComponent } from './components/toolbar/navbar-item/navbar-ite
 import { AuthService } from './services/auth.service';
 import { NotificationService } from './services/notification.service';
 import { HomeComponent } from './components/home/home.component';
-import { RegisterComponent } from './components/register/register.component';
+import { RegisterComponent } from './components/users/register/register.component';
 import { AuthGuard } from './guards/auth.guard';
 import { GlobalConstants } from './common/global.constants';
 import { JwtInterceptorService } from './services/jwt-interceptor.service';
-import { AreasSettingComponent } from './components/areas-setting/areas-setting.component';
-import { AreasDialogBoxComponent } from './components/areas-setting/areas-dialog-box/areas-dialog-box.component';
-import { TaskTypesSettingsComponent } from './components/task-types-settings/task-types-settings.component';
-import { TaskTypesDialogBoxComponent } from './components/task-types-settings/task-types-dialog-box/task-types-dialog-box.component';
-import { TasksSettingComponent } from './components/tasks-setting/tasks-setting.component';
-import { TasksDialogBoxComponent } from './components/tasks-setting/tasks-dialog-box/tasks-dialog-box.component';
-import { TasksOverviewComponent } from './components/tasks-overview/tasks-overview.component';
-import { GanttComponent } from './components/gantt/gantt.component';
-import { UsersSettingComponent } from './components/users-setting/users-setting.component';
-import { UsersDialogBoxComponent } from './components/users-setting/users-dialog-box/users-dialog-box.component';
+import { AreasSettingComponent } from './components/settings/areas-setting/areas-setting.component';
+import { AreasDialogBoxComponent } from './components/settings/areas-setting/areas-dialog-box/areas-dialog-box.component';
+import { TaskTypesSettingsComponent } from './components/settings/task-types-settings/task-types-settings.component';
+import { TaskTypesDialogBoxComponent } from './components/settings/task-types-settings/task-types-dialog-box/task-types-dialog-box.component';
+import { TasksSettingComponent } from './components/settings/tasks-setting/tasks-setting.component';
+import { TasksDialogBoxComponent } from './components/settings/tasks-setting/tasks-dialog-box/tasks-dialog-box.component';
+import { TasksOverviewComponent } from './components/tasks/tasks-overview/tasks-overview.component';
+import { GanttComponent } from './components/tasks/gantt/gantt.component';
+import { UsersSettingComponent } from './components/settings/users-setting/users-setting.component';
+import { UsersDialogBoxComponent } from './components/settings/users-setting/users-dialog-box/users-dialog-box.component';
 
 // Pass the fusioncharts library and chart modules
 FusionChartsModule.fcRoot(FusionCharts, charts, Widgets, Gantt, FusionTheme);

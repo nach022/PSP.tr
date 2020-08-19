@@ -41,6 +41,20 @@ router.get('/areas', verifier, asyncHandler(async (req, res) => {
 }));
 
 
+//Select Nombre Areas de Usuario
+router.get('/myAreas', verifier, asyncHandler(async (req, res) => {
+    let areas = await db.models['ServicioEjecutor'].findAll({ 
+        where: {
+            Id: req.areas
+        },
+        order: ['Nombre'] 
+    });
+    let result = [];
+    for(indx in areas){
+        result.push(areas[indx].Nombre);
+    }
+    res.status(200).send(result);
+}));
 
 
 // INSERT
@@ -300,7 +314,7 @@ router.delete('/tiposTareas/:TipoTareaId', verifier, asyncHandler(async (req, re
 
 /************** Tareas **************/
 
-//Función auxiliar que me recupera el servicio ejecutor y lo agrega al request cada vez que la url trae un id de servicio ejecutor
+//Función auxiliar que me recupera la tarea y la agrega al request cada vez que la url trae un id de tarea
 router.param('TareaId', function(request, response, next, id){
     db.models['Tarea'].findByPk(id)
         .then(existe =>{
@@ -321,28 +335,10 @@ router.param('TareaId', function(request, response, next, id){
 // SELECT
 
 router.get('/tareas', verifier, asyncHandler(async (req, res) => {
-
-    const dbEAM = new sequelize(DB_EAM_NAME, DB_EAM_USER, DB_EAM_PASSWORD, {
-        host: DB_EAM_HOST,
-        dialect: DB_EAM_DIALECT,
-        logging: false,
-        dialectOptions: {
-            options: {
-            trustServerCertificate: true,
-            schema: "dbo",
-            },
-        }
-    });
     try{
         await dbEAM.authenticate();
         console.log("Conexion a BD de EAM, check!");
-        let ppms = await dbEAM.query(`select PPM_CODE, PPM_DESC, po.PPO_OBJECT, o.OBJ_DESC, isnull(po.PPO_FREQ, p.PPM_FREQ) FREQ, 
-                                        isnull(po.PPO_PERIODUOM, p.PPM_PERIODUOM) PERIODUOM  from R5PPMS p 
-                                        inner join R5PPMOBJECTS po on po.PPO_PPM = p.PPM_CODE
-                                        inner join R5OBJECTS o on o.OBJ_CODE = po.PPO_OBJECT
-                                        where p.ppm_udfchar26 = 'SI'  and PPM_NOTUSED <> '+' order by PPM_CODE, OBJ_DESC`, 
-                                        { type: sequelize.QueryTypes.SELECT});
-        dbEAM.close();
+        let ppms = await db.query(`select PPM_CODE, PPM_DESC, OBJ_CODE, OBJ_DESC, PPM_FREQ, PPM_PERIODUOM  from psp.TareasInfo`, { type: sequelize.QueryTypes.SELECT});
         let resultado = [];
         for (index in ppms) {
             const ppm = ppms[index];
@@ -351,12 +347,12 @@ router.get('/tareas', verifier, asyncHandler(async (req, res) => {
                 PPM: ppm.PPM_CODE,
                 TipoTareaId: null,
                 Descr: ppm.PPM_DESC,
-                Equipo: ppm.PPO_OBJECT,
+                Equipo: ppm.OBJ_CODE,
                 EquipoDescr: ppm.OBJ_DESC,
-                Frecuencia: ppm.FREQ,
-                Periodo: ppm.PERIODUOM
+                Frecuencia: ppm.PPM_FREQ,
+                Periodo: ppm.PPM_PERIODUOM
             }
-            let tarea = await db.models['Tarea'].findOne({ where: { PPM: ppm.PPM_CODE, Equipo: ppm.PPO_OBJECT } });
+            let tarea = await db.models['Tarea'].findOne({ where: { PPM: ppm.PPM_CODE, Equipo: ppm.OBJ_CODE } });
             if(tarea !== null){
                 //console.log(tarea);
                 elemento.Id = tarea.Id;
@@ -371,7 +367,6 @@ router.get('/tareas', verifier, asyncHandler(async (req, res) => {
     }
 
     catch(error){
-        if(dbEAM) dbEAM.close();
         res.status(500).send(error);
     }
     
@@ -381,63 +376,49 @@ router.get('/tareas', verifier, asyncHandler(async (req, res) => {
 
 
 // SELECT EXTENDIDO
-router.get('/tareasOverview', /*verifier,*/ asyncHandler(async (req, res) => {
-
-    const dbEAM = new sequelize(DB_EAM_NAME, DB_EAM_USER, DB_EAM_PASSWORD, {
-        host: DB_EAM_HOST,
-        dialect: DB_EAM_DIALECT,
-        logging: false,
-        dialectOptions: {
-            options: {
-            trustServerCertificate: true,
-            schema: "dbo",
-            },
-        }
-    });
+router.get('/tareasOverview', verifier, asyncHandler(async (req, res) => {
     try{
         let salida = [];
-        await dbEAM.authenticate();
-        console.log("Conexion a BD de EAM, check!");
-        let tareas = await db.models['Tarea'].findAll(
-            {include:
-                {
-                    model: db.models['TipoTarea'], as: 'Tipo'
-                    
-                }
+        let tareasInfo = await db.query("select PPM_CODE, OBJ_CODE, PPM_DESC, OBJ_DESC, UltimaEjecucion, Holgura, PPM_DURATION from psp.TareasInfo order by Holgura asc", { type: sequelize.QueryTypes.SELECT});
+        
+        for(indx in tareasInfo){
+            tareaInfo = tareasInfo[indx];
+            let ultimaEjec = new Date(tareaInfo.UltimaEjecucion);
+            const timeZoneDifference = (ultimaEjec.getTimezoneOffset() / 60);
+            ultimaEjec.setTime(ultimaEjec.getTime() + (timeZoneDifference * 60) * 60 * 1000);
+            if(tareaInfo.PPM_CODE === '854AUS001'){
+                console.log('ue: ',tareaInfo.UltimaEjecucion);
+                console.log('ue2: ',ultimaEjec);
+                console.log('tz: ', timeZoneDifference);
+                console.log('ue3: ',ultimaEjec);
+                console.log(tareaInfo);
             }
-        );
-        for(indx in tareas){
-            tarea = tareas[indx];
+
+            let duracion = tareaInfo.PPM_DURATION;
+            let tarea = await db.models['Tarea'].findOne({ where:{PPM_CODE: tareaInfo.PPM_CODE, Equipo: tareaInfo.OBJ_CODE}, include:{ model: db.models['TipoTarea'], as: 'Tipo' }})
             servicio = await tarea.Tipo.getServicioEjecutor();
-            let ultimaEjec = await dbEAM.query("select max(EVT_COMPLETED) as fecha from R5EVENTS evt where evt.EVT_PPM = '"+tarea.PPM+"' and evt.EVT_OBJECT = '"+tarea.Equipo+"' and evt.EVT_TYPE = 'PPM' and EVT_RSTATUS = 'C' AND EVT_STATUS NOT IN ('REJ', 'CANC')", { type: sequelize.QueryTypes.SELECT});
-            let equipoDesc = await dbEAM.query("select OBJ_DESC from r5objects where obj_code = '"+tarea.Equipo+"'", { type: sequelize.QueryTypes.SELECT});
-            let duracion = await dbEAM.query("select PPM_DURATION from R5PPMS where PPM_CODE = '"+tarea.PPM+"'", { type: sequelize.QueryTypes.SELECT});
-            
-            let tareaSalida = {
-                PPM: tarea.PPM.trim(),
-                Descr: tarea.Descr.trim(),
-                Equipo: tarea.Equipo.trim(),
-                EquipoDescr: equipoDesc[0].OBJ_DESC.trim(),
-                Frecuencia: tarea.Frecuencia,
-                Periodo: tarea.Periodo.trim(),
-                TipoTarea: tarea.Tipo.Nombre.trim(),
-                ServicioEjecutor: servicio.Nombre.trim(),
-                UltimaEjecucion: null,
-                Duracion: duracion[0].PPM_DURATION
+            if(req.areas.includes(servicio.Id)){
+                let tareaSalida = {
+                    PPM: tarea.PPM.trim(),
+                    Descr: tarea.Descr.trim(),
+                    Equipo: tarea.Equipo.trim(),
+                    EquipoDescr: tareaInfo.OBJ_DESC.trim(),
+                    Frecuencia: tarea.Frecuencia,
+                    Periodo: tarea.Periodo.trim(),
+                    TipoTarea: tarea.Tipo.Nombre.trim(),
+                    ServicioEjecutor: servicio.Nombre.trim(),
+                    UltimaEjecucion: ultimaEjec,
+                    Duracion: duracion,
+                    Holgura: tareaInfo.Holgura
+                }
+                salida.push(tareaSalida);
             }
-            
-            if(ultimaEjec){
-                tareaSalida.UltimaEjecucion = ultimaEjec[0].fecha;
-            }
-            salida.push(tareaSalida);
         }
-        dbEAM.close();
         res.send(salida);
 
     }
     catch(error){
         console.log(error);
-        if(dbEAM) dbEAM.close();
         res.status(500).send(error);
     }
     
@@ -569,6 +550,97 @@ router.delete('/tareas/:TareaId', verifier, asyncHandler(async (req, res) => {
     });   
 }));
 
+
+
+/************** Notificaciones **************/
+
+
+router.get('/notificaciones', verifier, asyncHandler(async (req, res) => {
+    
+    try{ 
+        let salida = [];
+        /* Notificación de nuevos usuarios */
+        if (req.rolid.includes(parseInt(PSP_ADMIN_ROL)) || req.rolid.includes(parseInt(SYSADMIN_ROL))){
+            let solicitudes = await db.models['UserRol'].count({ where: {RolId: PSP_NO_ROL} })
+            if(solicitudes > 0){
+                salida.push({
+                    Tipo: 'newUser',
+                    Cant: solicitudes
+                });
+            }
+        }
+
+        /* Notificación de Tareas Vencidas */
+
+        let vencidas = await db.query(`select count(*) as Cant from psp.Tareas tarea
+                                        inner join psp.TiposTareas tipo on tarea.TipoTareaId = tipo.TipoTareaId
+                                        inner join psp.TareasInfo info on info.PPM_CODE = tarea.PPM_CODE and info.OBJ_CODE = tarea.Equipo
+                                        where tipo.ServicioEjecutorId in (${req.areas})
+                                        and info.Holgura <= 0`, 
+                                            { type: sequelize.QueryTypes.SELECT});
+        if(vencidas[0].Cant > 0){
+            salida.push({
+                Tipo: 'vencidas',
+                Cant: vencidas[0].Cant
+            });
+        }
+
+        /* Notificaciones de vencimientos semanales */
+
+        let vencimientos = await db.query(`select count(*) as Cant from psp.Tareas tarea
+                                        inner join psp.TiposTareas tipo on tarea.TipoTareaId = tipo.TipoTareaId
+                                        inner join psp.TareasInfo info on info.PPM_CODE = tarea.PPM_CODE and info.OBJ_CODE = tarea.Equipo
+                                        where tipo.ServicioEjecutorId in (${req.areas})
+                                        and info.Holgura > 0 and info.Holgura <= 7`, 
+                                            { type: sequelize.QueryTypes.SELECT});
+        if(vencimientos[0].Cant > 0){
+            salida.push({
+                Tipo: 'vencSemana',
+                Cant: vencimientos[0].Cant
+            });
+        }
+
+        /* Notificación de nuevas tareas en EAM */
+        if (req.rolid.includes(parseInt(PSP_ADMIN_ROL)) || req.rolid.includes(parseInt(SYSADMIN_ROL))){
+            console.log("Notif BD de EAM, check!");
+            let ppms = await db.query(`select count(*) as Cant from psp.TareasInfo info
+                                            where not exists(Select 1 from psp.Tareas tarea where tarea.PPM_CODE = info.PPM_CODE and tarea.Equipo = info.OBJ_CODE)`, 
+                                            { type: sequelize.QueryTypes.SELECT});
+            if(ppms[0].Cant > 0){
+                salida.push({
+                    Tipo: 'newPPM',
+                    Cant: ppms[0].Cant
+                });
+            }
+        }
+
+        /* Notificación de frecuencias diferentes entre EAM y PSP */
+        console.log("Notif BD de EAM, check!");
+        ppms = await db.query(`select count(*) as Cant from psp.Tareas tarea
+                                inner join psp.TareasInfo info on tarea.PPM_CODE = info.PPM_CODE and tarea.Equipo = info.OBJ_CODE
+                                inner join psp.TiposTareas tipo on tarea.TipoTareaId = tipo.TipoTareaId
+                                where isnull(tarea.Periodo,-999) <> isnull(info.PPM_PERIODUOM, -999) or isnull(tarea.Frecuencia,'999') <> isnull(PPM_FREQ, '999')
+                                and tipo.ServicioEjecutorId in (${req.areas})`, 
+                                { type: sequelize.QueryTypes.SELECT});
+        
+        if(ppms[0].Cant > 0){
+            salida.push({
+                Tipo: 'difFrec',
+                Cant: ppms[0].Cant
+            });
+        }
+
+
+        res.status(200).send(salida);
+
+    }
+    catch(error){
+        console.log(error);
+        res.status(500).send(error);
+    }
+    
+ 
+}));
 
 
 

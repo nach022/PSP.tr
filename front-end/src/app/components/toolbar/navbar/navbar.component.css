@@ -13,3 +13,7 @@
 .barra-herramientas{
   margin-bottom: 80px;
 }
+
+::ng-deep.mat-menu-panel {
+  max-width: none !important;
+}
