@@ -379,7 +379,7 @@ router.get('/tareas', verifier, asyncHandler(async (req, res) => {
 router.get('/tareasOverview', verifier, asyncHandler(async (req, res) => {
     try{
         let salida = [];
-        let tareasInfo = await db.query("select PPM_CODE, OBJ_CODE, PPM_DESC, OBJ_DESC, UltimaEjecucion, Holgura, PPM_DURATION from psp.TareasInfo order by Holgura asc", { type: sequelize.QueryTypes.SELECT});
+        let tareasInfo = await db.query("select PPM_CODE, OBJ_CODE, PPM_DESC, OBJ_DESC, UltimaEjecucion, Holgura, PPM_DURATION from psp.TareasInfo", { type: sequelize.QueryTypes.SELECT});
         
         for(indx in tareasInfo){
             tareaInfo = tareasInfo[indx];
@@ -398,7 +398,10 @@ router.get('/tareasOverview', verifier, asyncHandler(async (req, res) => {
             let tarea = await db.models['Tarea'].findOne({ where:{PPM_CODE: tareaInfo.PPM_CODE, Equipo: tareaInfo.OBJ_CODE}, include:{ model: db.models['TipoTarea'], as: 'Tipo' }})
             servicio = await tarea.Tipo.getServicioEjecutor();
             if(req.areas.includes(servicio.Id)){
+                let cantComents = await db.models['ComentarioTarea'].count({ where: {'TareaId': tarea.Id}});
+
                 let tareaSalida = {
+                    Id: tarea.Id,
                     PPM: tarea.PPM.trim(),
                     Descr: tarea.Descr.trim(),
                     Equipo: tarea.Equipo.trim(),
@@ -409,7 +412,8 @@ router.get('/tareasOverview', verifier, asyncHandler(async (req, res) => {
                     ServicioEjecutor: servicio.Nombre.trim(),
                     UltimaEjecucion: ultimaEjec,
                     Duracion: duracion,
-                    Holgura: tareaInfo.Holgura
+                    Holgura: tareaInfo.Holgura,
+                    CantComents: cantComents
                 }
                 salida.push(tareaSalida);
             }
@@ -423,6 +427,47 @@ router.get('/tareasOverview', verifier, asyncHandler(async (req, res) => {
     }
     
 }));
+
+
+
+
+// SELECT Diferentes frecuencias
+router.get('/tareasFreqDiff', verifier, asyncHandler(async (req, res) => {
+    try{
+        let salida = [];
+        let ppms = await db.query(`select TareaId, info.PPM_CODE, Descr, OBJ_CODE, OBJ_DESC, isnull(Frecuencia,0) Frecuencia, Periodo, 
+                                isnull(PPM_FREQ,0) PPM_FREQ, PPM_PERIODUOM from psp.Tareas tarea
+                                inner join psp.TareasInfo info on tarea.PPM_CODE = info.PPM_CODE and tarea.Equipo = info.OBJ_CODE
+                                inner join psp.TiposTareas tipo on tarea.TipoTareaId = tipo.TipoTareaId
+                                where isnull(tarea.Periodo,-999) <> isnull(info.PPM_PERIODUOM, -999) or isnull(tarea.Frecuencia,'999') <> isnull(PPM_FREQ, '999')
+                                and tipo.ServicioEjecutorId in (${req.areas})`, 
+                                { type: sequelize.QueryTypes.SELECT});
+        
+        
+        for(indx in ppms){
+            tarea = ppms[indx];
+            let tareaSalida = {
+                PPM: tarea.PPM_CODE.trim(),
+                Descr: tarea.Descr.trim(),
+                Equipo: tarea.OBJ_CODE.trim(),
+                EquipoDescr: tarea.OBJ_DESC.trim(),
+                Frecuencia: tarea.Frecuencia,
+                Periodo: tarea.Periodo,
+                FrecuenciaEAM: tarea.PPM_FREQ,
+                PeriodoEAM: tarea.PPM_PERIODUOM,
+            }
+            salida.push(tareaSalida);
+        }
+        res.send(salida);
+
+    }
+    catch(error){
+        console.log(error);
+        res.status(500).send(error);
+    }
+    
+}));
+
 
 
 
@@ -571,7 +616,6 @@ router.get('/notificaciones', verifier, asyncHandler(async (req, res) => {
         }
 
         /* Notificación de Tareas Vencidas */
-
         let vencidas = await db.query(`select count(*) as Cant from psp.Tareas tarea
                                         inner join psp.TiposTareas tipo on tarea.TipoTareaId = tipo.TipoTareaId
                                         inner join psp.TareasInfo info on info.PPM_CODE = tarea.PPM_CODE and info.OBJ_CODE = tarea.Equipo
@@ -586,7 +630,6 @@ router.get('/notificaciones', verifier, asyncHandler(async (req, res) => {
         }
 
         /* Notificaciones de vencimientos semanales */
-
         let vencimientos = await db.query(`select count(*) as Cant from psp.Tareas tarea
                                         inner join psp.TiposTareas tipo on tarea.TipoTareaId = tipo.TipoTareaId
                                         inner join psp.TareasInfo info on info.PPM_CODE = tarea.PPM_CODE and info.OBJ_CODE = tarea.Equipo
@@ -602,7 +645,6 @@ router.get('/notificaciones', verifier, asyncHandler(async (req, res) => {
 
         /* Notificación de nuevas tareas en EAM */
         if (req.rolid.includes(parseInt(PSP_ADMIN_ROL)) || req.rolid.includes(parseInt(SYSADMIN_ROL))){
-            console.log("Notif BD de EAM, check!");
             let ppms = await db.query(`select count(*) as Cant from psp.TareasInfo info
                                             where not exists(Select 1 from psp.Tareas tarea where tarea.PPM_CODE = info.PPM_CODE and tarea.Equipo = info.OBJ_CODE)`, 
                                             { type: sequelize.QueryTypes.SELECT});
@@ -615,7 +657,6 @@ router.get('/notificaciones', verifier, asyncHandler(async (req, res) => {
         }
 
         /* Notificación de frecuencias diferentes entre EAM y PSP */
-        console.log("Notif BD de EAM, check!");
         ppms = await db.query(`select count(*) as Cant from psp.Tareas tarea
                                 inner join psp.TareasInfo info on tarea.PPM_CODE = info.PPM_CODE and tarea.Equipo = info.OBJ_CODE
                                 inner join psp.TiposTareas tipo on tarea.TipoTareaId = tipo.TipoTareaId
@@ -631,6 +672,79 @@ router.get('/notificaciones', verifier, asyncHandler(async (req, res) => {
         }
 
 
+        res.status(200).send(salida);
+
+    }
+    catch(error){
+        console.log(error);
+        res.status(500).send(error);
+    }
+    
+ 
+}));
+
+
+
+/************** Notificaciones **************/
+
+
+router.get('/juntas', verifier, asyncHandler(async (req, res) => {
+    
+    try{ 
+        let juntas = await db.query(`select distinct Junta from psp.LimitesMediciones`, { type: sequelize.QueryTypes.SELECT});
+        res.status(200).send(juntas);
+
+    }
+    catch(error){
+        console.log(error);
+        res.status(500).send(error);
+    }
+    
+ 
+}));
+
+
+
+
+
+//Función auxiliar que me recupera la tarea y la agrega al request cada vez que la url trae un id de tarea
+router.param('idTarea', function(request, response, next, id){
+    db.models['Tarea'].findByPk(id)
+        .then(existe =>{
+            if(existe === null){
+                return response.status(404).send('No existe la Tarea.'); 
+            }
+            else{
+                request.tarea = existe;
+                next();
+            }
+        })
+        .catch(error => {
+            return next(error);
+        })
+  });   
+
+router.get('/commentsTarea', verifier, asyncHandler(async (req, res) => {
+    try{ 
+        const url = require('url');
+        const queryObject = url.parse(req.url, true).query;
+        console.log('a ver.... ', queryObject.IdTarea)
+        let comments = await db.models['ComentarioTarea'].findAll({ 
+            where: {
+                TareaId: queryObject.IdTarea
+            },
+            order: ['createdAt'],
+            include:{ model: db.models['User'], as: 'User' } 
+        });
+        salida = [];
+        comments.forEach(element => {
+            salida.push({
+                ComentarioId: element.Id,
+                CreatedAt: element.createdAt,
+                UserId: element.UserId,
+                UserName: element.User.Nombre
+            })
+        });
         res.status(200).send(salida);
 
     }

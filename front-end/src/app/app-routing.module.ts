@@ -12,6 +12,8 @@ import { TasksOverviewComponent } from './components/tasks/tasks-overview/tasks-
 import { GanttComponent } from './components/tasks/gantt/gantt.component';
 import { RegisterGuard } from './guards/register.guard';
 import { UsersSettingComponent } from './components/settings/users-setting/users-setting.component';
+import { FreqDiffComponent } from './components/tasks/freq-diff/freq-diff.component';
+import { MedicionesJuntasComponent } from './components/presa/mediciones-juntas/mediciones-juntas.component';
 
 
 const routes: Routes = [
@@ -25,6 +27,8 @@ const routes: Routes = [
   { path: 'tasks-setting', component: TasksSettingComponent, canActivate: [AuthGuard] },
   { path: 'tasks-overview', component: TasksOverviewComponent, canActivate: [AuthGuard] },
   { path: 'gantt', component: GanttComponent, canActivate: [AuthGuard] },
+  { path: 'freq-diff', component: FreqDiffComponent, canActivate: [AuthGuard] },
+  { path: 'mediciones-juntas', component: MedicionesJuntasComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: 'login'}
 ];
 

@@ -17,3 +17,6 @@
 ::ng-deep.mat-menu-panel {
   max-width: none !important;
 }
+.titulo{
+  font-size: 12x;
+}

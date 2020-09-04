@@ -11,20 +11,3 @@
 
 
 
- <script type="text/javascript">
-    var myConfObj = {
-      iframeMouseOver : false
-    }
-    window.addEventListener('blur',function(){
-      if(myConfObj.iframeMouseOver){
-        console.log('Wow! Iframe Click!');
-      }
-    });
-
-    document.getElementById('dashboard').addEventListener('mouseover',function(){
-      myConfObj.iframeMouseOver = true;
-    });
-    document.getElementById('dashboard').addEventListener('mouseout',function(){
-        myConfObj.iframeMouseOver = false;
-    });
-  </script>

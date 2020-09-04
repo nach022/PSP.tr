@@ -1,13 +1,22 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { GlobalConstants } from '../common/global.constants';
-import { tareaDataInterface } from '../components/settings/tasks-setting/tasks-setting.component';
+import { TareaDataInterface } from '../components/settings/tasks-setting/tasks-setting.component';
 import { tipoInterface } from '../components/settings/task-types-settings/task-types-settings.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SiteService {
+  getCommentsTarea(IdTarea: number) {
+    const params = new HttpParams().set('IdTarea', IdTarea.toString());
+    return this.http.get<any>(GlobalConstants.API_COMMENTS_URL, { params });
+  }
+
+
+  getJuntas() {
+    return this.http.get<any>(GlobalConstants.API_JUNTAS_URL);
+  }
 
   constructor(private http: HttpClient) { }
 
@@ -86,17 +95,22 @@ export class SiteService {
     return this.http.get<any>(GlobalConstants.API_TAREAS_OVERVIEW_URL);
   }
 
+  // SELECT tareas con incoherencia de frecuencias
+  getTareasFreqDiff() {
+    return this.http.get<any>(GlobalConstants.API_TAREAS_FREQDIFF_URL);
+  }
+
 
 
   // INSERT
   postTarea(tarea: any) {
-    return this.http.post<tareaDataInterface>(GlobalConstants.API_TAREAS_URL, tarea);
+    return this.http.post<TareaDataInterface>(GlobalConstants.API_TAREAS_URL, tarea);
   }
 
 
   // UPDATE
   putTarea(tareaData: any) {
-    return this.http.put<tareaDataInterface>(`${GlobalConstants.API_TAREAS_URL}/${tareaData.Id}`, {
+    return this.http.put<TareaDataInterface>(`${GlobalConstants.API_TAREAS_URL}/${tareaData.Id}`, {
             Descr: tareaData.Descr,
             Frecuencia: tareaData.Frecuencia,
             Periodo: tareaData.Periodo,

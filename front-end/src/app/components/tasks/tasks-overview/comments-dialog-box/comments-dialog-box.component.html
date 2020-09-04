@@ -1,0 +1,45 @@
+<div layout="column" layout-fill>
+    <div flex class="mat-content">
+      <mat-card>
+          <mat-card-header>
+            <mat-card-title>Comentarios</mat-card-title>
+            <mat-card-subtitle>Tarea: {{this.Tarea}} <br> Equipo {{this.Equipo}}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-divider></mat-divider>
+
+          <mat-list>
+            <ng-template let-item let-i="index" let-last="last" ngFor [ngForOf]="[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]">
+              <mat-list-item class="pad-top pad-bottom">
+                <!--img matListAvatar src="https://api.adorable.io/avatars/285/{{i}}@adorable.io.png" /-->
+                <ngx-avatar matListAvatar name="John Doe"></ngx-avatar>
+                <h3 matLine class="cursor-pointer"> Firstname Lastname <span class="tc-grey-500 md-caption">11:24 AM</span></h3>
+                <div matLine>
+                  <div class="text-wrap">
+                    Farm-to-table poke distillery, bushwick messenger bag vaporware neutra artisan paleo. Single-origin coffee shabby chic glossier lumberjack chambray dreamcatcher, blue bottle raclette.
+                  </div>
+                </div>
+              </mat-list-item>
+              <mat-divider *ngIf="!last" mat-inset></mat-divider>
+            </ng-template>
+          </mat-list>
+      </mat-card>
+    </div>
+    <div fxLayout="column" fxLayoutAlign="start end" fxFlexFill>
+      <button mat-fab color="basic" aria-label="Agregar comentario" (click)="addComment()">
+          <mat-icon>add</mat-icon>
+      </button>
+    </div>
+    <div [hidden]="!verAdd">
+      <mat-card>
+          <mat-card-header>
+            <mat-card-title>Nuevo comentario:</mat-card-title>
+          </mat-card-header>
+          <mat-form-field>
+            <textarea rows="6" matInput placeholder="Comentario" maxlength="1000"></textarea>
+          </mat-form-field>
+          <button mat-raised-button color="accent" aria-label="Agregar comentario" (click)="addComment()">
+              <mat-icon>save</mat-icon> Guardar
+          </button>
+      </mat-card>
+    </div>
+  </div>

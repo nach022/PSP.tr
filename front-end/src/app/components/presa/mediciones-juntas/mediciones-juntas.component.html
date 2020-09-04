@@ -1,0 +1,33 @@
+
+
+<div  *ngIf="isDataLoaded" >
+  <div fxLayout="row" fxLayoutAlign="center center">
+      <div fxLayout="column">
+        <h2>Selecciona una junta:&nbsp;&nbsp;&nbsp;</h2>
+      </div>
+      <div fxLayout="column">
+        <mat-form-field appearance="fill">
+          <mat-label>Junta</mat-label>
+          <mat-select [(ngModel)]="this.junta" (selectionChange)="selectJunta()">
+              <mat-option *ngFor="let punto of this.juntas" [value]="punto.Junta">
+                  {{punto.Junta}}
+              </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <mat-divider></mat-divider>
+
+<br>
+
+  <div  *ngIf="juntaSelected" >
+    <iframe appIframeTracker [src]='this.dashboardUrlX' width="50%" height="300" frameborder="0"></iframe>
+    <iframe appIframeTracker [src]='this.dashboardUrlY' width="50%" height="300" frameborder="0"></iframe>
+    <iframe appIframeTracker [src]='this.dashboardUrlZ' width="50%" height="300" frameborder="0"></iframe>
+    <iframe appIframeTracker [src]='this.dashboardUrlT' width="50%" height="300" frameborder="0"></iframe>
+  </div>
+</div>
+
+
+
+

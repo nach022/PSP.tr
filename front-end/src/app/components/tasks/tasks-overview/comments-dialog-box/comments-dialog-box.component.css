@@ -1,0 +1,21 @@
+.espacioAbajo{
+  margin-bottom: 40px;
+}
+
+.descrInput{
+  width: 500px;
+}
+
+.tipoInput{
+  width: 300px;
+  margin-right: 15px;
+}
+
+.freqInput{
+  width: 100px;
+  margin-right: 15px;
+}
+
+mat-form-field {
+  width: 100%;
+}

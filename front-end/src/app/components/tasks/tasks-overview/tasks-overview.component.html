@@ -53,6 +53,29 @@
       <td mat-cell *matCellDef="let element"> {{element.Holgura}} </td>
     </ng-container>
 
+     <!-- Comentarios Column -->
+     <ng-container matColumnDef="Comentarios">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Comentarios</th>
+
+        <td mat-cell *matCellDef="let element">
+            <button mat-button color="primary" (click)="openDialog(element.Id, element.Descr, element.EquipoDescr)"><mat-icon matBadge="{{element.CantComentarios}}" matBadgeHidden="{{element.CantComentarios===0}}" matBadgeColor="warn">chat</mat-icon></button>
+        </td>
+      </ng-container>
+
+
+<!--
+      <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef style="text-align:center">Asignar Rol | Eliminar Solicitud</th>
+          <td mat-cell *matCellDef="let element" class="action-link" style="text-align:center">
+
+            |
+            <button mat-button color="primary" (click)="openDialog('DeleteSol',element)"><mat-icon>delete</mat-icon></button>
+          </td>
+        </ng-container>-->
+
+
+
+
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns" class="thead-dark"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class.table-danger]="row.Holgura <= 0" [class.table-warning]="row.Holgura <= 7 && row.Holgura > 0"></tr>

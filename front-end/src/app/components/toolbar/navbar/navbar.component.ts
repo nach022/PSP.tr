@@ -22,13 +22,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.NombreUsuario = sessionStorage.getItem('psp-name');
-    this.RolUsuario = sessionStorage.getItem('psp-rol').split(',');
+    if (sessionStorage.getItem('psp-rol')){
+      this.RolUsuario = sessionStorage.getItem('psp-rol').split(',');
+    }
 
     this.subscription = timer(0, 20000).pipe(
       switchMap(() => this.siteService.getNotifications())
     ).subscribe(notif => {
       const aux = [];
-      console.log(notif);
       notif.forEach(element => {
         if (element.Tipo === 'newPPM'){
           aux.push({
@@ -42,7 +43,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
           aux.push({
             icon: 'replay',
             text: `Hay ${element.Cant} tareas con diferente frecuencia en EAM.`,
-            path: '/tasks-overview',
+            path: '/freq-diff',
             color: 'warn'
           });
         }

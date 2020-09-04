@@ -1,0 +1,12 @@
+.thead-dark tr,
+.thead-dark td,
+.thead-dark th,
+.thead-dark thead {
+  color: #fff;
+  background-color: #343a40;
+  border-color: #454d55;
+}
+
+.my-table {
+  width: 90%;
+}

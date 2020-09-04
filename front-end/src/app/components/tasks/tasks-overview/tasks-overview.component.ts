@@ -3,6 +3,8 @@ import { SiteService } from 'src/app/services/site.service';
 import { NgBlockUI, BlockUI } from 'ng-block-ui';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
+import { MatDialog } from '@angular/material/dialog';
+import { CommentsDialogBoxComponent } from './comments-dialog-box/comments-dialog-box.component';
 
 
 
@@ -43,12 +45,12 @@ export class TasksOverviewComponent implements OnInit {
     D: [],
     W: [],
   };
-  public displayedColumns: string[] = ['PPM', 'Descr', 'Equipo', 'Frecuencia', 'UltimaEjecucion', 'ProximaEjecucion', 'Holgura'];
+  public displayedColumns: string[] = ['PPM', 'Descr', 'Equipo', 'Frecuencia', 'UltimaEjecucion', 'ProximaEjecucion', 'Holgura', 'Comentarios'];
 
   @ViewChild(MatSort) sort: MatSort;
 
 
-  constructor(private siteService: SiteService) {
+  constructor(private siteService: SiteService, public dialog: MatDialog) {
   }
   @BlockUI() blockUI: NgBlockUI;
 
@@ -105,6 +107,7 @@ export class TasksOverviewComponent implements OnInit {
 
 
           table.push({
+            Id: element.Id,
             PPM: element.PPM,
             Descr: element.Descr,
             Equipo: element.Equipo,
@@ -117,7 +120,8 @@ export class TasksOverviewComponent implements OnInit {
             Holgura: element.Holgura,
             ServicioEjecutor: element.ServicioEjecutor,
             TipoTarea: element.TipoTarea,
-            Freq: freq
+            Freq: freq,
+            CantComentarios: element.CantComents
           });
 
         });
@@ -130,5 +134,21 @@ export class TasksOverviewComponent implements OnInit {
       }
     );
   }
+
+
+
+
+  openDialog(Id, Tarea, Equipo ) {
+    const dialogRef = this.dialog.open(CommentsDialogBoxComponent, {
+      width: '80%',
+      height: '90%',
+      data: {
+        Id, Tarea, Equipo
+      }
+    });
+
+  }
+
+
 
 }

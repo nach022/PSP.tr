@@ -1,0 +1,49 @@
+<div  fxLayout="column" fxLayoutAlign="space-around center" fxFlexFill>
+
+    <div fxLayout="row" fxLayoutAlign="center center"> <h1>Tareas con diferentes frecuencias en PSP y EAM</h1></div>
+
+
+
+
+    <table mat-table [dataSource]="dataSource" #mytable class="my-table mat-elevation-z8">
+
+      <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+      <!-- PPM Column -->
+      <ng-container matColumnDef="PPM">
+        <th mat-header-cell *matHeaderCellDef> PPM </th>
+        <td mat-cell *matCellDef="let element"> {{element.PPM}} </td>
+      </ng-container>
+
+      <!-- Descr Column -->
+      <ng-container matColumnDef="Descr">
+        <th mat-header-cell *matHeaderCellDef> Descripci&oacute;n </th>
+        <td mat-cell *matCellDef="let element"> {{element.Descr}} </td>
+      </ng-container>
+
+      <!-- Equipo Column -->
+      <ng-container matColumnDef="Equipo">
+        <th mat-header-cell *matHeaderCellDef> Equipo </th>
+        <td mat-cell *matCellDef="let element" matTooltip="{{element.EquipoDescr}}" matTooltipPosition="right"> {{element.Equipo}} </td>
+      </ng-container>
+
+      <!-- Frecuencia Column -->
+      <ng-container matColumnDef="Frecuencia">
+        <th mat-header-cell *matHeaderCellDef> Frecuencia PSP </th>
+        <td mat-cell *matCellDef="let element"> {{element.Frecuencia}} </td>
+      </ng-container>
+
+        <!-- FrecuenciaEAM Column -->
+      <ng-container matColumnDef="FrecuenciaEAM">
+        <th mat-header-cell *matHeaderCellDef> Frecuencia en EAM </th>
+        <td mat-cell *matCellDef="let element"> {{element.FrecuenciaEAM}} </td>
+      </ng-container>
+
+
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" class="thead-dark"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+  </div>

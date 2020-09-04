@@ -19,16 +19,19 @@ export class GlobalConstants {
 
   public static API_PORT = 3000;
   public static API_BASE_URL = `http://${GlobalConstants.API_SERVER()}:${GlobalConstants.API_PORT}/api`;
+  public static API_COMMENTS_URL = `${GlobalConstants.API_BASE_URL}/psp/commentsTarea`;
   public static API_FILTRO_AREAS_URL = `${GlobalConstants.API_BASE_URL}/psp/myAreas`;
   public static API_LOGIN_URL = `${GlobalConstants.API_BASE_URL}/user/login`;
   public static API_MENU_URL = `${GlobalConstants.API_BASE_URL}/app/menu`;
   public static API_NOTIF_URL = `${GlobalConstants.API_BASE_URL}/psp/notificaciones`;
+  public static API_JUNTAS_URL = `${GlobalConstants.API_BASE_URL}/psp/juntas`;
   public static API_REGISTER_URL = `${GlobalConstants.API_BASE_URL}/user/register`;
   public static API_ROLES_URL = `${GlobalConstants.API_BASE_URL}/app/roles`;
   public static API_SERV_EJEC_URL = `${GlobalConstants.API_BASE_URL}/psp/areas`;
   public static API_TIPO_TAREAS_URL = `${GlobalConstants.API_BASE_URL}/psp/tiposTareas`;
   public static API_TAREAS_URL = `${GlobalConstants.API_BASE_URL}/psp/tareas`;
   public static API_TAREAS_OVERVIEW_URL = `${GlobalConstants.API_BASE_URL}/psp/tareasOverview`;
+  public static API_TAREAS_FREQDIFF_URL = `${GlobalConstants.API_BASE_URL}/psp/tareasFreqDiff`;
   public static API_USUARIOS_URL = `${GlobalConstants.API_BASE_URL}/app/usuarios`;
   public static HTTP_TIMEOUT = 20000;
 

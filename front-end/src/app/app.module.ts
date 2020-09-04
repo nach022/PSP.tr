@@ -42,6 +42,11 @@ import { TasksOverviewComponent } from './components/tasks/tasks-overview/tasks-
 import { GanttComponent } from './components/tasks/gantt/gantt.component';
 import { UsersSettingComponent } from './components/settings/users-setting/users-setting.component';
 import { UsersDialogBoxComponent } from './components/settings/users-setting/users-dialog-box/users-dialog-box.component';
+import { FreqDiffComponent } from './components/tasks/freq-diff/freq-diff.component';
+import { MedicionesJuntasComponent } from './components/presa/mediciones-juntas/mediciones-juntas.component';
+import { CommentsDialogBoxComponent } from './components/tasks/tasks-overview/comments-dialog-box/comments-dialog-box.component';
+import { CovalentModule } from './covalent.module';
+import { AvatarModule } from 'ngx-avatar';
 
 // Pass the fusioncharts library and chart modules
 FusionChartsModule.fcRoot(FusionCharts, charts, Widgets, Gantt, FusionTheme);
@@ -49,6 +54,7 @@ FusionChartsModule.fcRoot(FusionCharts, charts, Widgets, Gantt, FusionTheme);
 @NgModule({
   declarations: [
     AppComponent,
+    CommentsDialogBoxComponent,
     LoginComponent,
     NavbarComponent,
     NavbarItemsComponent,
@@ -65,7 +71,9 @@ FusionChartsModule.fcRoot(FusionCharts, charts, Widgets, Gantt, FusionTheme);
     TasksOverviewComponent,
     GanttComponent,
     UsersSettingComponent,
-    UsersDialogBoxComponent
+    UsersDialogBoxComponent,
+    FreqDiffComponent,
+    MedicionesJuntasComponent
   ],
   imports: [
     FusionChartsModule,
@@ -81,13 +89,15 @@ FusionChartsModule.fcRoot(FusionCharts, charts, Widgets, Gantt, FusionTheme);
       positionClass: GlobalConstants.APP_NOTIF_POSITION
     }),
     AngularMaterialModule,
+    CovalentModule,
     FormsModule,
     ReactiveFormsModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    AvatarModule
   ],
   entryComponents: [
     BlockTemplateComponent,
