@@ -740,6 +740,7 @@ router.get('/commentsTarea', verifier, asyncHandler(async (req, res) => {
         comments.forEach(element => {
             salida.push({
                 ComentarioId: element.Id,
+                
                 CreatedAt: element.createdAt,
                 UserId: element.UserId,
                 UserName: element.User.Nombre
