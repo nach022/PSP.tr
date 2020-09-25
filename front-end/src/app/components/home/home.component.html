@@ -3,12 +3,12 @@
 <div fxLayout="row" fxLayoutAlign="center center"> <h1>Indicadores del Plan de Seguridad de Presa.</h1></div>
 <br><br>
 <div  *ngIf="isDataLoaded" fxLayout="column" fxLayoutAlign="space-around center" fxFlexFill >
-  <iframe [attr.src]="dashboardUrl" width="80%" height="200" frameborder="0"></iframe>
+  <iframe [src]="dashboardUrl" width="80%" height="200" frameborder="0"></iframe>
 </div>
 
 <div *ngIf="isDataLoaded" fxLayout="column" fxLayoutAlign="space-around center" fxFlexFill >
     <br><br><br>
-  <iframe [src]='this.dashboardUrl2' width="80%" height="200" frameborder="0"></iframe>
+  <iframe [src]='dashboardUrl2' width="80%" height="200" frameborder="0"></iframe>
 </div>
 
 <div *ngIf="isDataLoaded">
