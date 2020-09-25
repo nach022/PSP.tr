@@ -1,0 +1,13 @@
+ng g c new-component --module app
+ng serve
+pm2 restart 0
+ng build --prod
+
+agregar comments
+detalles de diseño
+informes
+hacer que configuración de tareas sea por PPM y no por PPM + Equipo
+
+
+
+

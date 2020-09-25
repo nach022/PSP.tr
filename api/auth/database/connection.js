@@ -16,6 +16,8 @@ const TareaModel = require("../models/psp/Tarea");
 const TipoTareaModel = require("../models/psp/TipoTarea");
 const RolGruposAccionModel = require("../models/psp/RolGruposAccion");
 const ComentarioTareaModel = require("../models/psp/ComentarioTarea");
+const EjecucionTareaModel = require("../models/psp/EjecucionTarea");
+const EjecucionFuturaTareaModel = require("../models/psp/EjecucionFuturaTarea");
 
 
 const db = new sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
@@ -146,6 +148,8 @@ const Tarea = TareaModel(db, sequelize);
 const TipoTarea = TipoTareaModel(db, sequelize);
 const ServEjec = ServEjecModel(db, sequelize);
 const ComentarioTarea = ComentarioTareaModel(db, sequelize);
+const EjecucionTarea = EjecucionTareaModel(db, sequelize);
+const EjecucionFuturaTarea = EjecucionFuturaTareaModel(db, sequelize);
 
 //Relaciones
 TipoTarea.belongsTo(ServEjec);
@@ -161,6 +165,12 @@ ComentarioTarea.belongsTo(User);
 User.hasMany(ComentarioTarea)
 
 
+EjecucionTarea.belongsTo(Tarea);
+Tarea.hasMany(EjecucionTarea);
+
+EjecucionFuturaTarea.belongsTo(Tarea);
+Tarea.hasMany(EjecucionFuturaTarea);
+
 
 
 db.sync(/*{ force:true }*/)
@@ -168,9 +178,6 @@ db.sync(/*{ force:true }*/)
 .then(() => {
     
     console.log("Modelos sincronizados, check!");
-
-
-
 
     /* Datos de prueba *//*
     App.create({ Nombre: 'PSP.tr', Descr:'Aplicación de gestión del Programa de Seguridad de Presas' })

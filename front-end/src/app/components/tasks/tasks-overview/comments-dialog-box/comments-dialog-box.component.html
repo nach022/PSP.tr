@@ -1,28 +1,129 @@
 <div layout="column" layout-fill>
     <div flex class="mat-content">
       <mat-card>
-          <mat-card-header>
-            <mat-card-title>Comentarios</mat-card-title>
-            <mat-card-subtitle>Tarea: {{this.Tarea}} <br> Equipo {{this.Equipo}}</mat-card-subtitle>
-          </mat-card-header>
-          <mat-divider></mat-divider>
-
-          <mat-list>
-            <ng-template let-item let-i="index" let-last="last" ngFor [ngForOf]="[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]">
-              <mat-list-item class="pad-top pad-bottom">
-                <!--img matListAvatar src="https://api.adorable.io/avatars/285/{{i}}@adorable.io.png" /-->
-                <ngx-avatar matListAvatar name="John Doe"></ngx-avatar>
-                <h3 matLine class="cursor-pointer"> Firstname Lastname <span class="tc-grey-500 md-caption">11:24 AM</span></h3>
-                <div matLine>
-                  <div class="text-wrap">
-                    Farm-to-table poke distillery, bushwick messenger bag vaporware neutra artisan paleo. Single-origin coffee shabby chic glossier lumberjack chambray dreamcatcher, blue bottle raclette.
-                  </div>
-                </div>
-              </mat-list-item>
-              <mat-divider *ngIf="!last" mat-inset></mat-divider>
-            </ng-template>
-          </mat-list>
+        <mat-card-header>
+          <mat-card-title>Comentarios</mat-card-title>
+          <mat-card-subtitle><b>Tarea:</b> {{this.Tarea}} <br> <b>Equipo:</b> {{this.Equipo}}</mat-card-subtitle>
+        </mat-card-header>
       </mat-card>
+      <mat-divider></mat-divider>
+
+      <ng-template let-item let-i="index" let-last="last" ngFor [ngForOf]="this.Comments">
+        <mat-card>
+          <mat-card-header>
+            <div mat-card-avatar><ngx-avatar matListAvatar name="{{ item.UserName }}"></ngx-avatar></div>
+            <mat-card-title>{{ item.UserName }}</mat-card-title>
+            <mat-card-subtitle>{{ item.CreatedAt | date:'dd/MM/yyyy HH:mm'}}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p>
+                {{ item.Comentario }}
+            </p>
+          </mat-card-content>
+          <mat-card-actions class="commentsDeleteButton">
+            <button *ngIf="item.Deletable" mat-button aria-label="Eliminar comentario" (click)="deleteCommentDialog(item.ComentarioId, item.Comentario)" color="primary">
+              <mat-icon>delete</mat-icon>
+            </button>
+
+          </mat-card-actions>
+        </mat-card>
+        <mat-divider *ngIf="!last" mat-inset></mat-divider>
+      </ng-template>
+
+
+
+
+
+
+
+      <!--ng-template let-item let-i="index" let-last="last" ngFor [ngForOf]="this.Comments">
+          <mat-card>
+
+              <mat-grid-list cols="4" rowHeight="100px">
+              <div matLine>
+                  <ngx-avatar matListAvatar name="{{ item.UserName }}"></ngx-avatar>
+                  <b>{{ item.UserName }} </b>
+                  <span>{{ item.CreatedAt | date:'dd/MM/yyyy HH:mm'}} </span>
+              </div>
+              <span matLine> {{ item.Comentario }}
+
+              </span>
+          </mat-card>
+          <mat-divider *ngIf="!last" mat-inset></mat-divider>
+      </!--ng-template>
+
+
+      <mat-card>
+        <ng-template let-item let-i="index" let-last="last" ngFor [ngForOf]="this.Comments">
+
+          <table width="100%">
+            <tr width="100%">
+              <td class="commentAvatar">
+                <ngx-avatar matListAvatar name="{{ item.UserName }}"></ngx-avatar>
+              </td>
+              <td class="commentMessage">
+                <table width="100%">
+                  <tr width="100%">
+                    <td class="commentNombre">
+                        <h3 matLine class="cursor-pointer"> <b>{{ item.UserName }}&nbsp;</b> <span style="color: gray">&nbsp;&nbsp;{{ item.CreatedAt | date:'dd/MM/yyyy HH:mm'}}</span></h3>
+                    </td>
+                    <td class="commentdeleteButton">
+                      <button *ngIf="item.Deletable" mat-icon-button color="primary" aria-label="Eliminar comentario" (click)="deleteCommentDialog(item.ComentarioId, item.Comentario)">
+                        <mat-icon icon>delete</mat-icon>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr width="100%">
+                    <p>
+                      {{ item.Comentario }}
+                    </p>
+
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+          <mat-divider *ngIf="!last" mat-inset></mat-divider>
+
+        </ng-template>
+      </mat-card>
+      <!--ng-template-- let-item let-i="index" let-last="last" ngFor [ngForOf]="this.Comments">
+        <mat-card>
+
+
+
+          <mat-grid-list cols="20">
+            <mat-grid-tile colspan="2">
+              <ngx-avatar matListAvatar name="{{ item.UserName }}"></ngx-avatar>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="18">
+                <mat-grid-list rows="2" cols="18">
+                    <mat-grid-tile colspan="17" rowspan="1">
+                      <h3 matLine class="cursor-pointer"> <b>{{ item.UserName }}&nbsp;</b> <span style="color: gray">&nbsp;&nbsp;{{ item.CreatedAt | date:'dd/MM/yyyy HH:mm'}}</span>
+                      </h3>
+                    </mat-grid-tile>
+                    <mat-grid-tile colspan="1"rowspan="1">
+                        <button *ngIf="item.Deletable" mat-icon-button color="primary" aria-label="Eliminar comentario" (click)="deleteCommentDialog(item.ComentarioId, item.Comentario)">
+                          <mat-icon icon>delete</mat-icon>
+                        </button>
+                    </mat-grid-tile>
+                    <mat-grid-tile colspan="18"rowspan="1">
+                      <p>
+                        {{ item.Comentario }}
+                      </p>
+                    </mat-grid-tile>
+                </mat-grid-list>
+
+
+
+              </mat-grid-tile>
+
+          </mat-grid-list>
+
+
+        </mat-card>
+      </!--ng-template-->
+
     </div>
     <div fxLayout="column" fxLayoutAlign="start end" fxFlexFill>
       <button mat-fab color="basic" aria-label="Agregar comentario" (click)="addComment()">
@@ -35,9 +136,9 @@
             <mat-card-title>Nuevo comentario:</mat-card-title>
           </mat-card-header>
           <mat-form-field>
-            <textarea rows="6" matInput placeholder="Comentario" maxlength="1000"></textarea>
+            <textarea rows="6" matInput placeholder="Comentario" maxlength="1000"  [(ngModel)]="commentText"></textarea>
           </mat-form-field>
-          <button mat-raised-button color="accent" aria-label="Agregar comentario" (click)="addComment()">
+          <button mat-raised-button color="accent" aria-label="Agregar comentario" (click)="saveComment()" [disabled]="this.commentText.trim().length <= 0">
               <mat-icon>save</mat-icon> Guardar
           </button>
       </mat-card>

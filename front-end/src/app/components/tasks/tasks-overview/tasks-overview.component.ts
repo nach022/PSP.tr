@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { SiteService } from 'src/app/services/site.service';
+import { SiteService } from '../../../services/site.service';
 import { NgBlockUI, BlockUI } from 'ng-block-ui';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { CommentsDialogBoxComponent } from './comments-dialog-box/comments-dialog-box.component';
+import { NotificationService } from '../../../services/notification.service';
 
 
 
@@ -45,12 +46,12 @@ export class TasksOverviewComponent implements OnInit {
     D: [],
     W: [],
   };
-  public displayedColumns: string[] = ['PPM', 'Descr', 'Equipo', 'Frecuencia', 'UltimaEjecucion', 'ProximaEjecucion', 'Holgura', 'Comentarios'];
+  public displayedColumns: string[] = ['Grupo', 'PPM', 'Descr', 'Equipo', 'Frecuencia', 'UltimaEjecucion', 'ProximaEjecucion', 'Holgura', 'CantComentarios'];
 
   @ViewChild(MatSort) sort: MatSort;
 
 
-  constructor(private siteService: SiteService, public dialog: MatDialog) {
+  constructor(private siteService: SiteService, public dialog: MatDialog, private notif: NotificationService) {
   }
   @BlockUI() blockUI: NgBlockUI;
 
@@ -118,7 +119,7 @@ export class TasksOverviewComponent implements OnInit {
             UltimaEjecucion: `${ue.getDate().toString().padStart(2, '0')}/${(ue.getMonth() + 1).toString().padStart(2, '0')}/${ue.getFullYear()}`,
             ProximaEjecucion: `${prox.getDate().toString().padStart(2, '0')}/${(prox.getMonth() + 1).toString().padStart(2, '0')}/${prox.getFullYear()}`,
             Holgura: element.Holgura,
-            ServicioEjecutor: element.ServicioEjecutor,
+            Grupo: element.ServicioEjecutor,
             TipoTarea: element.TipoTarea,
             Freq: freq,
             CantComentarios: element.CantComents
@@ -127,7 +128,6 @@ export class TasksOverviewComponent implements OnInit {
         });
         this.dataSource = new MatTableDataSource(table);
         this.dataSource.sort = this.sort;
-        console.log(this.dataSource);
       },
       err => {
         this.blockUI.stop();
@@ -138,17 +138,18 @@ export class TasksOverviewComponent implements OnInit {
 
 
 
-  openDialog(Id, Tarea, Equipo ) {
+  openDialog(Tarea ) {
     const dialogRef = this.dialog.open(CommentsDialogBoxComponent, {
       width: '80%',
       height: '90%',
       data: {
-        Id, Tarea, Equipo
+        Id: Tarea.Id,
+        Tarea: Tarea.Descr,
+        Equipo: Tarea.EquipoDescr,
+        Fila: Tarea
       }
     });
 
   }
-
-
 
 }

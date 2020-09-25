@@ -93,6 +93,19 @@ const usuarioValidation = (data) => {
 }
 
 
+const commentValidation = (data) => {
+    const bodyFormat = Joi.object({
+        IdTarea: Joi.number()
+            .integer()
+            .required(),
+        commentText: Joi.string()
+            .required()
+            .min(1)
+            .max(1000)
+    });
+    return bodyFormat.validate(data)
+}
+
 
 
 module.exports.loginValidation = loginValidation;
@@ -101,3 +114,4 @@ module.exports.servicioEjecutorValidation = servicioEjecutorValidation;
 module.exports.tipoTareaValidation = tipoTareaValidation;
 module.exports.tareaValidation = tareaValidation;
 module.exports.usuarioValidation = usuarioValidation;
+module.exports.commentValidation = commentValidation;

@@ -14,6 +14,7 @@ import { RegisterGuard } from './guards/register.guard';
 import { UsersSettingComponent } from './components/settings/users-setting/users-setting.component';
 import { FreqDiffComponent } from './components/tasks/freq-diff/freq-diff.component';
 import { MedicionesJuntasComponent } from './components/presa/mediciones-juntas/mediciones-juntas.component';
+import { RptGrupoAccionComponent } from './components/reports/rpt-grupo-accion/rpt-grupo-accion.component';
 
 
 const routes: Routes = [
@@ -29,6 +30,7 @@ const routes: Routes = [
   { path: 'gantt', component: GanttComponent, canActivate: [AuthGuard] },
   { path: 'freq-diff', component: FreqDiffComponent, canActivate: [AuthGuard] },
   { path: 'mediciones-juntas', component: MedicionesJuntasComponent, canActivate: [AuthGuard] },
+  { path: 'report-grupo-accion', component: RptGrupoAccionComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: 'login'}
 ];
 

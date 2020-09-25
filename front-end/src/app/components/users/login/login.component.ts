@@ -9,12 +9,6 @@ import { GlobalConstants } from 'src/app/common/global.constants';
 
 
 
-// inside method
-
- // inside method to stop loading
-
-
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',

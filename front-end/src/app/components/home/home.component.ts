@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { NgBlockUI, BlockUI } from 'ng-block-ui';
-import { GlobalConstants } from 'src/app/common/global.constants';
+import { GlobalConstants } from '../../common/global.constants';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 
@@ -17,8 +17,10 @@ export class HomeComponent implements OnInit {
   public filtro: string;
   public isDataLoaded = false;
   public dashboardUrl: SafeResourceUrl;
+  public dashboardUrl2: SafeResourceUrl;
+  public dashboardUrl3: SafeResourceUrl;
 
-  constructor(private authService: AuthService, protected sanitizer: DomSanitizer) {
+  constructor(private authService: AuthService, private sanitizer: DomSanitizer) {
   }
   @BlockUI() blockUI: NgBlockUI;
 
@@ -34,7 +36,9 @@ export class HomeComponent implements OnInit {
         });
         sessionStorage.setItem(GlobalConstants.SESSION_FILTRO_AREAS, filtro);
         this.filtro = filtro;
-        this.dashboardUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`http://10.101.0.57:3003/d-solo/o8DrKF4Gk/homepage?orgId=1${this.filtro}&theme=light&panelId=4`);
+        this.dashboardUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`http://172.16.3.43:3000/d-solo/o8DrKF4Gk/homepage?orgId=1${this.filtro}&theme=light&panelId=4`);
+        this.dashboardUrl2 = this.sanitizer.bypassSecurityTrustResourceUrl(`http://172.16.3.43:3000/d-solo/o8DrKF4Gk/homepage?orgId=1${this.filtro}&theme=light&panelId=5`);
+        this.dashboardUrl3 = this.sanitizer.bypassSecurityTrustResourceUrl(`http://http://172.16.3.43:3000/d-solo/o8DrKF4Gk/homepage?orgId=1&theme=light&panelId=2`);
         this.isDataLoaded = true;
 
       },
@@ -45,7 +49,9 @@ export class HomeComponent implements OnInit {
     }
     else{
       this.filtro = sessionStorage.getItem(GlobalConstants.SESSION_FILTRO_AREAS);
-      this.dashboardUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`http://10.101.0.57:3003/d-solo/o8DrKF4Gk/homepage?orgId=1${this.filtro}&theme=light&panelId=4`);
+      this.dashboardUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`http://172.16.3.43:3000/d-solo/o8DrKF4Gk/homepage?orgId=1${this.filtro}&theme=light&panelId=4`);
+      this.dashboardUrl2 = this.sanitizer.bypassSecurityTrustResourceUrl(`http://172.16.3.43:3000/d-solo/o8DrKF4Gk/homepage?orgId=1${this.filtro}&theme=light&panelId=5`);
+      this.dashboardUrl3 = this.sanitizer.bypassSecurityTrustResourceUrl(`http://172.16.3.43:3000/d-solo/o8DrKF4Gk/homepage?orgId=1&theme=light&panelId=2`);
       this.isDataLoaded = true;
     }
   }

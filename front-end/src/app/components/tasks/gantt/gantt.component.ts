@@ -49,6 +49,7 @@ export class GanttComponent implements OnInit {
     const tasks = [];
     const equipos = [];
     const processes = [];
+    const descrs = [];
 
     this.blockUI.start('Cargando Datos de Tareas...');
     this.siteService.getTareasOverview().subscribe(
@@ -82,10 +83,12 @@ export class GanttComponent implements OnInit {
           }
 
           if (prox < hoy2){
-
             processes.push({
               label: element.PPM,
               id: `${indx}`
+            });
+            descrs.push({
+              label: element.Descr,
             });
             equipos.push({
               label: element.Equipo
@@ -101,7 +104,7 @@ export class GanttComponent implements OnInit {
                 finTarea = new Date(hoy2);
               }
               tasks.push({
-                label: `${element.Descr}<br>Equipo: ${element.EquipoDescr}`,
+                label: `<b>Tarea:</b> ${element.Descr}<br><b>Equipo:</b> ${element.EquipoDescr}<br><b>Grupo de Acci&oacute;n:</b> ${element.ServicioEjecutor}`,
                 processid: indx,
                 start: formatDate(prox, 'dd/MM/yyyy', 'en'),
                 end: formatDate(finTarea, 'dd/MM/yyyy', 'en'),
@@ -131,9 +134,6 @@ export class GanttComponent implements OnInit {
           indx ++;
         });
 
-        console.log('equipos: ', equipos);
-        console.log('processes: ', processes);
-        console.log('tasks: ', tasks);
 
         this.dataSource = {
           chart: {
@@ -146,7 +146,7 @@ export class GanttComponent implements OnInit {
             ganttPaneDuration: '30',
             ganttPaneDurationUnit: 'd',
             plottooltext:
-              '$label{br}Fecha de inicio: $start{br}Fecha de fin: $end',
+              '$label{br}<b>Fecha de inicio:</b> $start{br}<b>Fecha de fin:</b  > $end',
             legendBorderAlpha: '0',
             legendShadow: '0',
             usePlotGradientColor: '0',
@@ -189,14 +189,14 @@ export class GanttComponent implements OnInit {
           processes: {
             headertext: 'Tarea',
             fontcolor: '#000000',
-            fontsize: '11',
+            fontsize: '14',
             isanimated: '1',
             bgcolor: '#6baa01',
             headervalign: 'bottom',
             headeralign: 'left',
             headerbgcolor: '#999999',
             headerfontcolor: '#ffffff',
-            headerfontsize: '12',
+            headerfontsize: '14',
             align: 'left',
             isbold: '1',
             bgalpha: '25',
@@ -208,20 +208,24 @@ export class GanttComponent implements OnInit {
             showprocessname: '1',
             namealign: 'left',
             fontcolor: '#000000',
-            fontsize: '10',
-            valign: 'right',
-            align: 'center',
+            fontsize: '14',
+            valign: 'bottom',
+            align: 'left',
             headervalign: 'bottom',
-            headeralign: 'center',
+            headeralign: 'left',
             headerbgcolor: '#999999',
             headerfontcolor: '#ffffff',
-            headerfontsize: '12',
+            bgcolor: '#eeeeee',
+            headerfontsize: '14',
             datacolumn: [
               {
-                bgcolor: '#eeeeee',
                 headertext: 'Equipo',
                 text: equipos
               },
+              {
+                headertext: 'Descripción',
+                text: descrs
+              }
             ]
           },
           tasks: {

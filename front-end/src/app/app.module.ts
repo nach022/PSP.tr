@@ -45,8 +45,10 @@ import { UsersDialogBoxComponent } from './components/settings/users-setting/use
 import { FreqDiffComponent } from './components/tasks/freq-diff/freq-diff.component';
 import { MedicionesJuntasComponent } from './components/presa/mediciones-juntas/mediciones-juntas.component';
 import { CommentsDialogBoxComponent } from './components/tasks/tasks-overview/comments-dialog-box/comments-dialog-box.component';
+import { DeleteCommentDialogBoxComponent } from './components/tasks/tasks-overview/delete-comment-dialog-box/delete-comment-dialog-box.component';
 import { CovalentModule } from './covalent.module';
 import { AvatarModule } from 'ngx-avatar';
+import { RptGrupoAccionComponent } from './components/reports/rpt-grupo-accion/rpt-grupo-accion.component';
 
 // Pass the fusioncharts library and chart modules
 FusionChartsModule.fcRoot(FusionCharts, charts, Widgets, Gantt, FusionTheme);
@@ -55,6 +57,7 @@ FusionChartsModule.fcRoot(FusionCharts, charts, Widgets, Gantt, FusionTheme);
   declarations: [
     AppComponent,
     CommentsDialogBoxComponent,
+    DeleteCommentDialogBoxComponent,
     LoginComponent,
     NavbarComponent,
     NavbarItemsComponent,
@@ -73,7 +76,8 @@ FusionChartsModule.fcRoot(FusionCharts, charts, Widgets, Gantt, FusionTheme);
     UsersSettingComponent,
     UsersDialogBoxComponent,
     FreqDiffComponent,
-    MedicionesJuntasComponent
+    MedicionesJuntasComponent,
+    RptGrupoAccionComponent
   ],
   imports: [
     FusionChartsModule,

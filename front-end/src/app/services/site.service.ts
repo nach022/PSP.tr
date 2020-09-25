@@ -8,9 +8,18 @@ import { tipoInterface } from '../components/settings/task-types-settings/task-t
   providedIn: 'root'
 })
 export class SiteService {
+
   getCommentsTarea(IdTarea: number) {
-    const params = new HttpParams().set('IdTarea', IdTarea.toString());
+    const params = new HttpParams().set('TareaId', IdTarea.toString());
     return this.http.get<any>(GlobalConstants.API_COMMENTS_URL, { params });
+  }
+
+  postCommentTarea(IdTarea: number, commentText: string) {
+    return this.http.post(GlobalConstants.API_COMMENTS_URL, { IdTarea, commentText: commentText.trim() });
+  }
+
+  deleteComentarioTarea(Id: number) {
+    return this.http.delete(`${GlobalConstants.API_COMMENTS_URL}/${Id}`);
   }
 
 

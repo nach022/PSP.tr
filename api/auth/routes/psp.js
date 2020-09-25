@@ -2,7 +2,7 @@ const router = require('express').Router();
 const verifier = require('./jwtVerify');
 const sequelize = require('sequelize');
 const asyncHandler = require('express-async-handler');
-const { servicioEjecutorValidation, tipoTareaValidation, tareaValidation } = require('../validation');
+const { servicioEjecutorValidation, tipoTareaValidation, tareaValidation, commentValidation } = require('../validation');
 
 
 /************** Servicios Ejecutores **************/
@@ -685,7 +685,7 @@ router.get('/notificaciones', verifier, asyncHandler(async (req, res) => {
 
 
 
-/************** Notificaciones **************/
+/************** juntas **************/
 
 
 router.get('/juntas', verifier, asyncHandler(async (req, res) => {
@@ -707,15 +707,18 @@ router.get('/juntas', verifier, asyncHandler(async (req, res) => {
 
 
 
-//Función auxiliar que me recupera la tarea y la agrega al request cada vez que la url trae un id de tarea
-router.param('idTarea', function(request, response, next, id){
-    db.models['Tarea'].findByPk(id)
+
+/************** Comentarios de Tareas **************/
+
+// Función auxiliar para obtener comentario
+router.param('CommentId', function(request, response, next, id){
+    db.models['ComentarioTarea'].findByPk(id)
         .then(existe =>{
             if(existe === null){
-                return response.status(404).send('No existe la Tarea.'); 
+                return response.status(404).send('No existe el comentario.'); 
             }
             else{
-                request.tarea = existe;
+                request.comentario = existe;
                 next();
             }
         })
@@ -724,14 +727,15 @@ router.param('idTarea', function(request, response, next, id){
         })
   });   
 
+
+//SELECT
 router.get('/commentsTarea', verifier, asyncHandler(async (req, res) => {
     try{ 
         const url = require('url');
         const queryObject = url.parse(req.url, true).query;
-        console.log('a ver.... ', queryObject.IdTarea)
         let comments = await db.models['ComentarioTarea'].findAll({ 
             where: {
-                TareaId: queryObject.IdTarea
+                TareaId: queryObject.TareaId
             },
             order: ['createdAt'],
             include:{ model: db.models['User'], as: 'User' } 
@@ -740,10 +744,11 @@ router.get('/commentsTarea', verifier, asyncHandler(async (req, res) => {
         comments.forEach(element => {
             salida.push({
                 ComentarioId: element.Id,
-                
                 CreatedAt: element.createdAt,
-                UserId: element.UserId,
-                UserName: element.User.Nombre
+                UserId: element.UserLegajo,
+                UserName: element.User.Nombre,
+                Comentario: element.Comentario,
+                Deletable: element.UserLegajo == req.userid
             })
         });
         res.status(200).send(salida);
@@ -757,6 +762,89 @@ router.get('/commentsTarea', verifier, asyncHandler(async (req, res) => {
  
 }));
 
+
+
+router.post('/commentsTarea', verifier, asyncHandler(async (req, res) => {
+    // verifico que el body esté bien formado
+    const { error } = commentValidation(req.body);
+    // si n está bien formado devuelvo estado 400
+    if(error){     
+        return res.status(400).send(error.details[0].message);
+    }
+    // si está bien formado
+    else{
+        // busco la tarea
+        db.models['Tarea'].findByPk(req.body.IdTarea, { include:{ model: db.models['TipoTarea'], as: 'Tipo' } })
+        .then(tarea => {
+            // si la tarea no existe, retorno 404
+            if(tarea === null){
+                return res.status(404).send('No existe la Tarea a al cual desea agregarle un comentario.'); 
+            }
+            else{
+                // busco una tarea existente con el mismo PPM y Equipo.
+
+                tarea.Tipo.getServicioEjecutor()
+                .then(servicio => {
+                    if(req.areas.includes(servicio.Id)){
+                        db.models['ComentarioTarea'].create({TareaId: tarea.Id, Comentario: req.body.commentText.trim(), UserLegajo: req.userid})
+                        .then(com =>{
+                            db.models['User'].findByPk(com.UserLegajo)
+                            .then(user => {
+                                res.status(201).send({
+                                    ComentarioId: com.Id,
+                                    CreatedAt: com.createdAt,
+                                    UserId: com.UserLegajo,
+                                    UserName: user.Nombre,
+                                    Comentario: com.Comentario,
+                                    Deletable: true
+                                });
+
+                            })
+                            .catch(error =>{
+                                console.log(error);
+                                res.status(500).send(error);
+                            })
+                          
+                        })
+                        .catch(error =>{
+                            console.log(error);
+                            res.status(500).send(error);
+                        })
+                    }
+                
+                    else{
+                        return res.status(403).send('No puede agregar comentarios a tareas de otro grupo de acción que no sea el suyo.');
+                    }
+            
+                })
+                .catch(error =>{
+                    console.log(error);
+                    res.status(409).send(error);
+                })
+            }
+                    
+        })
+        .catch(error =>{
+            console.log(error);
+            res.status(500).send(error);
+        });
+                
+        
+    }
+}));
+
+
+
+router.delete('/commentsTarea/:CommentId', verifier, asyncHandler(async (req, res) => {
+    /************************************************************** si el usuario es igual */
+    req.comentario.destroy().
+    then(() =>{
+        res.status(200).send();
+    })
+    .catch(error =>{
+        res.status(500).send(error)
+    });   
+}));
 
 
 module.exports = router;

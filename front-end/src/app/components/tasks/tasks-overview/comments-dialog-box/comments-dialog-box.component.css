@@ -19,3 +19,22 @@
 mat-form-field {
   width: 100%;
 }
+
+.commentAvatar{
+  vertical-align: text-top;
+  text-align: left;
+
+}
+.commentMessage{
+  width: 100%;
+
+}
+
+.commentNombre{
+  width: 95%;
+
+}
+
+.commentsDeleteButton{
+  text-align: right;
+}
