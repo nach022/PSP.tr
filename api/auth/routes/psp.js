@@ -335,8 +335,9 @@ router.param('TareaId', function(request, response, next, id){
 // SELECT
 
 router.get('/tareas', verifier, asyncHandler(async (req, res) => {
+    var aux = "0-";
     try{
-        let aux = "0-";
+       
         await dbEAM.authenticate();
         console.log("Conexion a BD de EAM, check!");
         aux += "1-";
