@@ -359,7 +359,7 @@ router.get('/tareas', verifier, asyncHandler(async (req, res) => {
             }
             aux += "element ok-";
             let tarea = await db.models['Tarea'].findOne({ where: { PPM: ppm.PPM_CODE, Equipo: ppm.OBJ_CODE } });
-            aux += "tarea Ok-;
+            aux += "tarea Ok-";
             if(tarea !== null){
                 //console.log(tarea);
                 elemento.Id = tarea.Id;
@@ -374,7 +374,7 @@ router.get('/tareas', verifier, asyncHandler(async (req, res) => {
     }
 
     catch(error){
-        res.status(500).send(error);
+        res.status(500).send(aux);
     }
     
 }));
