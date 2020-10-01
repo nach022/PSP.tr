@@ -335,18 +335,42 @@ router.param('TareaId', function(request, response, next, id){
 // SELECT
 
 router.get('/tareas', verifier, asyncHandler(async (req, res) => {
-    var aux = "0-";
+    const dbEAM = new sequelize(DB_EAM_NAME, DB_EAM_USER, DB_EAM_PASSWORD, {
+        host: DB_EAM_HOST,
+        dialect: DB_EAM_DIALECT,
+        logging: false,
+        dialectOptions: {
+            options: {
+            trustServerCertificate: true,
+            schema: "dbo",
+            },
+        }
+    });
     try{
+        const db = new sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
+            host: DB_HOST,
+            dialect: DB_DIALECT,
+            logging: false,
+            dialectOptions: {
+              options: {
+                trustServerCertificate: true,
+                schema: "auth",
+              },
+            },
+            pool: {
+              max: DB_POOL_MAX,
+              min: DB_POOL_MIN,
+              acquire: DB_POOL_ACQUIRE,
+              idle: DB_POOL_IDLE,
+            },
+          });
        
         await dbEAM.authenticate();
         console.log("Conexion a BD de EAM, check!");
-        aux += "1-";
+
         let ppms = await db.query(`select PPM_CODE, PPM_DESC, OBJ_CODE, OBJ_DESC, PPM_FREQ, PPM_PERIODUOM  from psp.TareasInfo`, { type: sequelize.QueryTypes.SELECT});
-        aux += "2-";
         let resultado = [];
-        aux += "len: "+ppms.length +"-";
         for (index in ppms) {
-            aux += "i: "+str(index)+"-";
             const ppm = ppms[index];
             let elemento = {
                 Id: 0,
@@ -358,9 +382,7 @@ router.get('/tareas', verifier, asyncHandler(async (req, res) => {
                 Frecuencia: ppm.PPM_FREQ,
                 Periodo: ppm.PPM_PERIODUOM
             }
-            aux += "element ok-";
             let tarea = await db.models['Tarea'].findOne({ where: { PPM: ppm.PPM_CODE, Equipo: ppm.OBJ_CODE } });
-            aux += "tarea Ok-";
             if(tarea !== null){
                 //console.log(tarea);
                 elemento.Id = tarea.Id;
@@ -375,6 +397,7 @@ router.get('/tareas', verifier, asyncHandler(async (req, res) => {
     }
 
     catch(error){
+        console.log(error);
         res.status(500).send(aux);
     }
     
