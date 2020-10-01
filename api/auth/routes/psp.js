@@ -336,11 +336,16 @@ router.param('TareaId', function(request, response, next, id){
 
 router.get('/tareas', verifier, asyncHandler(async (req, res) => {
     try{
+        let aux = "0-";
         await dbEAM.authenticate();
         console.log("Conexion a BD de EAM, check!");
+        aux += "1-";
         let ppms = await db.query(`select PPM_CODE, PPM_DESC, OBJ_CODE, OBJ_DESC, PPM_FREQ, PPM_PERIODUOM  from psp.TareasInfo`, { type: sequelize.QueryTypes.SELECT});
+        aux += "2-";
         let resultado = [];
+        aux += "len: "+ppms.length +"-";
         for (index in ppms) {
+            aux += "i: "+str(index)+"-";
             const ppm = ppms[index];
             let elemento = {
                 Id: 0,
@@ -352,7 +357,9 @@ router.get('/tareas', verifier, asyncHandler(async (req, res) => {
                 Frecuencia: ppm.PPM_FREQ,
                 Periodo: ppm.PPM_PERIODUOM
             }
+            aux += "element ok-";
             let tarea = await db.models['Tarea'].findOne({ where: { PPM: ppm.PPM_CODE, Equipo: ppm.OBJ_CODE } });
+            aux += "tarea Ok-;
             if(tarea !== null){
                 //console.log(tarea);
                 elemento.Id = tarea.Id;
