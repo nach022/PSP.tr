@@ -335,39 +335,7 @@ router.param('TareaId', function(request, response, next, id){
 // SELECT
 
 router.get('/tareas', verifier, asyncHandler(async (req, res) => {
-    const dbEAM = new sequelize(DB_EAM_NAME, DB_EAM_USER, DB_EAM_PASSWORD, {
-        host: DB_EAM_HOST,
-        dialect: DB_EAM_DIALECT,
-        logging: false,
-        dialectOptions: {
-            options: {
-            trustServerCertificate: true,
-            schema: "dbo",
-            },
-        }
-    });
     try{
-        const db = new sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
-            host: DB_HOST,
-            dialect: DB_DIALECT,
-            logging: false,
-            dialectOptions: {
-              options: {
-                trustServerCertificate: true,
-                schema: "auth",
-              },
-            },
-            pool: {
-              max: DB_POOL_MAX,
-              min: DB_POOL_MIN,
-              acquire: DB_POOL_ACQUIRE,
-              idle: DB_POOL_IDLE,
-            },
-          });
-       
-        await dbEAM.authenticate();
-        console.log("Conexion a BD de EAM, check!");
-
         let ppms = await db.query(`select PPM_CODE, PPM_DESC, OBJ_CODE, OBJ_DESC, PPM_FREQ, PPM_PERIODUOM  from psp.TareasInfo`, { type: sequelize.QueryTypes.SELECT});
         let resultado = [];
         for (index in ppms) {
@@ -383,7 +351,7 @@ router.get('/tareas', verifier, asyncHandler(async (req, res) => {
                 Periodo: ppm.PPM_PERIODUOM
             }
             let tarea = await db.models['Tarea'].findOne({ where: { PPM: ppm.PPM_CODE, Equipo: ppm.OBJ_CODE } });
-            if(tarea !== null){
+            if(tarea){
                 //console.log(tarea);
                 elemento.Id = tarea.Id;
                 elemento.TipoTareaId = tarea.TipoTareaId;
@@ -398,7 +366,7 @@ router.get('/tareas', verifier, asyncHandler(async (req, res) => {
 
     catch(error){
         console.log(error);
-        res.status(500).send(aux);
+        res.status(500).send(error);
     }
     
 }));
@@ -427,26 +395,32 @@ router.get('/tareasOverview', verifier, asyncHandler(async (req, res) => {
 
             let duracion = tareaInfo.PPM_DURATION;
             let tarea = await db.models['Tarea'].findOne({ where:{PPM_CODE: tareaInfo.PPM_CODE, Equipo: tareaInfo.OBJ_CODE}, include:{ model: db.models['TipoTarea'], as: 'Tipo' }})
-            servicio = await tarea.Tipo.getServicioEjecutor();
-            if(req.areas.includes(servicio.Id)){
-                let cantComents = await db.models['ComentarioTarea'].count({ where: {'TareaId': tarea.Id}});
+            if(tarea){
+                servicio = await tarea.Tipo.getServicioEjecutor();
+                if(req.areas.includes(servicio.Id)){
+                    if(tarea.Periodo !== null && tarea.Frecuencia !== null && tarea.Frecuencia > 0){
+                        let cantComents = await db.models['ComentarioTarea'].count({ where: {'TareaId': tarea.Id}});
 
-                let tareaSalida = {
-                    Id: tarea.Id,
-                    PPM: tarea.PPM.trim(),
-                    Descr: tarea.Descr.trim(),
-                    Equipo: tarea.Equipo.trim(),
-                    EquipoDescr: tareaInfo.OBJ_DESC.trim(),
-                    Frecuencia: tarea.Frecuencia,
-                    Periodo: tarea.Periodo.trim(),
-                    TipoTarea: tarea.Tipo.Nombre.trim(),
-                    ServicioEjecutor: servicio.Nombre.trim(),
-                    UltimaEjecucion: ultimaEjec,
-                    Duracion: duracion,
-                    Holgura: tareaInfo.Holgura,
-                    CantComents: cantComents
+                        let tareaSalida = {
+                            Id: tarea.Id,
+                            PPM: tarea.PPM.trim(),
+                            Descr: tarea.Descr.trim(),
+                            Equipo: tarea.Equipo.trim(),
+                            EquipoDescr: tareaInfo.OBJ_DESC.trim(),
+                            Frecuencia: tarea.Frecuencia,
+                            Periodo: tarea.Periodo.trim(),
+                            TipoTarea: tarea.Tipo.Nombre.trim(),
+                            ServicioEjecutor: servicio.Nombre.trim(),
+                            UltimaEjecucion: ultimaEjec,
+                            Duracion: duracion,
+                            Holgura: tareaInfo.Holgura,
+                            CantComents: cantComents
+                        }
+                        salida.push(tareaSalida);
+
+                    }
+                    
                 }
-                salida.push(tareaSalida);
             }
         }
         res.send(salida);
