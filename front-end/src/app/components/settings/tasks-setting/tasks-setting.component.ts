@@ -5,7 +5,6 @@ import { NotificationService } from 'src/app/services/notification.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TasksDialogBoxComponent } from './tasks-dialog-box/tasks-dialog-box.component';
 import { MatTable } from '@angular/material/table';
-import { stringToKeyValue } from '@angular/flex-layout/extended/typings/style/style-transforms';
 
 
 

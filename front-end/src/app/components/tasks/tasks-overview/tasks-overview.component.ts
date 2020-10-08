@@ -39,7 +39,18 @@ export interface Dessert {
   styleUrls: ['./tasks-overview.component.css']
 })
 export class TasksOverviewComponent implements OnInit {
-  public dataSource: MatTableDataSource<any> = new MatTableDataSource();
+  public dataSource: MatTableDataSource<any>;
+  public dataGrouped = [];
+  public grupos = [];
+  public tipos = [];
+  public tareas = [];
+  public grouped = false;
+  public classGrupo = [];
+  public classTipo = [];
+  public classTarea = [];
+  private sort: MatSort;
+
+
   public periodMap = {
     Y: [],
     M: [],
@@ -47,8 +58,15 @@ export class TasksOverviewComponent implements OnInit {
     W: [],
   };
   public displayedColumns: string[] = ['Grupo', 'PPM', 'Descr', 'Equipo', 'Frecuencia', 'UltimaEjecucion', 'ProximaEjecucion', 'Holgura', 'CantComentarios'];
+  public displayedColumns2: string[] = ['Equipo2', 'Descr2', 'Frecuencia2', 'UltimaEjecucion2', 'ProximaEjecucion2', 'Holgura2', 'CantComentarios2'];
 
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort) set matSort(ms: MatSort) {
+    this.sort = ms;
+    this.setDataSourceAttributes();
+  }
+  setDataSourceAttributes() {
+    this.dataSource.sort = this.sort;
+  }
 
 
   constructor(private siteService: SiteService, public dialog: MatDialog, private notif: NotificationService) {
@@ -106,8 +124,7 @@ export class TasksOverviewComponent implements OnInit {
             prox = new Date();
           }
 
-
-          table.push({
+          const newElement = {
             Id: element.Id,
             PPM: element.PPM,
             Descr: element.Descr,
@@ -116,18 +133,67 @@ export class TasksOverviewComponent implements OnInit {
             Frecuencia: `${element.Frecuencia}  ${element.Periodo !== null ? this.periodMap[element.Periodo.trim()][element.Frecuencia > 1 ? 2 : 1] : ''}`,
             UEjec: element.UltimaEjecucion,
             PEjec: prox,
-            UltimaEjecucion: `${ue.getDate().toString().padStart(2, '0')}/${(ue.getMonth() + 1).toString().padStart(2, '0')}/${ue.getFullYear()}`,
-            ProximaEjecucion: `${prox.getDate().toString().padStart(2, '0')}/${(prox.getMonth() + 1).toString().padStart(2, '0')}/${prox.getFullYear()}`,
+// UltimaEjecucion:`${ue.getDate().toString().padStart(2,'0')}/${(ue.getMonth()+1).toString().padStart(2,'0')}/${ue.getFullYear()}`,
+// ProximaEjecucion:`${prox.getDate().toString().padStart(2,'0')}/${(prox.getMonth()+1).toString().padStart(2,'0')}/${prox.getFullYear()}`,
+            UltimaEjecucion: element.UltimaEjecucion,
+            ProximaEjecucion: prox,
             Holgura: element.Holgura,
             Grupo: element.ServicioEjecutor,
             TipoTarea: element.TipoTarea,
             Freq: freq,
             CantComentarios: element.CantComents
-          });
+          };
+
+
+          table.push(newElement);
+          let tareaName = newElement.PPM + ' - ' + newElement.Descr;
+          if (!this.grupos.includes(newElement.Grupo)){
+            this.grupos.push(newElement.Grupo);
+            this.tipos[newElement.Grupo] = [];
+            this.tareas[newElement.Grupo] = [];
+            this.dataGrouped[newElement.Grupo] = [];
+
+            this.classGrupo[newElement.Grupo] = '';
+            this.classTipo[newElement.Grupo] = [];
+            this.classTarea[newElement.Grupo] = [];
+          }
+          if (!this.tipos[newElement.Grupo].includes(newElement.TipoTarea)){
+            this.tipos[newElement.Grupo].push(newElement.TipoTarea);
+            this.tareas[newElement.Grupo][newElement.TipoTarea] = [];
+            this.dataGrouped[newElement.Grupo][newElement.TipoTarea] = [];
+
+            this.classTipo[newElement.Grupo][newElement.TipoTarea] = '';
+            this.classTarea[newElement.Grupo][newElement.TipoTarea] = [];
+          }
+          if (!this.tareas[newElement.Grupo][newElement.TipoTarea].includes(tareaName)){
+            this.tareas[newElement.Grupo][newElement.TipoTarea].push(tareaName);
+            this.dataGrouped[newElement.Grupo][newElement.TipoTarea][tareaName] = [];
+
+            this.classTarea[newElement.Grupo][newElement.TipoTarea][tareaName] = '';
+          }
+          this.dataGrouped[newElement.Grupo][newElement.TipoTarea][tareaName].push(newElement);
+          if (newElement.Holgura <= 7){
+            if (this.classGrupo[newElement.Grupo] === ''){
+              this.classGrupo[newElement.Grupo] = 'table-warning';
+            }
+            if (this.classTipo[newElement.Grupo][newElement.TipoTarea] === ''){
+              this.classTipo[newElement.Grupo][newElement.TipoTarea] = 'table-warning';
+            }
+            if (this.classTarea[newElement.Grupo][newElement.TipoTarea][tareaName] === ''){
+              this.classTarea[newElement.Grupo][newElement.TipoTarea][tareaName] = 'table-warning';
+            }
+          }
+
+          if (newElement.Holgura <= 0){
+            this.classGrupo[newElement.Grupo] = 'table-danger';
+            this.classTipo[newElement.Grupo][newElement.TipoTarea] = 'table-danger';
+            this.classTarea[newElement.Grupo][newElement.TipoTarea][tareaName] = 'table-danger';
+          }
 
         });
         this.dataSource = new MatTableDataSource(table);
         this.dataSource.sort = this.sort;
+        console.log('data grouped ', this.dataGrouped);
       },
       err => {
         this.blockUI.stop();

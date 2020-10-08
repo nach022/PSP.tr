@@ -19,6 +19,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
@@ -59,6 +60,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
       MatRadioModule,
       MatSelectModule,
       MatSidenavModule,
+      MatSlideToggleModule,
       MatSnackBarModule,
       MatSortModule,
       MatTableModule,
@@ -83,6 +85,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
       MatRadioModule,
       MatSelectModule,
       MatSidenavModule,
+      MatSlideToggleModule,
       MatSnackBarModule,
       MatSortModule,
       MatTableModule,
