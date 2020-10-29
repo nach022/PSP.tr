@@ -49,6 +49,7 @@ import { DeleteCommentDialogBoxComponent } from './components/tasks/tasks-overvi
 import { CovalentModule } from './covalent.module';
 import { AvatarModule } from 'ngx-avatar';
 import { RptGrupoAccionComponent } from './components/reports/rpt-grupo-accion/rpt-grupo-accion.component';
+import { TaskEjecucionesComponent } from './components/tasks/task-ejecuciones/task-ejecuciones.component';
 
 // Pass the fusioncharts library and chart modules
 FusionChartsModule.fcRoot(FusionCharts, charts, Widgets, Gantt, FusionTheme);
@@ -77,7 +78,8 @@ FusionChartsModule.fcRoot(FusionCharts, charts, Widgets, Gantt, FusionTheme);
     UsersDialogBoxComponent,
     FreqDiffComponent,
     MedicionesJuntasComponent,
-    RptGrupoAccionComponent
+    RptGrupoAccionComponent,
+    TaskEjecucionesComponent,
   ],
   imports: [
     FusionChartsModule,

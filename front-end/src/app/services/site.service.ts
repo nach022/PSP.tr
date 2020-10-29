@@ -9,6 +9,16 @@ import { tipoInterface } from '../components/settings/task-types-settings/task-t
 })
 export class SiteService {
 
+  getOTs(idTarea: string) {
+    const params = new HttpParams().set('TareaId', idTarea);
+    return this.http.get<any>(GlobalConstants.API_OTS_URL, { params });
+  }
+
+  getEjecucionesFuturas(idTarea: string) {
+    const params = new HttpParams().set('TareaId', idTarea);
+    return this.http.get<any>(GlobalConstants.API_EJEC_FUTURAS_URL, { params });
+  }
+
   getCommentsTarea(IdTarea: number) {
     const params = new HttpParams().set('TareaId', IdTarea.toString());
     return this.http.get<any>(GlobalConstants.API_COMMENTS_URL, { params });
@@ -97,6 +107,10 @@ export class SiteService {
   // SELECT
   getTareas() {
     return this.http.get<any>(GlobalConstants.API_TAREAS_URL);
+  }
+
+  getTarea(id: any) {
+    return this.http.get<any>(`${GlobalConstants.API_TAREAS_URL}/${id}`);
   }
 
   // SELECT extendido.

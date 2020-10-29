@@ -36,9 +36,11 @@ export class HomeComponent implements OnInit {
         });
         sessionStorage.setItem(GlobalConstants.SESSION_FILTRO_AREAS, filtro);
         this.filtro = filtro;
-        this.dashboardUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`http://172.16.3.43:3000/d-solo/o8DrKF4Gk/homepage?orgId=1${this.filtro}&theme=light&panelId=4`);
-        this.dashboardUrl2 = this.sanitizer.bypassSecurityTrustResourceUrl(`http://172.16.3.43:3000/d-solo/o8DrKF4Gk/homepage?orgId=1${this.filtro}&theme=light&panelId=5`);
-        this.dashboardUrl3 = this.sanitizer.bypassSecurityTrustResourceUrl(`http://172.16.3.43:3000/d-solo/o8DrKF4Gk/homepage?orgId=1&theme=light&panelId=2`);
+
+
+        this.dashboardUrl = this.sanitizer.bypassSecurityTrustResourceUrl(GlobalConstants.GRAFANA_HOME_TAREAS(this.filtro));
+        this.dashboardUrl2 = this.sanitizer.bypassSecurityTrustResourceUrl(GlobalConstants.GRAFANA_HOME_TRABAJOS(this.filtro));
+        this.dashboardUrl3 = this.sanitizer.bypassSecurityTrustResourceUrl(GlobalConstants.GRAFANA_HOME_LAST_UPD);
         this.isDataLoaded = true;
 
       },
@@ -49,9 +51,9 @@ export class HomeComponent implements OnInit {
     }
     else{
       this.filtro = sessionStorage.getItem(GlobalConstants.SESSION_FILTRO_AREAS);
-      this.dashboardUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`http://172.16.3.43:3000/d-solo/o8DrKF4Gk/homepage?orgId=1${this.filtro}&theme=light&panelId=4`);
-      this.dashboardUrl2 = this.sanitizer.bypassSecurityTrustResourceUrl(`http://172.16.3.43:3000/d-solo/o8DrKF4Gk/homepage?orgId=1${this.filtro}&theme=light&panelId=5`);
-      this.dashboardUrl3 = this.sanitizer.bypassSecurityTrustResourceUrl(`http://172.16.3.43:3000/d-solo/o8DrKF4Gk/homepage?orgId=1&theme=light&panelId=2`);
+      this.dashboardUrl = this.sanitizer.bypassSecurityTrustResourceUrl(GlobalConstants.GRAFANA_HOME_TAREAS(this.filtro));
+      this.dashboardUrl2 = this.sanitizer.bypassSecurityTrustResourceUrl(GlobalConstants.GRAFANA_HOME_TRABAJOS(this.filtro));
+      this.dashboardUrl3 = this.sanitizer.bypassSecurityTrustResourceUrl(GlobalConstants.GRAFANA_HOME_LAST_UPD);
       this.isDataLoaded = true;
     }
   }

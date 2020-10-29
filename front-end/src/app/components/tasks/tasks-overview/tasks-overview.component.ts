@@ -5,7 +5,6 @@ import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { CommentsDialogBoxComponent } from './comments-dialog-box/comments-dialog-box.component';
-import { NotificationService } from '../../../services/notification.service';
 
 
 
@@ -51,25 +50,28 @@ export class TasksOverviewComponent implements OnInit {
   private sort: MatSort;
 
 
+
   public periodMap = {
     Y: [],
     M: [],
     D: [],
     W: [],
   };
-  public displayedColumns: string[] = ['Grupo', 'PPM', 'Descr', 'Equipo', 'Frecuencia', 'UltimaEjecucion', 'ProximaEjecucion', 'Holgura', 'CantComentarios'];
-  public displayedColumns2: string[] = ['Equipo2', 'Descr2', 'Frecuencia2', 'UltimaEjecucion2', 'ProximaEjecucion2', 'Holgura2', 'CantComentarios2'];
+  public displayedColumns: string[] = ['Grupo', 'PPM', 'Descr', 'Equipo', 'Frecuencia', 'UltimaEjecucion', 'ProximaEjecucion', 'Holgura', 'Ejecuciones'];
+  public displayedColumns2: string[] = ['Equipo2', 'Descr2', 'Frecuencia2', 'UltimaEjecucion2', 'ProximaEjecucion2', 'Holgura2', 'Ejecuciones2'];
 
   @ViewChild(MatSort) set matSort(ms: MatSort) {
     this.sort = ms;
     this.setDataSourceAttributes();
   }
   setDataSourceAttributes() {
-    this.dataSource.sort = this.sort;
+    if (this.dataSource){
+      this.dataSource.sort = this.sort;
+    }
   }
 
 
-  constructor(private siteService: SiteService, public dialog: MatDialog, private notif: NotificationService) {
+  constructor(private siteService: SiteService, public dialog: MatDialog) {
   }
   @BlockUI() blockUI: NgBlockUI;
 
@@ -133,8 +135,6 @@ export class TasksOverviewComponent implements OnInit {
             Frecuencia: `${element.Frecuencia}  ${element.Periodo !== null ? this.periodMap[element.Periodo.trim()][element.Frecuencia > 1 ? 2 : 1] : ''}`,
             UEjec: element.UltimaEjecucion,
             PEjec: prox,
-// UltimaEjecucion:`${ue.getDate().toString().padStart(2,'0')}/${(ue.getMonth()+1).toString().padStart(2,'0')}/${ue.getFullYear()}`,
-// ProximaEjecucion:`${prox.getDate().toString().padStart(2,'0')}/${(prox.getMonth()+1).toString().padStart(2,'0')}/${prox.getFullYear()}`,
             UltimaEjecucion: element.UltimaEjecucion,
             ProximaEjecucion: prox,
             Holgura: element.Holgura,
@@ -146,7 +146,7 @@ export class TasksOverviewComponent implements OnInit {
 
 
           table.push(newElement);
-          let tareaName = newElement.PPM + ' - ' + newElement.Descr;
+          const tareaName = newElement.PPM + ' - ' + newElement.Descr;
           if (!this.grupos.includes(newElement.Grupo)){
             this.grupos.push(newElement.Grupo);
             this.tipos[newElement.Grupo] = [];
@@ -192,8 +192,14 @@ export class TasksOverviewComponent implements OnInit {
 
         });
         this.dataSource = new MatTableDataSource(table);
+        this.dataSource.sortingDataAccessor = (data, col) => {
+          if (col === 'Frecuencia') {
+            return data.Freq;
+          } else {
+            return data[col];
+          }
+        };
         this.dataSource.sort = this.sort;
-        console.log('data grouped ', this.dataGrouped);
       },
       err => {
         this.blockUI.stop();

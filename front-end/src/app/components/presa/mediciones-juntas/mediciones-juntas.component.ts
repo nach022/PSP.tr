@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { SiteService } from 'src/app/services/site.service';
+import { GlobalConstants } from '../../../common/global.constants';
 
 @Component({
   selector: 'app-mediciones-juntas',
@@ -38,12 +39,12 @@ export class MedicionesJuntasComponent implements OnInit {
   selectJunta(){
     console.log('cambié a ', this.junta);
     const anio = new Date().getFullYear();
-    const epochIni = new Date(anio, 0, 1).getTime();
-    const epochFin = new Date(anio, 11, 1).getTime();
-    this.dashboardUrlX = this.sanitizer.bypassSecurityTrustResourceUrl(`http://10.101.0.57:3003/d-solo/UKwkTCNGz/mediciones-juntas?orgId=1&var-Junta=${this.junta}&from=${epochIni}&to=${epochFin}&panelId=4&theme=light`);
-    this.dashboardUrlY = this.sanitizer.bypassSecurityTrustResourceUrl(`http://10.101.0.57:3003/d-solo/UKwkTCNGz/mediciones-juntas?orgId=1&var-Junta=${this.junta}&from=${epochIni}&to=${epochFin}&panelId=8&theme=light`);
-    this.dashboardUrlZ = this.sanitizer.bypassSecurityTrustResourceUrl(`http://10.101.0.57:3003/d-solo/UKwkTCNGz/mediciones-juntas?orgId=1&var-Junta=${this.junta}&from=${epochIni}&to=${epochFin}&panelId=7&theme=light`);
-    this.dashboardUrlT = this.sanitizer.bypassSecurityTrustResourceUrl(`http://10.101.0.57:3003/d-solo/UKwkTCNGz/mediciones-juntas?orgId=1&var-Junta=${this.junta}&from=${epochIni}&to=${epochFin}&panelId=10&theme=light`);
+    const epochIni = (new Date(anio, 0, 1).getTime()).toString();
+    const epochFin = (new Date(anio, 11, 31).getTime()).toString();
+    this.dashboardUrlX = this.sanitizer.bypassSecurityTrustResourceUrl(GlobalConstants.GRAFANA_JUNTAS_X(this.junta, epochIni, epochFin));
+    this.dashboardUrlY = this.sanitizer.bypassSecurityTrustResourceUrl(GlobalConstants.GRAFANA_JUNTAS_Y(this.junta, epochIni, epochFin));
+    this.dashboardUrlZ = this.sanitizer.bypassSecurityTrustResourceUrl(GlobalConstants.GRAFANA_JUNTAS_Z(this.junta, epochIni, epochFin));
+    this.dashboardUrlT = this.sanitizer.bypassSecurityTrustResourceUrl(GlobalConstants.GRAFANA_JUNTAS_T(this.junta, epochIni, epochFin));
     this.juntaSelected = true;
 
   }

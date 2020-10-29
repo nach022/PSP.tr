@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const verifier = require('./jwtVerify');
 const sequelize = require('sequelize');
+const { Op } = require('sequelize');
 const asyncHandler = require('express-async-handler');
 const { servicioEjecutorValidation, tipoTareaValidation, tareaValidation, commentValidation } = require('../validation');
 
@@ -362,6 +363,33 @@ router.get('/tareas', verifier, asyncHandler(async (req, res) => {
             resultado.push(elemento);
         }
         res.send(resultado);
+    }
+
+    catch(error){
+        console.log(error);
+        res.status(500).send(error);
+    }
+    
+}));
+
+
+
+
+router.get('/tareas/:TareaId', verifier, asyncHandler(async (req, res) => {
+    try{
+        let descrEquipo = await db.query(`select OBJ_DESC from psp.TareasInfo where PPM_CODE = '${req.tarea.PPM}' and OBJ_CODE = '${req.tarea.Equipo}'`, { type: sequelize.QueryTypes.SELECT});
+        let elemento = {
+            Id: req.tarea.Id,
+            PPM: req.tarea.PPM,
+            TipoTareaId: req.tarea.TareaId,
+            Descr: req.tarea.Descr,
+            Equipo: req.tarea.Equipo,
+            EquipoDescr: descrEquipo[0].OBJ_DESC,
+            Frecuencia: req.tarea.Frecuencia,
+            Periodo: req.tarea.Periodo
+        }
+
+        res.send(elemento);
     }
 
     catch(error){
@@ -841,15 +869,134 @@ router.post('/commentsTarea', verifier, asyncHandler(async (req, res) => {
 
 
 router.delete('/commentsTarea/:CommentId', verifier, asyncHandler(async (req, res) => {
-    /************************************************************** si el usuario es igual */
-    req.comentario.destroy().
-    then(() =>{
-        res.status(200).send();
-    })
-    .catch(error =>{
-        res.status(500).send(error)
-    });   
+    if (req.comentario.UserLegajo == req.userid){
+        req.comentario.destroy().
+        then(() =>{
+            res.status(200).send();
+        })
+        .catch(error =>{
+            res.status(500).send(error)
+        });
+    }
+    else{
+        return res.status(403).send('No puede eliminar comentarios que no son propios.');
+    }
+       
 }));
+
+
+/************** Ejecuciones de Tareas **************/
+// SELECT
+router.get('/OTs', verifier, asyncHandler(async (req, res) => {
+    try{ 
+        const url = require('url');
+        const queryObject = url.parse(req.url, true).query;
+
+
+        let futuras = [];
+        let futVenc = await db.models['EjecucionFuturaTarea'].findAll({ 
+            where: {
+                TareaId: queryObject.TareaId,
+                Estado: 'VENC'
+            },
+            order: [['FechaInicio', 'DESC']]
+        });
+        
+        futVenc.forEach(element => {
+            futuras.push({
+                Estado: element.Estado,
+                Fecha: element.FechaInicio,
+                FechaFin: null,
+                FechaInicio: null,
+                OT: "Sin OT",
+                TareaId: element.TareaId,
+                createdAt: element.createdAt,
+                updatedAt: element.updatedAt
+            })
+        });
+
+
+        let pasadas = await db.models['EjecucionTarea'].findAll({ 
+            where: {
+                TareaId: queryObject.TareaId,
+                Estado: {[Op.ne]: 'PEND'}
+            },
+            order: [['Fecha', 'DESC']]
+        });
+        let salida = futuras.concat(pasadas);
+
+        res.status(200).send(salida);
+
+    }
+    catch(error){
+        console.log(error);
+        res.status(500).send(error);
+    }
+    
+ 
+}));
+
+
+
+
+router.get('/EjecucionesFuturas', verifier, asyncHandler(async (req, res) => {
+    try{ 
+        const url = require('url');
+        const queryObject = url.parse(req.url, true).query;
+
+        let salida = [];
+
+        let ejec = await db.models['EjecucionFuturaTarea'].findAll({ 
+            where: {
+                TareaId: queryObject.TareaId,
+                Estado: {[Op.ne]: 'VENC'}
+            },
+            order: ['FechaInicio']
+        });
+
+        ejec.forEach(element => {
+            salida.push({
+                OT: 'Sin OT',
+                Estado: element.Estado,
+                FechaInicio: element.FechaInicio,
+                TareaId: element.TareaId,
+                createdAt: element.createdAt,
+                updatedAt: element.updatedAt
+            });
+        });
+
+        let pend = await db.models['EjecucionTarea'].findAll({ 
+            where: {
+                TareaId: queryObject.TareaId,
+                Estado: 'PEND'
+            },
+            order: ['Fecha']
+        });
+
+        pend.forEach(element => {
+            salida.push({
+                OT: element.OT,
+                Estado: element.Estado,
+                FechaInicio: element.Fecha,
+                TareaId: element.TareaId,
+                createdAt: element.createdAt,
+                updatedAt: element.updatedAt
+            })
+        });
+        res.status(200).send(salida);
+
+    }
+    catch(error){
+        console.log(error);
+        res.status(500).send(error);
+    }
+    
+ 
+}));
+
+
+
+
 
 
 module.exports = router;

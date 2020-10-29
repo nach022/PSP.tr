@@ -3,10 +3,23 @@ ng serve
 pm2 restart 0
 ng build --prod
 
-agregar comments
+ver ejecuciones
+cambiar dashboards grafana
+eliminar error 404
+pedir nombre servidor
+cambiar puerto
+agregar comments a OTs
 detalles de diseño
 informes
 hacer que configuración de tareas sea por PPM y no por PPM + Equipo
+
+when 2 goes 23, and gets neined... people prefered to play 35 with no info on 
+26 out fas fas, and you ja 6's SE
+
+
+
+
+
 
 
 
