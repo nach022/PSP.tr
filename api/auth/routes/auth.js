@@ -152,9 +152,9 @@ router.post('/login', (req,res) => {
             //proceso la respuesta
             .then((resAuth) => {
                 // si el estado es OK
-                resAuth.data.LoginRes = "OK";
+                /*resAuth.data.LoginRes = "OK";
                 resAuth.data.Legajo = 10021;
-                resAuth.data.Nombre = 'Failache, Nicolás';
+                resAuth.data.Nombre = 'Failache, Nicolás';*/
                 if(resAuth.status == 200){
                     // si la respuesta dice que hubo un error al verificar las credenciales, devuelvo un 401
                     if(resAuth.data.LoginRes == "ERROR"){
