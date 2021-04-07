@@ -1,7 +1,7 @@
 <mat-toolbar  class="mat-elevation-z10 barra-herramientas">
   <app-navbar-items></app-navbar-items>
   <div class="spacer"></div>
-  <img src="assets/img/title.svg" >
+  <img src="./assets/img/title.svg" >
   <div class="spacer"></div>
   <button mat-raised-button  [matMenuTriggerFor]="usuarioMenu"><mat-icon>account_circle</mat-icon>&nbsp;<span>{{ NombreUsuario }}</span></button>
   <button mat-raised-button [matMenuTriggerFor]="notifMenu" color="accent"><mat-icon matBadge="{{this.notificaciones.length}}" matBadgeHidden="{{this.notificaciones.length===0}}" matBadgePosition="below">notifications</mat-icon></button>
