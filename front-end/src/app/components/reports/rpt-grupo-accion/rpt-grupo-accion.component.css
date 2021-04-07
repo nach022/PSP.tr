@@ -1,0 +1,21 @@
+.mat-form-field.stretch-height,
+.mat-form-field.stretch-height .mat-form-field-flex,
+.mat-form-field.stretch-height textarea {
+  height: 100%;
+}
+.mat-form-field.stretch-height .mat-form-field-wrapper {
+  height: calc(100% - 1.34375em);
+}
+.mat-form-field.stretch-height .mat-form-field-infix {
+  height: calc(100% - 1.34375em - 2px);
+}
+.block50 {
+  display: block;
+  width: 50%;
+  text-decoration: none;
+}
+
+.block100 {
+  display: block;
+  width: 100%;
+}

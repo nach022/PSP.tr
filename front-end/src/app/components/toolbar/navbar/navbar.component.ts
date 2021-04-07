@@ -14,7 +14,7 @@ import { NotificationService } from 'src/app/services/notification.service';
 export class NavbarComponent implements OnInit, OnDestroy {
   NombreUsuario = '';
   RolUsuario = [];
-  notificaciones: {icon: string, text: string, func: string}[] = [];
+  notificaciones: {icon: string, text: string, func: string, color: string, path: string}[] = [];
   subscription: Subscription;
 
   constructor(private auth: AuthService, private siteService: SiteService, private router: Router, private notif: NotificationService) {}

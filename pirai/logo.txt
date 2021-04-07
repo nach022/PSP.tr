@@ -1,0 +1,8 @@
+https://maketext.io/
+
+Fuente: bahiana
+Size: 116
+Bg: none
+Fill: #71c2cc
+Reflect: #1d3f72
+Shadow: #d8ebf9

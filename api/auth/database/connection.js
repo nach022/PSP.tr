@@ -2,6 +2,7 @@ const sequelize = require("sequelize");
 
 const MenuItemModel = require("../models/apps/MenuItem");
 
+// AUTH
 const AppModel = require("../models/auth/App");
 const RolModel = require("../models/auth/Rol");
 const RolMenuModel = require("../models/auth/RolMenu");
@@ -10,7 +11,7 @@ const UserModel = require("../models/auth/User");
 const UserRolModel = require("../models/auth/UserRol");
 
 
-
+// PSP
 const ServEjecModel = require("../models/psp/ServicioEjecutor");
 const TareaModel = require("../models/psp/Tarea");
 const TipoTareaModel = require("../models/psp/TipoTarea");
@@ -18,7 +19,16 @@ const RolGruposAccionModel = require("../models/psp/RolGruposAccion");
 const ComentarioTareaModel = require("../models/psp/ComentarioTarea");
 const EjecucionTareaModel = require("../models/psp/EjecucionTarea");
 const EjecucionFuturaTareaModel = require("../models/psp/EjecucionFuturaTarea");
+const ComentarioOTModel = require('../models/psp/ComentarioOT');
 
+
+// PIRAI
+const ProfundidadModel = require("../models/pirai/Profundidad");
+const FamiliaVariablesModel = require("../models/pirai/FamiliaVariables");
+const VariableModel = require("../models/pirai/Variable");
+const ProfundidadVariableModel = require("../models/pirai/ProfundidadVariable");
+const TecnicaVariableModel = require("../models/pirai/TecnicaVariable");
+const ItemListaVariableModel = require("../models/pirai/ItemListaVariable");
 
 const db = new sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
   host: DB_HOST,
@@ -150,6 +160,7 @@ const ServEjec = ServEjecModel(db, sequelize);
 const ComentarioTarea = ComentarioTareaModel(db, sequelize);
 const EjecucionTarea = EjecucionTareaModel(db, sequelize);
 const EjecucionFuturaTarea = EjecucionFuturaTareaModel(db, sequelize);
+const ComentarioOT = ComentarioOTModel(db, sequelize);
 
 //Relaciones
 TipoTarea.belongsTo(ServEjec);
@@ -162,7 +173,10 @@ TipoTarea.hasMany(Tarea, { onDelete: 'CASCADE', hooks:true});
 ComentarioTarea.belongsTo(Tarea);
 Tarea.hasMany(ComentarioTarea);
 ComentarioTarea.belongsTo(User);
-User.hasMany(ComentarioTarea)
+User.hasMany(ComentarioTarea);
+
+ComentarioOT.belongsTo(EjecucionTarea);
+EjecucionTarea.hasMany(ComentarioOT);
 
 
 EjecucionTarea.belongsTo(Tarea);
@@ -170,6 +184,35 @@ Tarea.hasMany(EjecucionTarea);
 
 EjecucionFuturaTarea.belongsTo(Tarea);
 Tarea.hasMany(EjecucionFuturaTarea);
+
+
+
+//Modelos de Aplicación Piraí
+const Profundidad = ProfundidadModel(db, sequelize);
+const FamiliaVariables = FamiliaVariablesModel(db, sequelize);
+const Variable = VariableModel(db, sequelize);
+const ProfundidadVariable = ProfundidadVariableModel(db, sequelize);
+const TecnicaVariable = TecnicaVariableModel(db, sequelize);
+const ItemListaVariable = ItemListaVariableModel(db, sequelize);
+
+
+Variable.belongsTo(FamiliaVariables);
+FamiliaVariables.hasMany(Variable);
+
+Variable.hasMany(ProfundidadVariable);
+ProfundidadVariable.belongsTo(Variable);
+ProfundidadVariable.belongsTo(Profundidad);
+Profundidad.hasMany(ProfundidadVariable);
+
+Variable.hasMany(TecnicaVariable);
+TecnicaVariable.belongsTo(Variable);
+
+Variable.hasMany(ItemListaVariable, {
+  foreignKey: "VariableCodigo"
+});
+ItemListaVariable.belongsTo(Variable);
+
+
 
 
 

@@ -13,8 +13,8 @@ module.exports = (sequelize, type) => {
         AppId:{
             type: DataTypes.INTEGER,
             allowNull: false,
-            field: 'AppId'
-
+            field: 'AppId',
+            unique: 'AppLabel'
         },
         Label: {
             type: DataTypes.STRING(50),
@@ -25,6 +25,10 @@ module.exports = (sequelize, type) => {
         },
         Icono: {
             type: DataTypes.STRING(50),
+            allowNull: true
+        },
+        Estilo: {
+            type: DataTypes.STRING(200),
             allowNull: true
         },
         Tipo: {

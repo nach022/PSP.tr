@@ -27,6 +27,7 @@ export class GlobalConstants {
   public static API_JUNTAS_URL = `${GlobalConstants.API_BASE_URL}/psp/juntas`;
   public static API_OTS_URL = `${GlobalConstants.API_BASE_URL}/psp/OTs`;
   public static API_REGISTER_URL = `${GlobalConstants.API_BASE_URL}/user/register`;
+  public static API_REPORTE_URL = `${GlobalConstants.API_BASE_URL}/pspReports/reporte`;
   public static API_ROLES_URL = `${GlobalConstants.API_BASE_URL}/app/roles`;
   public static API_SERV_EJEC_URL = `${GlobalConstants.API_BASE_URL}/psp/areas`;
   public static API_TIPO_TAREAS_URL = `${GlobalConstants.API_BASE_URL}/psp/tiposTareas`;
@@ -82,6 +83,7 @@ export class GlobalConstants {
 
   // keys para almacenar información en el local storage
   public static LOCAL_TOKEN_KEY = 'psp-token';
+
 
   public static API_SERVER(){
     if (environment.production) {

@@ -1,1 +1,30 @@
-<p>rpt-grupo-accion works!</p>
+<div  *ngIf="isDataLoaded" >
+  <div fxLayout="row" fxLayoutAlign="center center">
+    <div fxLayout="column">
+      <h2>Selecciona Grupo de Acci&oacute;n:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h2>
+    </div>
+    <div fxLayout="column">
+      <mat-form-field>
+        <mat-label>Grupo</mat-label>
+        <mat-select [(ngModel)]="this.area">
+            <mat-option *ngFor="let grupo of this.grupos" [value]="grupo.Id">
+                {{grupo.Nombre}}
+            </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="center center">
+    <div style="display: flex; flex-direction: column; width: 50%;">
+      <mat-form-field class="stretch-height" appearance="outline">
+        <mat-label>Comentarios Adicionales:</mat-label>
+        <textarea matInput rows="10" [(ngModel)]="this.comentario"></textarea>
+      </mat-form-field>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="center center">
+    <button class="block50" mat-raised-button color="primary" (click)="generarReporte()" [disabled]="!this.area">Generar reporte</button>
+  </div>
+</div>
+

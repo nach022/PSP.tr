@@ -189,6 +189,7 @@ async function crearMenuItem(menuItem, rolid, esRoot) {
         icon: menuItem.Icono,
         route: menuItem.Route,
         tipo: menuItem.Tipo,
+        estilo: menuItem.Estilo,
         hijos: []
     }
     if(menuItem.Tipo == "H"){
@@ -230,8 +231,6 @@ async function crearMenuItem(menuItem, rolid, esRoot) {
 
 // SELECT
 router.get('/menu', verifier, asyncHandler(async (req, res) => {
-
-
         let rootNode = await db.models['MenuItem'].findAll({
             where: {
                 AppId: req.appid,
@@ -240,7 +239,7 @@ router.get('/menu', verifier, asyncHandler(async (req, res) => {
             },
             include: [ 
                 {model: db.models['Rol'], as: 'Rols'},
-            ]   
+            ]
         });
         if(rootNode.length){
             let menu = await crearMenuItem(rootNode[0], req.rolid, true);

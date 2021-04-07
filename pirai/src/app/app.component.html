@@ -1,0 +1,33 @@
+<block-ui>
+  <div *ngIf="!router.url.includes('/login') && !router.url.includes('/register'); else loginPage" class="pirai">
+    <mat-toolbar color="primary" class="app-toolbar">
+      <button mat-icon-button color="basic" (click)="sidenav.toggle()" >
+        <mat-icon> menu</mat-icon>
+      </button>
+      <span class="navbarSpan">
+        <img src="/assets/img/pirai_logo.png" class="navbarLogo" alt="Pira&iacute;">
+      </span>
+      <app-logoff></app-logoff>
+    </mat-toolbar>
+    <mat-sidenav-container class="pirai">
+      <mat-sidenav mode = "over" #sidenav role="navigation">
+        <app-menu [sidenav]=sidenav (sidenavClose)="sidenav.close()"></app-menu>
+      </mat-sidenav>
+
+      <mat-sidenav-content>
+        <router-outlet></router-outlet>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+
+
+  </div>
+
+  <ng-template #loginPage>
+
+    <router-outlet></router-outlet>
+
+  </ng-template>
+
+
+</block-ui>
+

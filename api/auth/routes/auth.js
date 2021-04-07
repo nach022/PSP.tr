@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 
 
 router.post('/register', verifier, (req,res) => {
+    console.log(req.appid, req.userid);
     const { error } = registerValidation(req.body);
     // si n está bien formado devuelvo estado 400
     if(error){     
@@ -151,14 +152,19 @@ router.post('/login', (req,res) => {
             //proceso la respuesta
             .then((resAuth) => {
                 // si el estado es OK
+                /*resAuth.data.LoginRes = "OK";
+                resAuth.data.Legajo = 10041;
+                resAuth.data.Nombre = 'Corrales, Ignacio Miguel.';*/
                 if(resAuth.status == 200){
                     // si la respuesta dice que hubo un error al verificar las credenciales, devuelvo un 401
                     if(resAuth.data.LoginRes == "ERROR"){
+                        console.log(resAuth);
                         errorMessage = resAuth.data.Message;
                         return res.status(401).send(errorMessage);
                     }
                     // si la respuesta es que las credenciales no son correctas, devuelvo 401
                     else if(resAuth.data.LoginRes == "NO"){
+                        console.log(2);
                         errorMessage = 'Error de autenticación. Compruebe el usuario y password ingresados y vuelva a intentarlo.';
                         return res.status(401).send(errorMessage);
                     }
@@ -194,40 +200,45 @@ router.post('/login', (req,res) => {
                             }
                             // si el usuario tiene un rol, lo agrego al payload, genero el jwt y devuelvo un 200
                             else{
-                                let roles = [];
-                                let nomRol = [];
-                                queryRes.rows.forEach(element => {
-                                    roles.push(element.RolId);
-                                    if(element.RolId > 1){
-                                        nomRol.push(element.Rol.Nombre);
-                                    }                                    
-                                });
+                                db.models['Rol'].findOne({
+                                    where:{ AppId: req.body.AppId, Nombre: 'NOROL'}
+                                }).then(norol => {
+                                    let roles = [];
+                                    let nomRol = [];
+                                    queryRes.rows.forEach(element => {
+                                        roles.push(element.RolId);
+                                        if(element.RolId > norol.Id){
+                                            nomRol.push(element.Rol.Nombre);
+                                        }                                    
+                                    });
+    
+                                    let resData = {
+                                        _id: resAuth.data.Legajo,
+                                        app: req.body.AppId,
+                                        rol: roles
+                                    }
+                                    const token = jwt.sign(resData, JWT_SECRET, {
+                                        expiresIn: JWT_EXPIRE
+                                    });
+                                    
+                                    // si el rol es 'Sin Rol', agrego header indicando que existe solicitud de acceso
+                                    if (queryRes.rows[0].RolId === norol.Id){
+                                        res.header(HEADER_ROL, 0);
+                                    }
+                                    // agrego un header a la respuesta, que indica que el usuario sí tiene rol
+                                    else{
+                                        res.header(HEADER_ROL, 1);
+                                    }
+                                    
+                                    let userData = {
+                                        id: resAuth.data.Legajo,
+                                        nombre: resAuth.data.Nombre,
+                                        rol: nomRol,
+                                        createdAt: queryRes.rows[0].createdAt
+                                    }
+                                    return res.header(HEADER_TOKEN, token).send(userData);
 
-                                let resData = {
-                                    _id: resAuth.data.Legajo,
-                                    app: req.body.AppId,
-                                    rol: roles
-                                }
-                                const token = jwt.sign(resData, JWT_SECRET, {
-                                    expiresIn: JWT_EXPIRE
                                 });
-                                
-                                // si el rol es 'Sin Rol', agrego header indicando que existe solicitud de acceso
-                                if (queryRes.rows[0].RolId === 1){
-                                    res.header(HEADER_ROL, 0);
-                                }
-                                // agrego un header a la respuesta, que indica que el usuario sí tiene rol
-                                else{
-                                    res.header(HEADER_ROL, 1);
-                                }
-                                
-                                let userData = {
-                                    id: resAuth.data.Legajo,
-                                    nombre: resAuth.data.Nombre,
-                                    rol: nomRol,
-                                    createdAt: queryRes.rows[0].createdAt
-                                }
-                                return res.header(HEADER_TOKEN, token).send(userData);
                             }
                         })
                         // si hay error al buscar rol en la BD, devuelvo 502

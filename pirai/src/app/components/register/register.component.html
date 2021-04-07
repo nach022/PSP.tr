@@ -1,0 +1,56 @@
+<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
+    <div class="main-div">
+      <mat-card class="box">
+        <mat-card-header >
+            <img src="/assets/img/pirai_logo.png" width="25%" height="25%" alt="Pira&iacute;">
+        </mat-card-header>
+
+        <form class="login-form" #loginForm="ngForm" (submit)="registerUser()">
+
+
+          <mat-card-content>
+            <div *ngIf="this.solicitud === -1; else haySolicitud">
+              <!-- Markup for getting Username starts -->
+              <mat-grid-list cols="9" rowHeight="75px">
+                <p>
+                  Bienvenid@ <b>{{nombre}}</b>, a&uacute;n no tienes permisos para ingresar.
+                  Si deseas, puedes solicitar acceso al Administrador de la Pira&iacute;, qui&eacute;n te asignar&aacute; un rol acorde a tu funci&oacute;n.
+
+                </p>
+              </mat-grid-list>
+              <!-- Markup for getting Username ends -->
+
+              <button mat-raised-button  color="accent" class="btn-block" type="submit">
+                <mat-icon>input</mat-icon> Solicitar Acceso.
+              </button>
+              <button mat-raised-button  class="btn-block" (click)="salir()">
+                <mat-icon>power_settings_new</mat-icon> Salir.
+              </button>
+            </div>
+
+            <ng-template #haySolicitud>
+              <div>
+                <mat-grid-list cols="9" >
+                  <p>
+                    Bienvenid@ <b>{{nombre}}</b>, a&uacute;n no tienes permisos para ingresar.
+                    <br>Has creado una solicitud de acceso <b>hace {{tiempo}} d&iacute;as</b>, que a&uacute;n est&aacute; pendiente de revisi&oacute;n por parte del Coordinador del PSP.
+                    <br>Si consideras que el tiempo es excesivo, no dudes en ponerte en contacto con el Administrador de la Pira&iacute; de forma directa y consultar al respecto.
+                  </p>
+                </mat-grid-list>
+                <br>
+                <button mat-raised-button  class="btn-block" (click)="salir()">
+                    <mat-icon>power_settings_new</mat-icon> Salir.
+                </button>
+              </div>
+
+
+            </ng-template>
+
+          </mat-card-content>
+
+        </form>
+      </mat-card>
+    </div>
+    <div class="login-fondo-transparency">
+    </div>
+  </div>

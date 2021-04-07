@@ -1,0 +1,44 @@
+<div  *ngIf="isDataLoaded" fxLayout="column" fxLayoutAlign="space-around center" fxFlexFill>
+
+    <div fxLayout="row" fxLayoutAlign="center center"> <h1>Profundidades de Medici&oacute;n.</h1></div>
+
+
+
+    <table mat-table [dataSource]="dataSource" #mytable class="tabla-profundidades mat-elevation-z8">
+
+      <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+
+      <!-- Cod Column -->
+      <ng-container matColumnDef="orden">
+        <th mat-header-cell *matHeaderCellDef> Ordenar</th>
+        <td mat-cell *matCellDef="let element"> {{element.Orden}} </td>
+      </ng-container>
+
+      <!-- Cod Column -->
+      <ng-container matColumnDef="cod">
+        <th mat-header-cell *matHeaderCellDef> C&oacute;digo </th>
+        <td mat-cell *matCellDef="let element"> {{element.Codigo}} </td>
+      </ng-container>
+
+      <!-- Descr Column -->
+      <ng-container matColumnDef="descr">
+        <th mat-header-cell *matHeaderCellDef width="45%"> Descripcion </th>
+        <td mat-cell *matCellDef="let element"> {{element.Descripcion}} </td>
+      </ng-container>
+
+      <!-- Action Column -->
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef style="text-align:center" width="20%"> <button mat-button (click)="openDialog('Add',{})" ><mat-icon>add</mat-icon></button> </th>
+        <td mat-cell *matCellDef="let element" class="action-link" style="text-align:center">
+          <button mat-button color="primary" (click)="openDialog('Update',element)"><mat-icon>edit</mat-icon></button> |
+          <button mat-button color="primary" (click)="openDialog('Delete',element)"><mat-icon>delete</mat-icon></button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" class="thead-dark"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+  </div>

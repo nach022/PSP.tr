@@ -1,6 +1,5 @@
 // Servicio para interceptar Requests de HTTP, si los request son al backend, se le agrega en el header el JWT.
 
-
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, TimeoutError } from 'rxjs';

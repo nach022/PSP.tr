@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { GlobalConstants } from '../common/global.constants';
 import { TareaDataInterface } from '../components/settings/tasks-setting/tasks-setting.component';
 import { tipoInterface } from '../components/settings/task-types-settings/task-types-settings.component';
@@ -8,6 +8,17 @@ import { tipoInterface } from '../components/settings/task-types-settings/task-t
   providedIn: 'root'
 })
 export class SiteService {
+
+  postReporte(area: number, comentario: string) {
+    let texto = comentario ? comentario.trim() : '';
+    return this.http.post(`${GlobalConstants.API_REPORTE_URL}/${area}`,
+      { commentText: texto},
+      {
+        responseType: 'blob'
+      })
+  }
+
+  constructor(private http: HttpClient) { }
 
   getOTs(idTarea: string) {
     const params = new HttpParams().set('TareaId', idTarea);
@@ -37,7 +48,6 @@ export class SiteService {
     return this.http.get<any>(GlobalConstants.API_JUNTAS_URL);
   }
 
-  constructor(private http: HttpClient) { }
 
   // Función para recuperar el menú de la aplicación, dependiendo del rol del usuario
   getNavbar(){

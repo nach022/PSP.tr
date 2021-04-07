@@ -6,13 +6,13 @@ const { Op } = require('sequelize');
 module.exports = function (req, res, next) {
   //si la request no tiene cabezal de autorización retorno 401.
   if (!req.headers.authorization){
-    return res.status(401).send("Acceso denegado.1");
+    return res.status(401).send("Acceso denegado.");
   }
   else{
     //si el cabezal de autorización no tiene un token separado por espacio, retorno 401
     let token = req.headers.authorization.split(' ')[1];
     if(token === 'null'){
-      return res.status(401).send("Acceso denegado.2");
+      return res.status(401).send("Acceso denegado.");
     }
     else{
       try{
@@ -21,7 +21,7 @@ module.exports = function (req, res, next) {
         //si la verificación retorna false, devuelvo 401.
         if(!payload){
           console.log("acceso denegado, token: ", token);
-          return res.status(401).send("Acceso denegado.3");
+          return res.status(401).send("Acceso denegado.");
         }
         //si la verificación fue exitosa.
         else{ 

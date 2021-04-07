@@ -1,0 +1,24 @@
+<button mat-flat-button  [matMenuTriggerFor]="usuarioMenu" color="primary"><mat-icon>account_circle</mat-icon>&nbsp;<span>{{ NombreUsuario }}</span></button>
+<button mat-mini-fab [matMenuTriggerFor]="notifMenu" color="basic"><mat-icon matBadge="{{this.notificaciones.length}}" matBadgeHidden="{{this.notificaciones.length===0}}" matBadgePosition="below"  matBadgeColor="warn">notifications</mat-icon></button>
+
+<mat-menu #usuarioMenu="matMenu">
+    <button *ngFor="let rol of this.RolUsuario" mat-menu-item disabled>{{ rol }}</button>
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="cerrarSesion()">
+      <mat-icon>power_settings_new</mat-icon>
+      <span>Cerrar Sesión</span>
+    </button>
+  </mat-menu>
+
+  <mat-menu #notifMenu="matMenu">
+    <div *ngFor="let notif of this.notificaciones; let i = index">
+      <mat-divider *ngIf="i > 0"></mat-divider>
+      <button  mat-menu-item (click)="this.navegar(notif.path)">
+        <mat-icon color="{{notif.color}}">{{ notif.icon }}</mat-icon>
+        <span>{{ notif.text }}</span>
+      </button>
+    </div>
+    <button *ngIf="this.notificaciones.length===0" mat-menu-item disabled>
+      <span>No tienes notificaciones</span>
+    </button>
+  </mat-menu>
