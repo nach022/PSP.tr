@@ -112,7 +112,7 @@ async function getCantTareasCanceladas(area, inicio, fin){
 
 async function getTareasVencidas(area, inicio, fin){
 
-  let queryVenc = "select * from (select tarea.Descr + ' (Equipo' + tarea.Equipo + ')' as Descr, convert(varchar, Fecha, 103) as Venc, Fecha, "; 
+  let queryVenc = "select * from (select tarea.Descr + ' (Equipo: ' + tarea.Equipo + ')' as Descr, convert(varchar, Fecha, 103) as Venc, Fecha, "; 
   queryVenc += "cast(tarea.Frecuencia as varchar) + case tarea.Periodo when 'W' then ' semana' ";
   queryVenc += "when 'D' then ' día' when 'M' then ' mes' when 'Y' then ' año' end  + ";
   queryVenc += "case tarea.Frecuencia when  1 then '' else case tarea.Periodo when 'M' then 'es' else 's' end end as Freq"
