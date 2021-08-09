@@ -116,7 +116,6 @@ module.exports = function (req, res, next) {
         }
       }
       catch (err) {
-        console.log(err);
         res.status(401).send("Token vencido.");
       }
     }

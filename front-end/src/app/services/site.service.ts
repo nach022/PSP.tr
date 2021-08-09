@@ -9,10 +9,15 @@ import { tipoInterface } from '../components/settings/task-types-settings/task-t
 })
 export class SiteService {
 
-  postReporte(area: number, comentario: string) {
-    let texto = comentario ? comentario.trim() : '';
+  postReporte(area: number, comentario: string[], ini: Date, fin: Date) {
+
+    let texts = comentario.map(x=> x ? x.trim() : '');
     return this.http.post(`${GlobalConstants.API_REPORTE_URL}/${area}`,
-      { commentText: texto},
+      {
+        comments: texts,
+        inicio: ini,
+        fin: fin
+      },
       {
         responseType: 'blob'
       })

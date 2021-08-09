@@ -51,6 +51,23 @@ import { AvatarModule } from 'ngx-avatar';
 import { RptGrupoAccionComponent } from './components/reports/rpt-grupo-accion/rpt-grupo-accion.component';
 import { TaskEjecucionesComponent } from './components/tasks/task-ejecuciones/task-ejecuciones.component';
 
+import {MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/material-moment-adapter';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core'
+import 'moment/locale/es';
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
+
+
+
 // Pass the fusioncharts library and chart modules
 FusionChartsModule.fcRoot(FusionCharts, charts, Widgets, Gantt, FusionTheme);
 
@@ -118,7 +135,15 @@ FusionChartsModule.fcRoot(FusionCharts, charts, Widgets, Gantt, FusionTheme);
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptorService,
       multi: true
-    }
+    },
+    {provide: MAT_DATE_LOCALE, useValue: 'es'},
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+
+    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
 
 
   ],
