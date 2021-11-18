@@ -29,6 +29,7 @@ const VariableModel = require("../models/pirai/Variable");
 const ProfundidadVariableModel = require("../models/pirai/ProfundidadVariable");
 const TecnicaVariableModel = require("../models/pirai/TecnicaVariable");
 const ItemListaVariableModel = require("../models/pirai/ItemListaVariable");
+const UbicacionModel = require("../models/pirai/Ubicacion");
 
 const db = new sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
   host: DB_HOST,
@@ -194,6 +195,7 @@ const Variable = VariableModel(db, sequelize);
 const ProfundidadVariable = ProfundidadVariableModel(db, sequelize);
 const TecnicaVariable = TecnicaVariableModel(db, sequelize);
 const ItemListaVariable = ItemListaVariableModel(db, sequelize);
+const Ubicacion = UbicacionModel(db, sequelize);
 
 
 Variable.belongsTo(FamiliaVariables);
@@ -219,49 +221,7 @@ ItemListaVariable.belongsTo(Variable);
 db.sync(/*{ force:true }*/)
 //db.sync()
 .then(() => {
-    
     console.log("Modelos sincronizados, check!");
-
-    /* Datos de prueba *//*
-    App.create({ Nombre: 'PSP.tr', Descr:'Aplicación de gestión del Programa de Seguridad de Presas' })
-    .then(app => {
-        Rol.create({ AppId: app.Id, Nombre: 'sysadm', Descr:'Administrador total del sistema PSP.tr' })
-        .then(rol => {
-            User.create({ Legajo: 10041, Nombre:'Corrales, Ignacio Miguel' }).then(usr => {
-                usr.addApp(app, {
-                    through: {
-                        RolId: rol.Id
-                    }
-                }).then(()=>{
-                    MenuItem.create({AppId: app.Id, Label: 'ROOT', Tipo: 'N', Orden: 0 }).then((root)=>{
-                        MenuItem.create({AppId: app.Id, Label: 'Inicio', Icono: 'home', Tipo: 'H', Route: '/home', Padre: root.Id, Orden:1}).then((home)=>{
-                            MenuItem.create({AppId: app.Id, Label: 'Tareas', Icono: 'list_alt', Tipo: 'N', Route: '', Padre: root.Id, Orden:2}).then((tasks)=>{
-                                MenuItem.create({AppId: app.Id, Label: 'Visión General', Icono: 'toc', Tipo: 'H', Route: '/tasks-overview', Padre: tasks.Id, Orden:1}).then(()=>{
-                                    MenuItem.create({AppId: app.Id, Label: 'Diagrama de Planificación', Icono: 'line_style', Tipo: 'H', Route: '/gantt', Padre: tasks.Id, Orden:2}).then(()=>{
-                                        MenuItem.create({AppId: app.Id, Label: 'Informes', Icono: 'description', Tipo: 'N', Route: '', Padre: root.Id, Orden:3}).then(()=>{
-                                            MenuItem.create({AppId: app.Id, Label: 'Configuración', Icono: 'settings', Tipo: 'N', Route: '', Padre: root.Id, Orden:4}).then((conf)=>{
-                                                MenuItem.create({AppId: app.Id, Label: 'Tareas', Icono: 'playlist_add', Tipo: 'H', Route: '/tasks-setting', Padre: conf.Id, Orden:1}).then(()=>{
-                                                    MenuItem.create({AppId: app.Id, Label: 'Usuarios', Icono: 'people_alt', Tipo: 'H', Route: '/users-setting', Padre: conf.Id, Orden:2}).then(()=>{
-                                                    }).then(()=> console.log("Datos de prueba cargados, check!"));
-                                                });
-                                            });
-                                        });
-                                    });
-                                });
-                            });
-                        });
-                    });
-                });
-            });
-        });
-    
-        
-
-    });
-
-
-    *//** Fin Datos de Prueba */
-
 })
 .catch((error) => {
     console.error("ERROR: No se pudo sincronizar modelos.", error.message);

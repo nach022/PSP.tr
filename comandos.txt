@@ -1,7 +1,7 @@
 ng g c new-component --module app
 ng serve
 pm2 restart 0
-ng build --prod
+ng build --prod --base-href /psp/
 
 ver ejecuciones
 agregar comments a OTs

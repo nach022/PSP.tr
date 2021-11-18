@@ -7,6 +7,23 @@ const { profundidadValidation } = require('../piraiValidation');
 
 
 
+
+/****************       UBICACIONES       ******************/
+
+// SELECT
+router.get('/ubicaciones', verifier, asyncHandler(async (req, res) => {
+    try {
+        let result = await db.models['Ubicacion'].findAll();    
+        res.status(200).send(result);
+    }
+    catch(error){
+        console.log(error);
+        res.status(500).send(error);
+    }
+}));
+
+module.exports = router;
+
 /****************     PROFUNDIDADES    ******************/
 
 //Función auxiliar que me recupera la profundidad y la agrega al request cada vez que la url trae un codigo de profundidad
