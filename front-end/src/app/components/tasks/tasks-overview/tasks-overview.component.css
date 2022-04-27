@@ -1,6 +1,12 @@
 .my-table {
   width: 90%;
 }
+
+.my-table2 {
+  width: 95%;
+}
+
+
 .mat-sort-header-container {
   align-items: center;
 }

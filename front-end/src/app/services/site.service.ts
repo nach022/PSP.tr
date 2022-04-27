@@ -23,6 +23,7 @@ export class SiteService {
       })
   }
 
+
   constructor(private http: HttpClient) { }
 
   getOTs(idTarea: string) {
@@ -55,7 +56,7 @@ export class SiteService {
 
 
   // Función para recuperar el menú de la aplicación, dependiendo del rol del usuario
-  getNavbar(){
+  getMenu(){
     return this.http.get<any>(GlobalConstants.API_MENU_URL);
   }
 
@@ -192,5 +193,21 @@ export class SiteService {
     return this.http.get<any>(GlobalConstants.API_ROLES_URL);
   }
 
+
+  /************* Reportes *************/
+  getGruposRptPeriodico(){
+    return this.http.get<any>(GlobalConstants.API_REPORTE_PERIODICO_URL);
+  }
+
+  postReportePeriodico(area: number, ini: Date, fin: Date) {
+    return this.http.post(`${GlobalConstants.API_REPORTE_PERIODICO_URL}/${area}`,
+      {
+        inicio: ini,
+        fin: fin
+      },
+      {
+        responseType: 'blob'
+      })
+  }
 
 }

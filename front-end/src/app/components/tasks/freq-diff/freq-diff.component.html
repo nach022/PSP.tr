@@ -1,10 +1,12 @@
-<div  fxLayout="column" fxLayoutAlign="space-around center" fxFlexFill>
+<div>
 
-    <div fxLayout="row" fxLayoutAlign="center center"> <h1>Tareas con diferentes frecuencias en PSP y EAM</h1></div>
+  <div class="pagHeaderTop">
+    <h2>Tareas con diferentes frecuencias en PSP y EAM</h2>
+  </div>
 
 
 
-
+  <div class="centerDivTop">
     <table mat-table [dataSource]="dataSource" #mytable class="my-table mat-elevation-z8">
 
       <!--- Note that these columns can be defined in any order.
@@ -34,12 +36,24 @@
         <td mat-cell *matCellDef="let element"> {{element.Frecuencia}} </td>
       </ng-container>
 
-        <!-- FrecuenciaEAM Column -->
+      <!-- FrecuenciaEAM Column -->
       <ng-container matColumnDef="FrecuenciaEAM">
         <th mat-header-cell *matHeaderCellDef> Frecuencia en EAM </th>
         <td mat-cell *matCellDef="let element"> {{element.FrecuenciaEAM}} </td>
       </ng-container>
 
+      <!-- ActionColumn -->
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef style="text-align:center">Sobreescribir Frecuencia</th>
+        <td mat-cell *matCellDef="let element" class="action-link" style="text-align:center" >
+          <div *ngIf="element.FreqEAM == element.FreqPSP && element.PeriodoEAM == element.PeriodoPSP && element.FreqPSP > 0 && element.PeriodoPSP; else botonImportar">
+            <button mat-button color="accent"><mat-icon  matTooltip="Frecuencia importada correctamente" matTooltipPosition="right">check_circle</mat-icon></button>
+          </div>
+          <ng-template #botonImportar>
+            <button mat-button color="primary" (click)="openDialog(element)" [disabled]="element.FreqEAM == 0 || !element.PeriodoEAM"><mat-icon  matTooltip="Importar frecuencia desde EAM" matTooltipPosition="right">change_circle</mat-icon></button>
+          </ng-template>
+        </td>
+      </ng-container>
 
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns" class="thead-dark"></tr>
@@ -47,3 +61,4 @@
     </table>
 
   </div>
+</div>

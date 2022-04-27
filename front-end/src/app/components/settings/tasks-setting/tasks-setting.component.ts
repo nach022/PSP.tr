@@ -40,6 +40,7 @@ export class TasksSettingComponent implements OnInit{
   };
 
 
+
   @ViewChildren(MatTable) tables: QueryList<MatTable<any>>;
 
   constructor(private siteService: SiteService, private notif: NotificationService, public dialog: MatDialog) { }
@@ -50,6 +51,8 @@ export class TasksSettingComponent implements OnInit{
   public tareas = [];
   public selectedValue = [];
   public tablesIndexes = [];
+  public cantTareas = new Map();
+  public servicioTipo = new Map();
 
   ngOnInit(): void {
     this.periodMap.Y = [];
@@ -72,6 +75,7 @@ export class TasksSettingComponent implements OnInit{
         this.servicios = servs;
         this.servicios.forEach(serv => {
           this.tipos[serv.Id] = [];
+          this.cantTareas[serv.Id] = 0;
         });
         this.blockUI.start('Cargando Tipos de Tareas...');
         this.siteService.getTiposTareas().subscribe(
@@ -81,12 +85,12 @@ export class TasksSettingComponent implements OnInit{
             tipos.forEach(tipo => {
               this.tipos[tipo.ServicioEjecutorId].push({ Id: tipo.Id, Nombre: tipo.Nombre.trim(), Responsable: tipo.ServicioEjecutorId});
               this.tareas[tipo.Id] = [];
+              this.servicioTipo[tipo.Id] = tipo.ServicioEjecutorId;
             });
-            console.log(this.tareas);
+
             this.blockUI.start('Cargando Tareas...');
             this.siteService.getTareas().subscribe(
               tareas => {
-                console.log('tareas: ', tareas);
                 tareas.forEach(tarea => {
                   if (tarea.TipoTareaId === null){
                     this.tareas[0].push({
@@ -107,8 +111,7 @@ export class TasksSettingComponent implements OnInit{
                     this.selectedValue[tarea.PPM.trim()][tarea.Equipo.trim()] = '';
                   }
                   else{
-                    console.log(tarea.Periodo);
-                    console.log(this.periodMap);
+                    this.cantTareas[this.servicioTipo[tarea.TipoTareaId]] ++;
                     this.tareas[tarea.TipoTareaId].push({
                       Id: tarea.Id,
                       PPM: tarea.PPM.trim(),
@@ -127,6 +130,7 @@ export class TasksSettingComponent implements OnInit{
 
                 this.isDataLoaded = true;
                 this.blockUI.stop();
+                console.log(this.cantTareas);
               },
               error => {
                 console.log(error);
@@ -156,7 +160,6 @@ export class TasksSettingComponent implements OnInit{
   assignTipo(ppm){
     this.notif.clear();
     this.blockUI.start('Creando Tarea...');
-    console.log('asignando: ', ppm);
     const tareaData = {
       PPM: ppm.PPM.trim(),
       Equipo: ppm.Equipo.trim(),
@@ -167,7 +170,6 @@ export class TasksSettingComponent implements OnInit{
     };
     this.siteService.postTarea(tareaData).subscribe(
       res => {
-        console.log('res: ', res);
         const nuevaTarea = {
           Id: res.Id,
           PPM: res.PPM.trim(),
@@ -186,7 +188,6 @@ export class TasksSettingComponent implements OnInit{
         this.tables.toArray().forEach(element => {
           element.renderRows();
         });
-        console.log('index:', this.tablesIndexes[tareaData.TipoTareaId]);
 
         this.blockUI.stop();
         this.notif.info('La Tarea se creó correctamente.');
@@ -211,7 +212,6 @@ export class TasksSettingComponent implements OnInit{
     dialogRef.afterClosed().subscribe(result => {
       this.notif.clear();
       if (result){
-        console.log(result.event, result.data);
         if (result.event === 'Update'){
           this.updateRowData(result.data);
         }else if (result.event === 'Delete'){
@@ -229,7 +229,6 @@ export class TasksSettingComponent implements OnInit{
     this.blockUI.start('Modificando Tarea...');
     this.siteService.putTarea(tareaData).subscribe(
       res => {
-        console.log(res);
         // Me fijo si en la lista de tareas de ese tipo, ya está esta tarea (no cambió el TipoTarea, sólo frecuencia o período)
         const aux = this.tareas[tareaData.TipoTareaId].filter((value, key) => {
           return value.PPM === tareaData.PPM && value.Equipo === tareaData.Equipo;
@@ -286,7 +285,7 @@ export class TasksSettingComponent implements OnInit{
   deleteRowData(tareaData) {
     this.blockUI.start('Eliminando Tarea...');
     this.siteService.deleteTarea(tareaData).subscribe(
-      res => {
+      () => {
         this.tareas[tareaData.TipoTareaId] = this.tareas[tareaData.TipoTareaId].filter((value, key) => {
           return value.PPM !== tareaData.PPM || value.Equipo !== tareaData.Equipo;
         });

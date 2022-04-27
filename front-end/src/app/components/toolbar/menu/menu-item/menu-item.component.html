@@ -1,0 +1,34 @@
+<span *ngIf="item.tipo.trim() === 'N'">
+  <mat-expansion-panel class="menu-expansion-panel"  [ngClass]="{menuOpciones: !selected, menuOpcionesExpanded: selected}" hideToggle="true" #expMenu
+                            (opened)="seleccionar(true);"
+                            (closed)="seleccionar(false);">
+    <mat-expansion-panel-header class="menu-expansion-panel-header">
+      <mat-panel-title>
+        <!-- Cabeceras del submenu -->
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="menu-expansion-panel-header-title" >
+          <mat-icon [ngStyle]="objetizar(item.estilo)">{{item.icon}}</mat-icon>
+          &nbsp;&nbsp;{{item.label}}
+        </div>
+      </mat-panel-title>
+      <mat-panel-description [ngClass]="{menuOpcionesFlechas: !selected, menuOpcionesFlechasExpanded: selected}">
+        <mat-icon *ngIf="!expMenu.expanded">add</mat-icon>
+        <mat-icon *ngIf="expMenu.expanded">remove</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <span *ngFor="let child of item.hijos">
+      <mat-divider></mat-divider>
+      <app-menu-item [item]="child" [expanded]="selected" (snClose)="onSidenavClose($event)"></app-menu-item>
+    </span>
+
+  </mat-expansion-panel>
+  <mat-divider></mat-divider>
+</span>
+<span *ngIf="item.tipo.trim() === 'H'">
+  <mat-list-item (click)="onSidenavClose(item.route)">
+    <!-- Entradas principales -->
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="menu-expansion-panel-header-title">
+      <mat-icon [ngStyle]="objetizar(item.estilo)">{{item.icon}}</mat-icon>
+      &nbsp;&nbsp;{{item.label}}
+    </div>
+  </mat-list-item>
+</span>

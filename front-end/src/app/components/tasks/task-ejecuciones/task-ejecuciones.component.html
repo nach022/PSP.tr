@@ -1,7 +1,10 @@
-<div  fxLayout="column" fxLayoutAlign="space-around center" fxFlexFill><h1>Ejecuciones de Tarea.</h1></div>
+<div class="pagHeader">
+  <h2>Ejecuciones de Tarea.</h2>
+</div>
 
-<div flex class="mat-content">
-    <mat-card width="100%">
+<div class="centerDiv">
+  <div class="my-table bottomPadding">
+    <mat-card>
       <mat-card-header *ngIf="this.dataLoaded">
         <mat-card-subtitle><b>Tarea:</b> {{ this.tarea.PPM }} - {{ this.tarea.Descr }} <br>
           <b>Equipo:</b> {{ this.tarea.Equipo }} - {{ this.tarea.EquipoDescr }} <br>
@@ -12,10 +15,10 @@
 
       <mat-tab-group>
         <mat-tab label="Pasadas">
-          <div  fxLayout="column" fxLayoutAlign="space-around center" fxFlexFill>
-            <br><br>
-            <div class="my-table mat-elevation-z8">
-              <table mat-table [dataSource]="this.ots" id="tabla0" width="100%">
+
+
+            <div class="centerDivTop bottomPadding">
+              <table mat-table [dataSource]="this.ots" id="tabla0" class="my-table mat-elevation-z8">
 
                 <!--- Note that these columns can be defined in any order.
                     The actual rendered columns are set as a property on the row definition" -->
@@ -75,11 +78,10 @@
                     [class.table-warning]="(row.Estado == 'FIN' || row.Estado == 'EJEC') && row.Fecha < row.FechaInicio">
                 </tr>
               </table>
+            </div>
+            <div>
               <mat-paginator [pageSize]="20" [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
             </div>
-            <br>
-          </div>
-
 
         </mat-tab>
         <mat-tab label="Futuras">
@@ -135,8 +137,8 @@
 
         </mat-tab>
       </mat-tab-group>
-  </mat-card>
+    </mat-card>
+  </div>
 </div>
-
 
 

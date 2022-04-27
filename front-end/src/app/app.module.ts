@@ -54,6 +54,11 @@ import { TaskEjecucionesComponent } from './components/tasks/task-ejecuciones/ta
 import {MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core'
 import 'moment/locale/es';
+import { LogoffComponent } from './components/toolbar/logoff/logoff.component';
+import { MenuComponent } from './components/toolbar/menu/menu.component';
+import { MenuItemComponent } from './components/toolbar/menu/menu-item/menu-item.component';
+import { FreqDiffDialogBoxComponent } from './components/tasks/freq-diff/freq-diff-dialog-box/freq-diff-dialog-box.component';
+import { RptPeriodicoComponent } from './components/reports/rpt-periodico/rpt-periodico.component';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'DD/MM/YYYY',
@@ -72,82 +77,79 @@ export const MY_FORMATS = {
 FusionChartsModule.fcRoot(FusionCharts, charts, Widgets, Gantt, FusionTheme);
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    CommentsDialogBoxComponent,
-    DeleteCommentDialogBoxComponent,
-    LoginComponent,
-    NavbarComponent,
-    NavbarItemsComponent,
-    NavbarItemComponent,
-    BlockTemplateComponent,
-    HomeComponent,
-    RegisterComponent,
-    AreasSettingComponent,
-    AreasDialogBoxComponent,
-    TaskTypesDialogBoxComponent,
-    TaskTypesSettingsComponent,
-    TasksSettingComponent,
-    TasksDialogBoxComponent,
-    TasksOverviewComponent,
-    GanttComponent,
-    UsersSettingComponent,
-    UsersDialogBoxComponent,
-    FreqDiffComponent,
-    MedicionesJuntasComponent,
-    RptGrupoAccionComponent,
-    TaskEjecucionesComponent,
-  ],
-  imports: [
-    FusionChartsModule,
-    BlockUIModule.forRoot({
-      template: BlockTemplateComponent
-    }),
-    ToastrModule.forRoot({
-      closeButton: GlobalConstants.APP_NOTIF_CLOSE_BUTTON,
-      timeOut: GlobalConstants.APP_NOTIF_DURATION,
-      preventDuplicates: GlobalConstants.APP_NOTIF_PREVENT_DUPLICATES,
-      progressBar: GlobalConstants.APP_NOTIF_PROGRESS_BAR,
-      progressAnimation: GlobalConstants.APP_NOTIF_PROGRESS_STYLE,
-      positionClass: GlobalConstants.APP_NOTIF_POSITION
-    }),
-    AngularMaterialModule,
-    CovalentModule,
-    FormsModule,
-    ReactiveFormsModule,
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    FlexLayoutModule,
-    AvatarModule
-  ],
-  entryComponents: [
-    BlockTemplateComponent,
-    AreasDialogBoxComponent,
-    TaskTypesDialogBoxComponent
-  ],
-  providers: [
-    AuthService,
-    AuthGuard,
-    NotificationService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: JwtInterceptorService,
-      multi: true
-    },
-    {provide: MAT_DATE_LOCALE, useValue: 'es'},
-    {
-      provide: DateAdapter,
-      useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
-    },
-
-    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
-
-
-  ],
-  bootstrap: [AppComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    declarations: [
+        AppComponent,
+        AreasDialogBoxComponent,
+        AreasSettingComponent,
+        BlockTemplateComponent,
+        CommentsDialogBoxComponent,
+        DeleteCommentDialogBoxComponent,
+        FreqDiffComponent,
+        FreqDiffDialogBoxComponent,
+        GanttComponent,
+        HomeComponent,
+        LoginComponent,
+        LogoffComponent,
+        MedicionesJuntasComponent,
+        MenuComponent,
+        MenuItemComponent,
+        NavbarComponent,
+        NavbarItemComponent,
+        NavbarItemsComponent,
+        RegisterComponent,
+        RptGrupoAccionComponent,
+        RptPeriodicoComponent,
+        TaskEjecucionesComponent,
+        TasksDialogBoxComponent,
+        TasksOverviewComponent,
+        TasksSettingComponent,
+        TaskTypesDialogBoxComponent,
+        TaskTypesSettingsComponent,
+        UsersDialogBoxComponent,
+        UsersSettingComponent,
+    ],
+    imports: [
+        FusionChartsModule,
+        BlockUIModule.forRoot({
+            template: BlockTemplateComponent
+        }),
+        ToastrModule.forRoot({
+            closeButton: GlobalConstants.APP_NOTIF_CLOSE_BUTTON,
+            timeOut: GlobalConstants.APP_NOTIF_DURATION,
+            preventDuplicates: GlobalConstants.APP_NOTIF_PREVENT_DUPLICATES,
+            progressBar: GlobalConstants.APP_NOTIF_PROGRESS_BAR,
+            progressAnimation: GlobalConstants.APP_NOTIF_PROGRESS_STYLE,
+            positionClass: GlobalConstants.APP_NOTIF_POSITION
+        }),
+        AngularMaterialModule,
+        CovalentModule,
+        FormsModule,
+        ReactiveFormsModule,
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        FlexLayoutModule,
+        AvatarModule
+    ],
+    providers: [
+        AuthService,
+        AuthGuard,
+        NotificationService,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: JwtInterceptorService,
+            multi: true
+        },
+        { provide: MAT_DATE_LOCALE, useValue: 'es' },
+        {
+            provide: DateAdapter,
+            useClass: MomentDateAdapter,
+            deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+        },
+        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    ],
+    bootstrap: [AppComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

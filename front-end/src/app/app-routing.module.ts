@@ -16,6 +16,7 @@ import { FreqDiffComponent } from './components/tasks/freq-diff/freq-diff.compon
 import { MedicionesJuntasComponent } from './components/presa/mediciones-juntas/mediciones-juntas.component';
 import { RptGrupoAccionComponent } from './components/reports/rpt-grupo-accion/rpt-grupo-accion.component';
 import { TaskEjecucionesComponent } from './components/tasks/task-ejecuciones/task-ejecuciones.component';
+import { RptPeriodicoComponent } from './components/reports/rpt-periodico/rpt-periodico.component';
 
 
 const routes: Routes = [
@@ -32,6 +33,7 @@ const routes: Routes = [
   { path: 'freq-diff', component: FreqDiffComponent, canActivate: [AuthGuard] },
   { path: 'mediciones-juntas', component: MedicionesJuntasComponent, canActivate: [AuthGuard] },
   { path: 'report-grupo-accion', component: RptGrupoAccionComponent, canActivate: [AuthGuard] },
+  { path: 'report-periodico', component: RptPeriodicoComponent, canActivate: [AuthGuard] },
   { path: 'task-ejecuciones/:id', component: TaskEjecucionesComponent },
   { path: '**', redirectTo: 'login'}
 ];

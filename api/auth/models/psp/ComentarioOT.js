@@ -3,12 +3,14 @@ const { DataTypes } = require('sequelize');
 module.exports = (sequelize, type) => {
   return sequelize.define('ComentarioOT', 
     {
-      Id: {
+      Linea: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        primaryKey: true,
-        autoIncrement: true,
-        field: 'ComentarioId'
+        primaryKey: true
+      },
+      Fecha:{
+        type: DataTypes.DATE,
+        allowNull: false
       },
       Comentario: {
         type: DataTypes.TEXT,
@@ -16,7 +18,7 @@ module.exports = (sequelize, type) => {
         field: 'Comentario',
       },
       Usuario: {
-        type: DataTypes.STRING(80),
+        type: DataTypes.STRING(20),
         allowNull: false,
       }
     },

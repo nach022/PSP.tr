@@ -1,0 +1,49 @@
+<div  *ngIf="isDataLoaded" class="topPadding">
+
+  <mat-grid-list cols="8" rowHeight="40">
+    <mat-grid-tile rowspan="30"></mat-grid-tile>
+    <mat-grid-tile colspan="3" rowspan="2">
+      <div class="align-right">
+        <b>Selecciona Grupo de Acci&oacute;n: &nbsp;&nbsp;&nbsp;</b>
+        <mat-form-field>
+          <mat-label>Grupo</mat-label>
+          <mat-select [(ngModel)]="this.area" [disabled]="!(this.grupos.length-1)">
+            <mat-option *ngFor="let grupo of this.grupos" [value]="grupo.Id">
+              {{grupo.Descr}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </mat-grid-tile>
+    <mat-grid-tile colspan="2" rowspan="2">
+      <div class="align-right">
+        <b>Ingrese per&iacute;odo del reporte: &nbsp;&nbsp;&nbsp;</b>
+        <mat-form-field>
+          <mat-label>Inicio - Fin</mat-label>
+          <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+            <input matStartDate formControlName="start" [(ngModel)]="this.inicio" placeholder="Fecha de inicio">
+            <input matEndDate formControlName="end" [(ngModel)]="this.fin" placeholder="Fecha de fin">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker touchUi #picker></mat-date-range-picker>
+
+          <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Fecha de inicio inv&aacute;lida</mat-error>
+          <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Fecha de fin inv&aacute;lida</mat-error>
+        </mat-form-field>
+      </div>
+    </mat-grid-tile>
+    <mat-grid-tile></mat-grid-tile>
+    <mat-grid-tile rowspan="30"></mat-grid-tile>
+
+
+    <mat-grid-tile colspan="6"></mat-grid-tile>
+    <mat-grid-tile colspan="6">
+        <button class="block50" mat-raised-button color="primary" (click)="generarReporte()" [disabled]="!this.area || !this.inicio || !this.fin">Generar Reporte</button>
+    </mat-grid-tile>
+  </mat-grid-list>
+
+
+</div>
+
+
+

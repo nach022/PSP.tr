@@ -88,60 +88,40 @@ export class TasksOverviewComponent implements OnInit {
     this.blockUI.start('Cargando Datos de Tareas...');
     this.siteService.getTareasOverview().subscribe(
       res => {
-        console.log(res);
         this.blockUI.stop();
         const table = [];
         res.forEach(element => {
+          if(element.Equipo == 'S00200' && element.PPM == '833CEN039') console.log(element);
           let freq = 0;
-
-          const ue = new Date (element.UltimaEjecucion);
-          const timeZoneDifference = (ue.getTimezoneOffset() / 60);
-          ue.setTime(ue.getTime() + (timeZoneDifference * 60) * 60 * 1000);
-          let prox = new Date(ue);
-
-
-
-          if(element.PPM === '854AUS001'){
-            console.log('ultima ejec:', element.UltimaEjecucion);
-            console.log('next ejec:', prox);
-          }
-
           if (element.Periodo === 'M'){
             freq = element.Frecuencia * 30;
-            prox.setMonth(prox.getMonth() + element.Frecuencia);
           }
           else if (element.Periodo === 'D'){
             freq = element.Frecuencia;
-            prox.setDate(prox.getDate() + element.Frecuencia);
           }
           else if (element.Periodo === 'Y'){
             freq = element.Frecuencia * 365;
-            prox.setFullYear(prox.getFullYear() + element.Frecuencia);
           }
           else if (element.Periodo === 'W'){
             freq = element.Frecuencia * 7;
-            prox.setDate(prox.getDate() + 7 * element.Frecuencia);
-          }
-          else{
-            prox = new Date();
           }
 
+          if(element.UltimaEjecucion == null){
+            element.UltimaEjecucion = undefined;
+          }
           const newElement = {
             Id: element.Id,
             PPM: element.PPM,
             Descr: element.Descr,
             Equipo: element.Equipo,
             EquipoDescr: element.EquipoDescr,
-            Frecuencia: `${element.Frecuencia}  ${element.Periodo !== null ? this.periodMap[element.Periodo.trim()][element.Frecuencia > 1 ? 2 : 1] : ''}`,
-            UEjec: element.UltimaEjecucion,
-            PEjec: prox,
+            Frecuencia: `${element.Frecuencia&&element.Periodo?element.Frecuencia:''}  ${element.Frecuencia&&element.Periodo? this.periodMap[element.Periodo.trim()][element.Frecuencia > 1 ? 2 : 1] : ''}`,
             UltimaEjecucion: element.UltimaEjecucion,
-            ProximaEjecucion: prox,
+            ProximaEjecucion: element.ProximaEjecucion,
             Holgura: element.Holgura,
             Grupo: element.ServicioEjecutor,
             TipoTarea: element.TipoTarea,
             Freq: freq,
-            CantComentarios: element.CantComents
           };
 
 

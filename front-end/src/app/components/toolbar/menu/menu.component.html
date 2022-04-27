@@ -1,0 +1,11 @@
+
+<mat-nav-list>
+  <mat-accordion>
+    <span *ngFor="let item of menu">
+      <mat-divider></mat-divider>
+      <app-menu-item [item]="item" [expanded]="false" (snClose)="onSidenavClose($event)"></app-menu-item>
+    </span>
+    <mat-divider></mat-divider>
+  </mat-accordion>
+</mat-nav-list>
+<p class="version">v{{version}}</p>

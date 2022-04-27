@@ -1,4 +1,4 @@
-<div  *ngIf="isDataLoaded">
+<div  *ngIf="isDataLoaded" class="topPadding">
 
   <mat-grid-list cols="8" rowHeight="40">
     <mat-grid-tile rowspan="30"></mat-grid-tile>
@@ -34,7 +34,7 @@
     </mat-grid-tile>
     <mat-grid-tile></mat-grid-tile>
     <mat-grid-tile rowspan="30"></mat-grid-tile>
-
+<!--
     <ng-template [ngIf]="this.area">
       <div *ngFor="let item of this.preguntas[this.area]; let i = index">
         <mat-grid-tile colspan="6" >
@@ -50,9 +50,10 @@
         </mat-grid-tile>
       </div>
     </ng-template>
+    -->
     <mat-grid-tile colspan="6"></mat-grid-tile>
     <mat-grid-tile colspan="6">
-        <button class="block50" mat-raised-button color="primary" (click)="generarReporte()" [disabled]="!this.area || !this.inicio || !this.fin">Generar reporte</button>
+        <button class="block50" mat-raised-button color="primary" (click)="generarReporte()" [disabled]="!this.area || !this.inicio || !this.fin">Generar Reporte</button>
     </mat-grid-tile>
   </mat-grid-list>
 

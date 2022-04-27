@@ -1,0 +1,25 @@
+<div fxLayout="column" fxLayoutAlign="space-around center" fxFlexFill class="espacioAbajo">
+  <h1 mat-dialog-title>Importar Frecuencia</h1>
+  <mat-divider></mat-divider>
+</div>
+
+<form #dialogForm="ngForm">
+  <div mat-dialog-content class="espacioAbajo">
+
+    <div fxLayout="column" fxLayoutAlign="space-around center">
+      <p>Seguro que desea importar la frecuencia de EAM para el programado <b>{{data.Descr}}</b> sobre el activo <b>{{data.EquipoDescr}}</b>?
+        <br><br><br>
+      La nueva frecuencia pasar&aacute; a ser: <b>{{data.FrecuenciaEAM}}</b>.
+      </p>
+    </div>
+
+
+  </div>
+  <div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-evenly stretch">
+    <button (click)="doAction()" mat-raised-button color="accent">
+      <mat-icon> check</mat-icon>
+      &nbsp;Confirmar
+    </button>
+    <button (click)="closeDialog()" mat-raised-button><mat-icon>clear</mat-icon>&nbsp;Cancelar</button>
+  </div>
+</form>

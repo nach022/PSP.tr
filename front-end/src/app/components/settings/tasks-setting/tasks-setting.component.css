@@ -1,3 +1,6 @@
+.my-table {
+  width: 90%;
+}
 .mat-expansion-panel-header{
   align-items: baseline;
 }
@@ -7,20 +10,6 @@
   align-items: baseline;
 }
 
-.sinTareas{
-  font: 400 14px/20px Roboto, "Helvetica Neue", sans-serif;
-  font-style: normal;
-  font-variant-ligatures: normal;
-  font-variant-caps: normal;
-  font-variant-numeric: normal;
-  font-variant-east-asian: normal;
-  font-weight: 400;
-  font-stretch: normal;
-  font-size: 14px;
-  line-height: 20px;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  color: rgba(0,0,0,.54);
-}
 
 .table-danger,
 .table-danger > th,

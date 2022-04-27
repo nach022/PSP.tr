@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 export class GlobalConstants {
 
   // setting general de la APP
+  public static APP_VERSION = '1.1.0';
   public static APP_ID = 1;
   public static APP_TITLE = 'PSP.tr';
   public static APP_NOTIF_PREVENT_DUPLICATES = true;
@@ -27,6 +28,7 @@ export class GlobalConstants {
   public static API_JUNTAS_URL = `${GlobalConstants.API_BASE_URL}/psp/juntas`;
   public static API_OTS_URL = `${GlobalConstants.API_BASE_URL}/psp/OTs`;
   public static API_REGISTER_URL = `${GlobalConstants.API_BASE_URL}/user/register`;
+  public static API_REPORTE_PERIODICO_URL = `${GlobalConstants.API_BASE_URL}/pspReports/reportePeriodico`;
   public static API_REPORTE_URL = `${GlobalConstants.API_BASE_URL}/pspReports/reporte`;
   public static API_ROLES_URL = `${GlobalConstants.API_BASE_URL}/app/roles`;
   public static API_SERV_EJEC_URL = `${GlobalConstants.API_BASE_URL}/psp/areas`;

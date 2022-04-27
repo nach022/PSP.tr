@@ -406,48 +406,31 @@ router.get('/tareas/:TareaId', verifier, asyncHandler(async (req, res) => {
 router.get('/tareasOverview', verifier, asyncHandler(async (req, res) => {
     try{
         let salida = [];
-        let tareasInfo = await db.query("select PPM_CODE, OBJ_CODE, PPM_DESC, OBJ_DESC, UltimaEjecucion, Holgura, PPM_DURATION from psp.TareasInfo", { type: sequelize.QueryTypes.SELECT});
-        
+        let tareasInfo = await db.query("select PPM_CODE, OBJ_CODE, PPM_DESC, OBJ_DESC, dateadd(day, 1, UltimaEjecucion) as UltimaEjecucion, dateadd(day, 1, ProximaEjecucion) as ProximaEjecucion, Holgura, PPM_DURATION from psp.TareasInfo", { type: sequelize.QueryTypes.SELECT });
         for(indx in tareasInfo){
             tareaInfo = tareasInfo[indx];
-            let ultimaEjec = new Date(tareaInfo.UltimaEjecucion);
-            const timeZoneDifference = (ultimaEjec.getTimezoneOffset() / 60);
-            ultimaEjec.setTime(ultimaEjec.getTime() + (timeZoneDifference * 60) * 60 * 1000);
-            if(tareaInfo.PPM_CODE === '854AUS001'){
-                console.log('ue: ',tareaInfo.UltimaEjecucion);
-                console.log('ue2: ',ultimaEjec);
-                console.log('tz: ', timeZoneDifference);
-                console.log('ue3: ',ultimaEjec);
-                console.log(tareaInfo);
-            }
-
-            let duracion = tareaInfo.PPM_DURATION;
             let tarea = await db.models['Tarea'].findOne({ where:{PPM_CODE: tareaInfo.PPM_CODE, Equipo: tareaInfo.OBJ_CODE}, include:{ model: db.models['TipoTarea'], as: 'Tipo' }})
             if(tarea){
+
                 servicio = await tarea.Tipo.getServicioEjecutor();
                 if(req.areas.includes(servicio.Id)){
-                    if(tarea.Periodo !== null && tarea.Frecuencia !== null && tarea.Frecuencia > 0){
-                        let cantComents = await db.models['ComentarioTarea'].count({ where: {'TareaId': tarea.Id}});
-
-                        let tareaSalida = {
-                            Id: tarea.Id,
-                            PPM: tarea.PPM.trim(),
-                            Descr: tarea.Descr.trim(),
-                            Equipo: tarea.Equipo.trim(),
-                            EquipoDescr: tareaInfo.OBJ_DESC.trim(),
-                            Frecuencia: tarea.Frecuencia,
-                            Periodo: tarea.Periodo.trim(),
-                            TipoTarea: tarea.Tipo.Nombre.trim(),
-                            ServicioEjecutor: servicio.Nombre.trim(),
-                            UltimaEjecucion: ultimaEjec,
-                            Duracion: duracion,
-                            Holgura: tareaInfo.Holgura,
-                            CantComents: cantComents
-                        }
-                        salida.push(tareaSalida);
-
+                    let tareaSalida = {
+                        Id: tarea.Id,
+                        PPM: tarea.PPM.trim(),
+                        Descr: tarea.Descr.trim(),
+                        Equipo: tarea.Equipo.trim(),
+                        EquipoDescr: tareaInfo.OBJ_DESC.trim(),
+                        Frecuencia: tarea.Frecuencia,
+                        Periodo: tarea.Periodo? tarea.Periodo.trim():tarea.Periodo,
+                        TipoTarea: tarea.Tipo.Nombre.trim(),
+                        ServicioEjecutor: servicio.Nombre.trim(),
+                        UltimaEjecucion: tareaInfo.UltimaEjecucion,
+                        ProximaEjecucion: tareaInfo.ProximaEjecucion,
+                        Duracion: tareaInfo.PPM_DURATION,
+                        Holgura: tareaInfo.Holgura
                     }
-                    
+                    console.log(tareaInfo.ProximaEjecucion);
+                    salida.push(tareaSalida);
                 }
             }
         }
@@ -469,7 +452,7 @@ router.get('/tareasFreqDiff', verifier, asyncHandler(async (req, res) => {
     try{
         let salida = [];
         let ppms = await db.query(`select TareaId, info.PPM_CODE, Descr, OBJ_CODE, OBJ_DESC, isnull(Frecuencia,0) Frecuencia, Periodo, 
-                                isnull(PPM_FREQ,0) PPM_FREQ, PPM_PERIODUOM from psp.Tareas tarea
+                                isnull(PPM_FREQ,0) PPM_FREQ, PPM_PERIODUOM, tarea.TipoTareaId from psp.Tareas tarea
                                 inner join psp.TareasInfo info on tarea.PPM_CODE = info.PPM_CODE and tarea.Equipo = info.OBJ_CODE
                                 inner join psp.TiposTareas tipo on tarea.TipoTareaId = tipo.TipoTareaId
                                 where isnull(tarea.Periodo,-999) <> isnull(info.PPM_PERIODUOM, -999) or isnull(tarea.Frecuencia,'999') <> isnull(PPM_FREQ, '999')
@@ -480,6 +463,7 @@ router.get('/tareasFreqDiff', verifier, asyncHandler(async (req, res) => {
         for(indx in ppms){
             tarea = ppms[indx];
             let tareaSalida = {
+                TareaId: tarea.TareaId,
                 PPM: tarea.PPM_CODE.trim(),
                 Descr: tarea.Descr.trim(),
                 Equipo: tarea.OBJ_CODE.trim(),
@@ -488,6 +472,7 @@ router.get('/tareasFreqDiff', verifier, asyncHandler(async (req, res) => {
                 Periodo: tarea.Periodo,
                 FrecuenciaEAM: tarea.PPM_FREQ,
                 PeriodoEAM: tarea.PPM_PERIODUOM,
+                TipoTareaId: tarea.TipoTareaId
             }
             salida.push(tareaSalida);
         }

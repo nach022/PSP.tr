@@ -1,10 +1,12 @@
-<div  *ngIf="isDataLoaded" fxLayout="column" fxLayoutAlign="space-around center" fxFlexFill>
-  <fusioncharts
-    type="gantt"
-    width="100%"
-    height="800"
-    dataFormat="json"
-    [dataSource]="dataSource"
-  >
-  </fusioncharts>
+<div class="centerDiv topPadding">
+  <div  *ngIf="isDataLoaded">
+    <fusioncharts
+      type="gantt"
+      width="100%"
+      height="800"
+      dataFormat="json"
+      [dataSource]="dataSource"
+    >
+    </fusioncharts>
+  </div>
 </div>

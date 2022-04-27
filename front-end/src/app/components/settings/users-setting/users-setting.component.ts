@@ -133,22 +133,22 @@ export class UsersSettingComponent implements OnInit{
       };
 
       this.siteService.putUsuario(usuario).subscribe(
-        res => {
+        () => {
           if (entidad === 'sol'){
             this.usuarios.push(usr);
-            this.solicitudes = this.solicitudes.filter((value, key) => {
+            this.solicitudes = this.solicitudes.filter((value, ) => {
               return value.Id !== usuario.Id;
             });
           }
           else{
-            const aux = this.usuarios.filter((value, key) => {
+            const aux = this.usuarios.filter((value, ) => {
               return value.Id === usr.Id;
             });
             aux[0].Nombre = usuario.Nombre;
             aux[0].Roles = usuario.Roles;
             aux[0].RolesList = usuario.RolesList;
           }
-          this.tables.toArray()[1].renderRows();
+          this.tables.toArray()[this.solicitudes.length?1:0].renderRows();
           this.blockUI.stop();
           this.notif.info(msg2);
 

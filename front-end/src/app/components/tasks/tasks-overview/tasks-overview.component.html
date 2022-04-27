@@ -1,14 +1,14 @@
+<div>
 
-<div  fxLayout="column" fxLayoutAlign="space-around center" fxFlexFill>
-
-  <div fxLayout="row" fxLayoutAlign="space-around center">
-      <div  fxLayout="column" fxLayoutAlign="space-around center" fxFlexFill></div>
-      <div  fxLayout="column" fxLayoutAlign="space-around center" fxFlexFill><h1>Tareas PSP.</h1></div>
-      <div  fxLayout="column" fxLayoutAlign="space-around end" fxFlexFill><mat-slide-toggle color="primary" [(ngModel)]="grouped">vista agrupada</mat-slide-toggle></div>
+  <div class="pagHeaderTop">
+    <h2>Tareas PSP.</h2>
+  </div>
+  <div class="centerDivBottom">
+    <mat-slide-toggle color="primary" [(ngModel)]="grouped"><b>vista agrupada</b></mat-slide-toggle>
   </div>
 
 
-
+  <div class="centerDivBottom">
     <table mat-table #mytable [dataSource]="dataSource" matSort matSortActive="Holgura" matSortDirection="asc" matSortDisableClear="true" class="my-table mat-elevation-z8" *ngIf="!grouped">
 
     <!--- Note that these columns can be defined in any order.
@@ -18,68 +18,57 @@
 
 
     <!-- Grupo Column -->
-    <ng-container matColumnDef="Grupo">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Grupo de Acci&oacute;n </th>
-      <td mat-cell *matCellDef="let element"> {{element.Grupo}} </td>
-    </ng-container>
+      <ng-container matColumnDef="Grupo">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Grupo de Acci&oacute;n </th>
+        <td mat-cell *matCellDef="let element"> {{element.Grupo}} </td>
+      </ng-container>
 
-    <!-- PPM Column -->
-    <ng-container matColumnDef="PPM">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> PPM </th>
-      <td mat-cell *matCellDef="let element"> {{element.PPM}} </td>
-    </ng-container>
+      <!-- PPM Column -->
+      <ng-container matColumnDef="PPM">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> PPM </th>
+        <td mat-cell *matCellDef="let element"> {{element.PPM}} </td>
+      </ng-container>
 
-    <!-- Descr Column -->
-    <ng-container matColumnDef="Descr">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripci&oacute;n </th>
-      <td mat-cell *matCellDef="let element"> {{element.Descr}} </td>
-    </ng-container>
+      <!-- Descr Column -->
+      <ng-container matColumnDef="Descr">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripci&oacute;n </th>
+        <td mat-cell *matCellDef="let element"> {{element.Descr}} </td>
+      </ng-container>
 
-    <!-- Equipo Column -->
-    <ng-container matColumnDef="Equipo">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Equipo </th>
-      <td mat-cell *matCellDef="let element" matTooltip="{{element.EquipoDescr}}" matTooltipPosition="right"> {{element.Equipo}} </td>
-    </ng-container>
+      <!-- Equipo Column -->
+      <ng-container matColumnDef="Equipo">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Equipo </th>
+        <td mat-cell *matCellDef="let element" matTooltip="{{element.EquipoDescr}}" matTooltipPosition="right"> {{element.Equipo}} </td>
+      </ng-container>
 
-    <!-- Frecuencia Column -->
-    <ng-container matColumnDef="Frecuencia">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Frecuencia </th>
-      <td mat-cell *matCellDef="let element"> {{element.Frecuencia}} </td>
-    </ng-container>
+      <!-- Frecuencia Column -->
+      <ng-container matColumnDef="Frecuencia">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Frecuencia </th>
+        <td mat-cell *matCellDef="let element"> {{element.Frecuencia}} </td>
+      </ng-container>
 
-    <!-- Ultima Ejec -->
-    <ng-container matColumnDef="UltimaEjecucion">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header class="thead-dark"> &Uacute;ltima Ejecuci&oacute;n </th>
-      <td mat-cell *matCellDef="let element"> {{element.UltimaEjecucion | date: 'dd/MM/yyyy'}} </td>
-    </ng-container>
+      <!-- Ultima Ejec -->
+      <ng-container matColumnDef="UltimaEjecucion">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="thead-dark"> &Uacute;ltima Ejecuci&oacute;n </th>
+        <td mat-cell *matCellDef="let element"> {{element.UltimaEjecucion?(element.UltimaEjecucion | date: 'dd/MM/yyyy'):'-' }} </td>
+      </ng-container>
 
-    <!-- Proxima Ejec -->
-    <ng-container matColumnDef="ProximaEjecucion">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Pr&oacute;xima Ejecuci&oacute;n </th>
-      <td mat-cell *matCellDef="let element"> {{element.ProximaEjecucion  | date: 'dd/MM/yyyy'}} </td>
-    </ng-container>
+      <!-- Proxima Ejec -->
+      <ng-container matColumnDef="ProximaEjecucion">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Pr&oacute;xima Ejecuci&oacute;n </th>
+        <td mat-cell *matCellDef="let element"> {{element.ProximaEjecucion?(element.ProximaEjecucion | date: 'dd/MM/yyyy'):'-' }} </td>
+      </ng-container>
 
-    <!-- Holgura Column -->
-    <ng-container matColumnDef="Holgura">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Holgura  (d&iacute;as)</th>
-      <td mat-cell *matCellDef="let element"> {{element.Holgura}} </td>
-    </ng-container>
-
-     <!-- Comentarios Column -->
-     <ng-container matColumnDef="CantComentarios">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Comentarios</th>
-
-        <td mat-cell *matCellDef="let element">
-            <button mat-button color="primary" (click)="openDialog(element)">
-              <mat-icon matBadge="{{element.CantComentarios}}" matBadgeHidden="{{element.CantComentarios===0}}" matBadgeColor="warn">chat</mat-icon>
-            </button>
-        </td>
+      <!-- Holgura Column -->
+      <ng-container matColumnDef="Holgura">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Holgura  (d&iacute;as)</th>
+        <td mat-cell *matCellDef="let element"> {{element.Holgura}} </td>
       </ng-container>
 
 
 
      <!-- Ejecuciones Column -->
-     <ng-container matColumnDef="Ejecuciones">
+      <ng-container matColumnDef="Ejecuciones">
         <th mat-header-cell *matHeaderCellDef><mat-icon>miscellaneous_services</mat-icon></th>
         <td mat-cell *matCellDef="let element">
             <button class="button-ots"
@@ -92,136 +81,122 @@
         </td>
       </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns" class="thead-dark"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class.table-danger]="row.Holgura <= 0" [class.table-warning]="row.Holgura <= 7 && row.Holgura > 0"></tr>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" class="thead-dark"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class.table-danger]="row.Holgura <= 0" [class.table-warning]="row.Holgura <= 7 && row.Holgura > 0"></tr>
     </table>
   </div>
 
-
-<div *ngIf="grouped">
-  <mat-accordion>
-    <mat-expansion-panel  *ngFor="let grupo of this.grupos">
-      <mat-expansion-panel-header class= "{{this.classGrupo[grupo]}}">
-        <mat-panel-title>
-          <h3>{{grupo}}</h3>
-        </mat-panel-title>
-        <!--mat-panel-description-- *ngIf="this.tareas[0].length">
-          <mat-icon color="warn">warning</mat-icon>
-        </!--mat-panel-description-->
-      </mat-expansion-panel-header>
+  <div class="centerDivBottom" *ngIf="grouped">
+    <div class="my-table mat-elevation-z8">
       <mat-accordion>
-        <mat-expansion-panel  *ngFor="let tipo of this.tipos[grupo]; ">
-          <mat-expansion-panel-header class= "{{this.classTipo[grupo][tipo]}}">
+        <mat-expansion-panel  *ngFor="let grupo of this.grupos">
+          <mat-expansion-panel-header class= "{{this.classGrupo[grupo]}}">
             <mat-panel-title>
-              <h3>{{tipo}}</h3>
+              <h3>{{grupo}}</h3>
             </mat-panel-title>
+            <!--mat-panel-description-- *ngIf="this.tareas[0].length">
+              <mat-icon color="warn">warning</mat-icon>
+            </!--mat-panel-description-->
           </mat-expansion-panel-header>
-
-          <mat-accordion>
-            <mat-expansion-panel  *ngFor="let tarea of this.tareas[grupo][tipo];">
-              <mat-expansion-panel-header class= "{{this.classTarea[grupo][tipo][tarea]}}">
-                <mat-panel-title>
-                  <h3>{{tarea}}</h3>
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-
-
-
-
-          <div  fxLayout="column" fxLayoutAlign="space-around center" fxFlexFill>
-
-
-          <table mat-table [dataSource]="this.dataGrouped[grupo][tipo][tarea]"  class="my-table mat-elevation-z8">
-
-              <!--- Note that these columns can be defined in any order.
-                  The actual rendered columns are set as a property on the row definition"
-                public displayedColumns: string[] = ['PPM', 'Descr', 'Equipo', 'Frecuencia', 'UltimaEjecucion', 'ProximaEjecucion', 'Holgura'];
-                -->
-
-
-              <!-- Equipo Column -->
-              <ng-container matColumnDef="Equipo2">
-                <th mat-header-cell *matHeaderCellDef> Equipo </th>
-                <td mat-cell *matCellDef="let element"> {{element.Equipo}} </td>
-              </ng-container>
-
-              <!-- EquipoDescr Column -->
-              <ng-container matColumnDef="Descr2">
-                <th mat-header-cell *matHeaderCellDef> Descripci&oacute;n </th>
-                <td mat-cell *matCellDef="let element"> {{element.EquipoDescr}} </td>
-              </ng-container>
-
-              <!-- Frecuencia Column -->
-              <ng-container matColumnDef="Frecuencia2">
-                <th mat-header-cell *matHeaderCellDef> Frecuencia </th>
-                <td mat-cell *matCellDef="let element"> {{element.Frecuencia}} </td>
-              </ng-container>
-
-              <!-- Ultima Ejec -->
-              <ng-container matColumnDef="UltimaEjecucion2">
-                <th mat-header-cell *matHeaderCellDef class="thead-dark"> &Uacute;ltima Ejecuci&oacute;n </th>
-                <td mat-cell *matCellDef="let element"> {{element.UltimaEjecucion | date: 'dd/MM/yyyy'}} </td>
-              </ng-container>
-
-              <!-- Proxima Ejec -->
-              <ng-container matColumnDef="ProximaEjecucion2">
-                <th mat-header-cell *matHeaderCellDef> Pr&oacute;xima Ejecuci&oacute;n </th>
-                <td mat-cell *matCellDef="let element"> {{element.ProximaEjecucion | date: 'dd/MM/yyyy'}} </td>
-              </ng-container>
-
-              <!-- Holgura Column -->
-              <ng-container matColumnDef="Holgura2">
-                <th mat-header-cell *matHeaderCellDef> Holgura  (d&iacute;as)</th>
-                <td mat-cell *matCellDef="let element"> {{element.Holgura}} </td>
-              </ng-container>
-
-               <!-- Comentarios Column -->
-               <ng-container matColumnDef="CantComentarios2">
-                  <th mat-header-cell *matHeaderCellDef> Comentarios</th>
-
-                  <td mat-cell *matCellDef="let element">
-                      <!--button-- mat-button color="primary" (click)="openDialog(element)"><mat-icon matBadge="{{element.CantComentarios}}" matBadgeHidden="{{element.CantComentarios===0}}" matBadgeColor="warn">chat</mat-icon></!--button-->
-                      <a [routerLink]="['/task-ejecuciones', element.Id]">{{element.Id}} </a>
-                  </td>
-                </ng-container>
-
-
-
-                <!-- Ejecuciones Column -->
-                <ng-container matColumnDef="Ejecuciones2">
-                  <th mat-header-cell *matHeaderCellDef><mat-icon>miscellaneous_services</mat-icon></th>
-                  <td mat-cell *matCellDef="let element">
-                      <button class="button-ots"
-                      mat-button color="primary"
-                      [routerLink]="['/task-ejecuciones', element.Id]"
-                      matTooltip="Ver Ejecuciones de Tarea"
-                      matTooltipPosition="right">
-                        <mat-icon>miscellaneous_services</mat-icon>
-                      </button>
-                  </td>
-                </ng-container>
-
-              <tr mat-header-row *matHeaderRowDef="displayedColumns2" class="thead-dark"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns2;" [class.table-danger]="row.Holgura <= 0" [class.table-warning]="row.Holgura <= 7 && row.Holgura > 0"></tr>
-              </table>
-
-
-            </div>
+          <div class="bottomPadding">
+            <mat-accordion>
+              <mat-expansion-panel  *ngFor="let tipo of this.tipos[grupo]; ">
+                <mat-expansion-panel-header class= "{{this.classTipo[grupo][tipo]}}">
+                  <mat-panel-title>
+                    <h3>{{tipo}}</h3>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="bottomPadding">
+                  <mat-accordion>
+                    <mat-expansion-panel  *ngFor="let tarea of this.tareas[grupo][tipo];">
+                      <mat-expansion-panel-header class= "{{this.classTarea[grupo][tipo][tarea]}}">
+                        <mat-panel-title>
+                          <h3>{{tarea}}</h3>
+                        </mat-panel-title>
+                      </mat-expansion-panel-header>
 
 
 
 
+                      <div class="centerDivBottom">
+                        <table mat-table [dataSource]="this.dataGrouped[grupo][tipo][tarea]"  class="my-table2 mat-elevation-z8">
 
+                          <!-- Equipo Column -->
+                          <ng-container matColumnDef="Equipo2">
+                            <th mat-header-cell *matHeaderCellDef> Equipo </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Equipo}} </td>
+                          </ng-container>
+
+                          <!-- EquipoDescr Column -->
+                          <ng-container matColumnDef="Descr2">
+                            <th mat-header-cell *matHeaderCellDef> Descripci&oacute;n </th>
+                            <td mat-cell *matCellDef="let element"> {{element.EquipoDescr}} </td>
+                          </ng-container>
+
+                          <!-- Frecuencia Column -->
+                          <ng-container matColumnDef="Frecuencia2">
+                            <th mat-header-cell *matHeaderCellDef> Frecuencia </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Frecuencia}} </td>
+                          </ng-container>
+
+                          <!-- Ultima Ejec -->
+                          <ng-container matColumnDef="UltimaEjecucion2">
+                            <th mat-header-cell *matHeaderCellDef class="thead-dark"> &Uacute;ltima Ejecuci&oacute;n </th>
+                            <td mat-cell *matCellDef="let element"> {{element.UltimaEjecucion | date: 'dd/MM/yyyy'}} </td>
+                          </ng-container>
+
+                          <!-- Proxima Ejec -->
+                          <ng-container matColumnDef="ProximaEjecucion2">
+                            <th mat-header-cell *matHeaderCellDef> Pr&oacute;xima Ejecuci&oacute;n </th>
+                            <td mat-cell *matCellDef="let element"> {{element.ProximaEjecucion | date: 'dd/MM/yyyy'}} </td>
+                          </ng-container>
+
+                          <!-- Holgura Column -->
+                          <ng-container matColumnDef="Holgura2">
+                            <th mat-header-cell *matHeaderCellDef> Holgura  (d&iacute;as)</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Holgura}} </td>
+                          </ng-container>
+
+                          <!-- Comentarios Column -->
+                          <ng-container matColumnDef="CantComentarios2">
+                              <th mat-header-cell *matHeaderCellDef> Comentarios</th>
+                              <td mat-cell *matCellDef="let element">
+                                  <!--button-- mat-button color="primary" (click)="openDialog(element)"><mat-icon matBadge="{{element.CantComentarios}}" matBadgeHidden="{{element.CantComentarios===0}}" matBadgeColor="warn">chat</mat-icon></!--button-->
+                                  <a [routerLink]="['/task-ejecuciones', element.Id]">{{element.Id}} </a>
+                              </td>
+                          </ng-container>
+
+
+
+                          <!-- Ejecuciones Column -->
+                          <ng-container matColumnDef="Ejecuciones2">
+                            <th mat-header-cell *matHeaderCellDef><mat-icon>miscellaneous_services</mat-icon></th>
+                            <td mat-cell *matCellDef="let element">
+                                <button class="button-ots"
+                                mat-button color="primary"
+                                [routerLink]="['/task-ejecuciones', element.Id]"
+                                matTooltip="Ver Ejecuciones de Tarea"
+                                matTooltipPosition="right">
+                                  <mat-icon>miscellaneous_services</mat-icon>
+                                </button>
+                            </td>
+                          </ng-container>
+
+                          <tr mat-header-row *matHeaderRowDef="displayedColumns2" class="thead-dark"></tr>
+                          <tr mat-row *matRowDef="let row; columns: displayedColumns2;" [class.table-danger]="row.Holgura <= 0" [class.table-warning]="row.Holgura <= 7 && row.Holgura > 0"></tr>
+                        </table>
+
+
+                      </div>
+
+                    </mat-expansion-panel>
+                  </mat-accordion>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
         </mat-expansion-panel>
-        </mat-accordion>
-      </mat-expansion-panel>
       </mat-accordion>
-
-
-
-
-
-
-  </mat-expansion-panel>
-  </mat-accordion>
+    </div>
+  </div>
 </div>

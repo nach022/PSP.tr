@@ -16,7 +16,6 @@ const ServEjecModel = require("../models/psp/ServicioEjecutor");
 const TareaModel = require("../models/psp/Tarea");
 const TipoTareaModel = require("../models/psp/TipoTarea");
 const RolGruposAccionModel = require("../models/psp/RolGruposAccion");
-const ComentarioTareaModel = require("../models/psp/ComentarioTarea");
 const EjecucionTareaModel = require("../models/psp/EjecucionTarea");
 const EjecucionFuturaTareaModel = require("../models/psp/EjecucionFuturaTarea");
 const ComentarioOTModel = require('../models/psp/ComentarioOT');
@@ -158,7 +157,6 @@ Rol.belongsToMany(MenuItem, {
 const Tarea = TareaModel(db, sequelize);
 const TipoTarea = TipoTareaModel(db, sequelize);
 const ServEjec = ServEjecModel(db, sequelize);
-const ComentarioTarea = ComentarioTareaModel(db, sequelize);
 const EjecucionTarea = EjecucionTareaModel(db, sequelize);
 const EjecucionFuturaTarea = EjecucionFuturaTareaModel(db, sequelize);
 const ComentarioOT = ComentarioOTModel(db, sequelize);
@@ -170,11 +168,6 @@ ServEjec.hasMany(TipoTarea, { onDelete: 'CASCADE', hooks:true});
 Tarea.belongsTo(TipoTarea, { foreignKey: "TipoTareaId", as: 'Tipo' });
 TipoTarea.hasMany(Tarea, { onDelete: 'CASCADE', hooks:true});
 
-
-ComentarioTarea.belongsTo(Tarea);
-Tarea.hasMany(ComentarioTarea);
-ComentarioTarea.belongsTo(User);
-User.hasMany(ComentarioTarea);
 
 ComentarioOT.belongsTo(EjecucionTarea);
 EjecucionTarea.hasMany(ComentarioOT);

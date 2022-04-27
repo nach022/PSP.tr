@@ -24,7 +24,6 @@ export class UsersDialogBoxComponent implements OnInit {
       this.usuario = aux.user;
       this.action = aux.action;
       this.roles = aux.rolesList;
-      console.log('Me mandan este usuario: ', this.usuario);
   }
 
 

@@ -24,3 +24,14 @@ global.DB_EAM_DIALECT = process.env.DB_EAM_DIALECT;
 global.SYSADMIN_ROL = process.env.SYSADMIN_ROL;
 global.PSP_ADMIN_ROL = process.env.PSP_ADMIN_ROL;
 global.PSP_NO_ROL = process.env.PSP_NO_ROL;
+global.PSP_GOPE_ROL = process.env.PSP_GOPE_ROL;
+global.PSP_GIYP_ROL = process.env.PSP_GIYP_ROL;
+global.PSP_GGEN_ROL = process.env.PSP_GGEN_ROL;
+global.PSP_HIDRO_ROL = process.env.PSP_HIDRO_ROL;
+global.PSP_AICO_ROL = process.env.PSP_AICO_ROL;
+global.PSP_GOPE_ID = process.env.PSP_GOPE_ID;
+global.PSP_GIYP_ID = process.env.PSP_GIYP_ID;
+global.PSP_GGEN_ID = process.env.PSP_GGEN_ID;
+global.PSP_HIDRO_ID = process.env.PSP_HIDRO_ID;
+global.PSP_AICO_ID = process.env.PSP_AICO_ID;
+

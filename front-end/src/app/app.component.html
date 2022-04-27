@@ -1,7 +1,49 @@
-  <block-ui>
+  <!--block-ui>
     <div *ngIf="!router.url.includes('/login') && !router.url.includes('/register')">
       <app-navbar></app-navbar>
     </div>
     <router-outlet></router-outlet>
-  </block-ui>
+  </!--block-ui -->
 
+  <block-ui>
+    <div *ngIf="!router.url.includes('/login') && !router.url.includes('/register'); else loginPage" >
+      <mat-toolbar color="primary"  class="app-toolbar">
+        <div fxLayout="row" fxFill>
+
+          <div fxFlex="30" class="buttonMenu1">
+            <div class="buttonMenu2">
+              <button mat-icon-button color="basic" (click)="sidenav.toggle()" >
+                <mat-icon *ngIf="!sidenav.opened"> menu</mat-icon>
+                <mat-icon *ngIf="sidenav.opened"> close</mat-icon>
+              </button>
+            </div>
+          </div>
+          <div fxFlex>
+            <span class="navbarSpan">
+              <img src="/assets/img/logoPSP2.png" class="navbarLogo" alt="PSP">
+            </span>
+          </div>
+          <div fxFlex="30">
+            <app-logoff (sidenavClose)="sidenav.close()"></app-logoff>
+          </div>
+        </div>
+      </mat-toolbar>
+      <mat-sidenav-container class="psp">
+        <mat-sidenav mode = "over" #sidenav role="navigation" class="menuOpciones">
+          <app-menu [sidenav]=sidenav (sidenavClose)="sidenav.close()"></app-menu>
+        </mat-sidenav>
+
+        <mat-sidenav-content class="psp">
+          <router-outlet></router-outlet>
+        </mat-sidenav-content>
+      </mat-sidenav-container>
+
+
+    </div>
+
+    <ng-template #loginPage>
+      <router-outlet></router-outlet>
+    </ng-template>
+
+
+  </block-ui>

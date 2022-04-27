@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SiteService } from 'src/app/services/site.service';
-import { NotificationService } from 'src/app/services/notification.service';
 import { NgBlockUI, BlockUI } from 'ng-block-ui';
-import { GlobalConstants } from '../../../common/global.constants';
-import { Router } from '@angular/router';
 import { saveAs } from 'file-saver';
-import { ThrowStmt } from '@angular/compiler';
 import {FormGroup, FormControl} from '@angular/forms';
 import * as moment from 'moment';
 
@@ -25,10 +21,6 @@ export class RptGrupoAccionComponent implements OnInit {
     start: new FormControl(moment()),
     end: new FormControl(moment())
   });
-
-
-
-
 
 
 

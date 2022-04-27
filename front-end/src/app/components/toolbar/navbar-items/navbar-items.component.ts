@@ -18,7 +18,7 @@ export class NavbarItemsComponent implements OnInit {
   ngOnInit(): void {
     if (this.authService.loggedIn()) {
       this.blockUI.start('Cargando Menú de Opciones...');
-      this.siteService.getNavbar().subscribe(
+      this.siteService.getMenu().subscribe(
         res => {
           this.blockUI.stop();
           this.navbarItems = res;

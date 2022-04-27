@@ -1,18 +1,203 @@
-/*h1 {
-  color: #111;
-  font-family: 'Open Sans Condensed', sans-serif;
-  font-size: 48px;
-  font-weight: 700;
-  line-height: 48px;
-  margin: 0 0 24px;
-  padding: 0 30px;
-  text-align: center;
-  text-transform: uppercase;
+body{
+  margin :0px;
 }
-*/
+
+.appLogoff {
+  right: 0px;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  padding-right:50px;
+}
+
+.app-toolbar {
+  position: sticky;
+  position: -webkit-sticky; /* For macOS/iOS Safari */
+  top: 0; /* Sets the sticky toolbar to be on top */
+  z-index: 1000; /* Ensure that your app's content doesn't overlap the toolbar */
+}
+
+
+.menuOpciones{
+  background-color: #3f51b5;
+  color: white;
+}
+
+.menuOpcionesFlechas{
+  background-color: #3f51b5;
+  color: white;
+  text-align: right;
+}
+
+.menuOpcionesExpanded {
+  background:  #5769CC !important;
+}
+.menuOpcionesFlechasExpanded{
+  background-color: #5769CC;
+  color: white;
+  text-align: right;
+}
+
+.menu-expansion-panel {
+  border-radius: 0px !important;
+  box-shadow: none !important;
+  margin: 0px;
+  color: white;
+}
+
+.menu-expansion-panel-header {
+  height: 40px;
+}
+
+.menu-expansion-panel-header-title {
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+
+.mat-expansion-panel-body{
+  padding: 0px 0px 0px 20px !important;
+}
+
+
+.menu-expansion-panel-header > .mat-content {
+  justify-content: space-between;
+}
+
+.mat-content > mat-panel-title, .mat-content > mat-panel-description {
+  flex: 0 0 auto;
+}
+
+.menu-expansion-panel-header-title {
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+
+.buttonMenu1 {
+  position: relative;
+}
+
+.buttonMenu2 {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+
+.psp {
+ height: calc(100vh - 64px);
+  background-color: white;
+}
+
+.navbarLogo {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5px;
+  max-height: 50px;
+}
+
+.navbarSpan {
+  text-align: center;
+  display: inline-block;
+  width: 100%;
+}
 
 
 
+.pagHeader{
+  padding-top: 30px;
+  padding-bottom: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.pagHeaderTop{
+  padding-top: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.centerDiv{
+  display: flex;
+  justify-content: center;
+}
+
+.centerDivBottom{
+  display: flex;
+  justify-content: center;
+  padding-bottom: 30px;
+}
+
+.centerDivTop{
+  display: flex;
+  justify-content: center;
+  padding-top: 30px;
+}
+
+.bottomPadding {
+  padding-bottom: 20px;
+}
+
+.topPadding {
+  padding-top: 30px;
+}
+
+.width90{
+  width: 90%;
+}
+
+.width70{
+  width: 70%;
+}
+
+.valignCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.valignTop {
+  display: flex;
+  justify-content: center;
+  align-items:flex-start;
+  height: 100%;
+  margin-top: 2px;
+}
+
+.sinRegistros{
+  font: 400 14px/20px Roboto, "Helvetica Neue", sans-serif;
+  font-style: italic;
+  font-variant-ligatures: normal;
+  font-variant-caps: normal;
+  font-variant-numeric: normal;
+  font-variant-east-asian: normal;
+  font-weight: 400;
+  font-stretch: normal;
+  font-size: 14px;
+  line-height: 20px;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  color: rgba(0,0,0,.54);
+}
+
+
+.panelTitleInfo {
+  font-size: 12px;
+
+  color: rgba(0,0,0,.54);
+  padding-left: 20px;
+  margin-bottom: 16px !important;
+}
 
 .toast-center-center {
   top: 50%;
