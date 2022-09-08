@@ -16,7 +16,7 @@
     "cors": "^2.8.5",
     "dateformat": "^4.5.1",
     "dotenv": "^8.2.0",
-    "easy-template-x": "^2.0.0",
+    "easy-template-x": "^3.0.2",
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
     "jsonwebtoken": "^8.5.1",
