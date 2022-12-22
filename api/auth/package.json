@@ -19,7 +19,7 @@
     "easy-template-x": "^2.0.0",
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "officegen": "^0.6.5",
     "sequelize": "^5.21.6",
     "tedious": "^8.2.0",
