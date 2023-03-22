@@ -291,13 +291,11 @@ router.post('/reportePeriodico/:areaId', verifier, asyncHandler(async (req, res)
   else{
 
     try{
+      var template = '../templates/rep_periodico_default.docx';
       if(req.area.Id == global.PSP_GOPE_ID){
-        const template = '../templates/rep_periodico_GOPE.docx';
+        template = '../templates/rep_periodico_GOPE.docx';
       }
-      else{
-        const template = '../templates/rep_periodico_default.docx';
-      }
-      
+            
       const templatePath = path.join(__dirname, template);
       const templateFile = fs.readFileSync(templatePath);
       var dateFormat = require('dateformat');
