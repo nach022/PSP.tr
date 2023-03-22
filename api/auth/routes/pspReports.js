@@ -87,8 +87,35 @@ async function getCantTareasEjecutadas(area, inicio, fin){
   return result.cant;
 }
 
+async function getCantTareasPreviasEjecutadas(area, inicio, fin){
+  let queryEjec = `select count(*) as cant from psp.EjecucionesTareas ejec inner join psp.Tareas tarea on ejec.TareaId = tarea.TareaId 
+                  inner join psp.TiposTareas tipo on tipo.TipoTareaId = tarea.TipoTareaId
+                  where ejec.Estado = 'FIN' and tipo.ServicioEjecutorId = ${area} and FechaFin >= '${inicio}' 
+                  and FechaFin <= '${fin}' and Fecha < '${inicio}'`;
+  let result = await db.query( queryEjec, { plain: true, type: sequelize.QueryTypes.SELECT});
+  //console.log('queryEjec', queryEjec);
+  return result.cant;
+}
 
+async function getCantTareasPeriodoEjecutadas(area, inicio, fin){
+  let queryEjec = `select count(*) as cant from psp.EjecucionesTareas ejec inner join psp.Tareas tarea on ejec.TareaId = tarea.TareaId 
+                  inner join psp.TiposTareas tipo on tipo.TipoTareaId = tarea.TipoTareaId
+                  where ejec.Estado = 'FIN' and tipo.ServicioEjecutorId = ${area} and FechaFin >= '${inicio}' 
+                  and FechaFin <= '${fin}' and Fecha >= '${inicio}' and Fecha <= '${fin}'`;
+  let result = await db.query( queryEjec, { plain: true, type: sequelize.QueryTypes.SELECT});
+  //console.log('queryEjec', queryEjec);
+  return result.cant;
+}
 
+async function getCantTareasPosterioresEjecutadas(area, inicio, fin){
+  let queryEjec = `select count(*) as cant from psp.EjecucionesTareas ejec inner join psp.Tareas tarea on ejec.TareaId = tarea.TareaId 
+                  inner join psp.TiposTareas tipo on tipo.TipoTareaId = tarea.TipoTareaId
+                  where ejec.Estado = 'FIN' and tipo.ServicioEjecutorId = ${area} and FechaFin >= '${inicio}' 
+                  and FechaFin <= '${fin}' and Fecha > '${fin}'`;
+  let result = await db.query( queryEjec, { plain: true, type: sequelize.QueryTypes.SELECT});
+  //console.log('queryEjec', queryEjec);
+  return result.cant;
+}
 
 async function getCantTareasVencidas(area, inicio, fin){
   let queryVenc = 'select sum(cant) as cant from (select count(*) as cant from psp.EjecucionesTareas ejec ';
@@ -132,7 +159,7 @@ async function getTareasVencidas(area, inicio, fin){
   let queryVenc = "select * from (select tarea.Descr + ' (Equipo: ' + tarea.Equipo + ')' as Descr, convert(varchar, Fecha, 103) as Venc, Fecha, "; 
   queryVenc += "cast(tarea.Frecuencia as varchar) + case tarea.Periodo when 'W' then ' semana' ";
   queryVenc += "when 'D' then ' día' when 'M' then ' mes' when 'Y' then ' año' end  + ";
-  queryVenc += "case tarea.Frecuencia when  1 then '' else case tarea.Periodo when 'M' then 'es' else 's' end end as Freq"
+  queryVenc += "case tarea.Frecuencia when  1 then '' else case tarea.Periodo when 'M' then 'es' else 's' end end as Freq";
   queryVenc += ' from psp.EjecucionesTareas ejec ';
   queryVenc += ' inner join psp.Tareas tarea on ejec.TareaId = tarea.TareaId inner join psp.TiposTareas tipo on tipo.TipoTareaId = tarea.TipoTareaId ';
   queryVenc += " where tipo.ServicioEjecutorId = ";
@@ -173,7 +200,7 @@ async function reporteGrupoAccion(req, res, template){
     let cantEjec = await getCantTareasEjecutadas(req.area.Id, dateFormat(inicio, 'yyyy-mm-dd'), dateFormat(fin, 'yyyy-mm-dd'));
     let cantVenc = await getCantTareasVencidas(req.area.Id, dateFormat(inicio, 'yyyy-mm-dd'), dateFormat(fin, 'yyyy-mm-dd'));
     let cantCanc = await getCantTareasCanceladas(req.area.Id, dateFormat(inicio, 'yyyy-mm-dd'), dateFormat(fin, 'yyyy-mm-dd'));
-    let tareasVencidas= await getTareasVencidas(req.area.Id, dateFormat(inicio, 'yyyy-mm-dd'), dateFormat(fin, 'yyyy-mm-dd'))
+    let tareasVencidas= await getTareasVencidas(req.area.Id, dateFormat(inicio, 'yyyy-mm-dd'), dateFormat(fin, 'yyyy-mm-dd'));
 
   
 
@@ -264,7 +291,13 @@ router.post('/reportePeriodico/:areaId', verifier, asyncHandler(async (req, res)
   else{
 
     try{
-      const template = '../templates/rep_periodico_default.docx';
+      if(req.area.Id == global.PSP_GOPE_ID){
+        const template = '../templates/rep_periodico_GOPE.docx';
+      }
+      else{
+        const template = '../templates/rep_periodico_default.docx';
+      }
+      
       const templatePath = path.join(__dirname, template);
       const templateFile = fs.readFileSync(templatePath);
       var dateFormat = require('dateformat');
@@ -277,6 +310,9 @@ router.post('/reportePeriodico/:areaId', verifier, asyncHandler(async (req, res)
       let cantEjec = await getCantTareasEjecutadas(req.area.Id, dateFormat(inicio, 'yyyy-mm-dd'), dateFormat(fin, 'yyyy-mm-dd'));
       let cantVenc = await getCantTareasVencidas(req.area.Id, dateFormat(inicio, 'yyyy-mm-dd'), dateFormat(fin, 'yyyy-mm-dd'));
       let cantCanc = await getCantTareasCanceladas(req.area.Id, dateFormat(inicio, 'yyyy-mm-dd'), dateFormat(fin, 'yyyy-mm-dd'));
+      let cantEjecPrevPer = await getCantTareasPreviasEjecutadas(req.area.Id, dateFormat(inicio, 'yyyy-mm-dd'), dateFormat(fin, 'yyyy-mm-dd'));
+      let cantEjecPer = await getCantTareasPeriodoEjecutadas(req.area.Id, dateFormat(inicio, 'yyyy-mm-dd'), dateFormat(fin, 'yyyy-mm-dd'));
+      let cantEjecPostPer = await getCantTareasPosterioresEjecutadas(req.area.Id, dateFormat(inicio, 'yyyy-mm-dd'), dateFormat(fin, 'yyyy-mm-dd'));
 
       let sectores = [];
       if(req.area.Id == global.PSP_AICO_ID ){
@@ -295,7 +331,7 @@ router.post('/reportePeriodico/:areaId', verifier, asyncHandler(async (req, res)
       }
       else if(req.area.Id == global.PSP_GOPE_ID){
         sectores.push({nombre: 'Área Despacho'});
-        sectores.push({nombre: 'Gerencia de Operaciones'});
+        sectores.push({nombre: 'Gerencia de Operación'});
       }
       else if(req.area.Id == global.PSP_HIDRO_ID){
         sectores.push({nombre: 'Área Hidrología'});      
@@ -311,6 +347,9 @@ router.post('/reportePeriodico/:areaId', verifier, asyncHandler(async (req, res)
         cantEjec: cantEjec,
         cantVenc: cantVenc,
         cantCanc: cantCanc,
+        cantEjecPrevPer,
+        cantEjecPer,
+        cantEjecPostPer,
         sectores: sectores
       };
 
